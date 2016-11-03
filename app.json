@@ -5,4 +5,9 @@
   "version": "1.0.0",
   "icon": "",
   "vendor": "<a href=\"//codemake.org\" target=\"_blank\">CodeMake.Org</a> - See all our products <a href=\"//store.phpfox.com/techie/u/ecodemaster\" target=_new>HERE</a> - contact us at: support@codemake.org",
+  "menu": {
+    "name": "Digital",
+    "url": "/digital",
+    "icon": "smile-o"
+  }
 }
