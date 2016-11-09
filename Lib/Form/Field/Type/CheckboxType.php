@@ -11,16 +11,4 @@ class CheckboxType extends AbstractType
     ];
 
 
-    /**
-     * @return void
-     */
-    protected function assignVars()
-    {
-        parent::assignVars();
-        $this->oView->assign([
-           'name'   => $this->aInfo['name'],
-           'title'  => $this->aInfo['title']
-        ]);
-    }
-
 }

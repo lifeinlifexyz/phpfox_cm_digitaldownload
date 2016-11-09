@@ -189,7 +189,9 @@ class Form implements \ArrayAccess, JsonSerializable
 
     private function getTypeClassName($sType)
     {
-        return isset($this->aTypes[$sType]) ? $this->aTypes[$sType] : '\Apps\CM_DigitalDownload\Lib\Form\Field\Type\\' . ucfirst($sType) . 'Type';
+        return isset($this->aTypes[$sType])
+            ? $this->aTypes[$sType]
+            : '\Apps\CM_DigitalDownload\Lib\Form\Field\Type\\' . ucfirst($sType) . 'Type';
     }
 
 

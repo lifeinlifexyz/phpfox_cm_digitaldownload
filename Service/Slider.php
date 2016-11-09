@@ -12,19 +12,29 @@ class Slider extends \Phpfox_Service implements IFormly
     protected $sKeyName = 'slide_id';
     protected $_sTable = 'ynclean_slide';
 
-    protected $aFieldsInfo  = [
-        'title' => [
-            'type' => 'string',
-            'name' => 'title',
-            'title' => 'Title',
-            'rules' => 'required|3:250:length',
-        ],
-        'description' => [
-            'type' => 'string',
-            'name' => 'description',
-            'title' => 'Description',
-            'rules' => 'required|3:500:length',
-        ]
-    ];
-
+    /**
+     * return array of fields info
+     * @return array
+     */
+    public function getFieldsInfo()
+    {
+        return [
+            'title' => [
+                'type' => 'string',
+                'name' => 'title',
+                'title' => 'Title',
+                'filter' => function($text)
+                {
+                    return strip_tags($text);
+                },
+                'rules' => 'required|3:250:length',
+            ],
+            'description' => [
+                'type' => 'string',
+                'name' => 'description',
+                'title' => 'Description',
+                'rules' => 'required|3:500:length',
+            ]
+        ];
+    }
 }

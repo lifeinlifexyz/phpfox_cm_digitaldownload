@@ -15,15 +15,6 @@ trait FormlyTrait
     protected $mKey = null;
 
     /**
-     * return array of fields info
-     * @return array
-     */
-    public function getFieldsInfo()
-    {
-        return $this->aFieldsInfo;
-    }
-
-    /**
      * return primary key name(id)
      * @return string
      */

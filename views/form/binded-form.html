@@ -1,0 +1,12 @@
+<form class="form" role="form" action="{{ data.action }}"
+      method="{{ data.method }}"
+      enctype="{{ data.enctype }}">
+    {% for field in fields %}
+        <div class="form-group {% if field.hasError %} has-error {% endif %}">
+            {{ field }}
+        </div>
+    {% endfor %}
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="{{ data.saveCaption }}">
+    </div>
+</form>

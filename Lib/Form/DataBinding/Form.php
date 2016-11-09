@@ -2,6 +2,7 @@
 namespace Apps\CM_DigitalDownload\Lib\Form\DataBinding;
 
 
+use Apps\CM_DigitalDownload\Lib\Form\Field\AbstractType;
 use Core\View;
 
 class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
@@ -27,6 +28,7 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
     public function save()
     {
         $aValues = $this->getFieldsValue();
+
         //todo:: set before and after save events;
         if (is_null($this->mKey)) {
             $bRes = $this->oDatabase->insert($this->sTable, $aValues);
@@ -39,6 +41,36 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
         }
 
         return $this;
+    }
+
+    /**
+     * @param string $sTemplate
+     * @return string
+     */
+    public function render($sTemplate = '@CM_DigitalDownload/form/binded-form.html')
+    {
+        $this->aData['saveCaption'] = is_null($this->mKey) ? _p('Add') : _p('Save');
+        return parent::render($sTemplate);
+    }
+
+    /**
+     * @return array
+     */
+    public function getFieldsValue()
+    {
+        $aResult = [];
+        foreach ($this->aFields as $sField => &$oField) {
+            /**
+             * @var $oField AbstractType
+             */
+            $aFieldsInfo = $oField->getInfo();
+            if (isset($aFieldsInfo['filter'])) {
+                $aResult[$sField] = call_user_func($aFieldsInfo['filter'], $oField->getValue());
+            } else {
+                $aResult[$sField] = $oField->getValue();
+            }
+        }
+        return $aResult;
     }
 
     /**

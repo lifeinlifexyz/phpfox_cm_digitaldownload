@@ -5,7 +5,7 @@
 
  route('/digital', function(){
      $oSlider = Phpfox::getService('cmSlider');
-     $oSlider->setKey(1);
+     $oSlider->setKey(5);
 
      $form = $oSlider->getForm();
      if ($_POST && $form->isValid())
@@ -15,6 +15,8 @@
             var_dump($form->getFieldValue('title'));
             var_dump($form->getFieldsValue());
          echo '</pre>';
+         $form->save();
+         url()->send('digital');
      }
      echo $form;
     return 'controller';
