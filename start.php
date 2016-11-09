@@ -1,12 +1,13 @@
 <?php
 \Phpfox_Module::instance()->addServiceNames([
     'cmSlider'          => '\Apps\CM_DigitalDownload\Service\Slider',
-    'formBuilderFactory'          => '\Apps\CM_DigitalDownload\Lib\Form\BuilderFactory',
 ]);
 
  route('/digital', function(){
-     $builder = Phpfox::getService('formBuilderFactory')->make();
-     $form = $builder->getBindedForm('cmSlider', 4);
+     $oSlider = Phpfox::getService('cmSlider');
+     $oSlider->setKey(1);
+
+     $form = $oSlider->getForm();
      if ($_POST && $form->isValid())
      {
          echo "<h1>Is Valid</h1>";

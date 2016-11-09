@@ -3,13 +3,12 @@
 namespace Apps\CM_DigitalDownload\Lib\Form;
 
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
-use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IDataBinder;
-use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IForm;
 use Apps\CM_DigitalDownload\Lib\Form\Validator\IValidator;
 use Core\Request;
 use Core\View;
+use \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form as BindedForm;
 
-class Builder implements IDataBinder
+class Builder
 {
     /**
      * @var Request
@@ -35,11 +34,13 @@ class Builder implements IDataBinder
     /**
      * @param array $aFields
      * @param array $aFormData
-     * @return Form
+     * @return Form | BindedForm
      */
-    public function build(array $aFields, array $aFormData = [])
+    public function build(array $aFields, array $aFormData = [], $bDataBinded = false)
     {
-        $oForm = new Form($this->oView, $aFormData);
+        $oForm = (!$bDataBinded)
+        ? (new Form($this->oView, $aFormData))
+        : (new  BindedForm($this->oView, null, $aFormData));
         $oForm->setValidator($this->oValidator);
         foreach ($aFields as $aField) {
             $sType = $aField['type'];
@@ -52,39 +53,5 @@ class Builder implements IDataBinder
         }
 
         return $oForm;
-    }
-
-    /**
-     * @param string $mService
-     * @param null|string|int $mKey
-     * @return IForm
-     */
-    public function getBindedForm($mService, $mKey = null, array $aFormData = [], array $aServiceParams = [])
-    {
-
-        $oService =  is_string($mService)
-            ? \Phpfox::getService($mService, $aServiceParams)
-            : $mService;
-
-        $aFields = $oService->getFieldsInfo();
-        //todo:: check data info instanse;
-        if (!is_null($mKey)) {
-            $oService->setKey($mKey);
-            $aValues = \Phpfox_Database::instance()
-                ->select('*')
-                ->from($oService->getTableName())
-                ->where($oService->getKeyName()  . ' = ' . $mKey)
-                ->execute('getRow');
-            foreach($aValues as $sFieldName => &$mValue) {
-                if (isset($aFields[$sFieldName])) {
-                    $aFields[$sFieldName]['value'] = $mValue;
-                }
-            }
-        }
-        $oForm = $this->build($aFields, $aFormData);
-        $oForm->setDataInfo($oService);
-
-        return $oForm;
-
     }
 }

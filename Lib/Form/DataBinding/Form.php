@@ -2,14 +2,23 @@
 namespace Apps\CM_DigitalDownload\Lib\Form\DataBinding;
 
 
-use Phpfox_Service;
+use Core\View;
 
 class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
 {
-    /**
-     * @var IDataInfo
-     */
-    protected $oDataInfo = null;
+    protected $mKey = null;
+    protected $sKeyName = null;
+    protected $sTable = null;
+    protected $oDatabase = null;
+
+    public function __construct(View $oView, \Phpfox_Database $oDataBase = null, array $aData, $sTable = null, $mKey = null, $sKeyName = 'id')
+    {
+        $this->mKey = $mKey;
+        $this->sKeyName = $sKeyName;
+        $this->sTable = $sTable;
+        $this->oDatabase = $oDataBase;
+        parent::__construct($oView, $aData);
+    }
 
     /**
      * @return $this
@@ -17,35 +26,59 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
      */
     public function save()
     {
-        $mKey = $this->oDataInfo->getKey();
-        $sTable = $this->oDataInfo->getTableName();
         $aValues = $this->getFieldsValue();
         //todo:: set before and after save events;
-        if (is_null($mKey)) {
-            $bRes = $this->oDataInfo->database()->insert($sTable, $aValues);
+        if (is_null($this->mKey)) {
+            $bRes = $this->oDatabase->insert($this->sTable, $aValues);
         } else {
-            $bRes = $this->oDataInfo->database()->update($sTable, $aValues, $this->oDataInfo->getKeyName() . ' = ' . $mKey);
+            $bRes = $this->oDatabase->update($this->sTable, $aValues, $this->sKeyName . ' = ' . $this->mKey);
         }
 
         if (!$bRes) {
-            throw new \Exception("Unable to save object to \" {$sTable} \" ");
+            throw new \Exception("Unable to save object to \" {$this->sTable} \" ");
         }
 
         return $this;
     }
 
     /**
-     * @param IDataInfo $oDataInfo
+     * @param null $mKey
      * @return Form
      */
-    public function setDataInfo($oDataInfo)
+    public function setKey($mKey)
     {
-
-        if (!($oDataInfo instanceof IDataInfo && $oDataInfo instanceof Phpfox_Service)) {
-            throw new \InvalidArgumentException('$oDataInfo must be instanceof "IDataInfo" and "Phpfox_Service"');
-        }
-
-        $this->oDataInfo = $oDataInfo;
+        $this->mKey = $mKey;
         return $this;
     }
+
+    /**
+     * @param null $sKeyName
+     * @return Form
+     */
+    public function setKeyName($sKeyName)
+    {
+        $this->sKeyName = $sKeyName;
+        return $this;
+    }
+
+    /**
+     * @param null $sTable
+     * @return Form
+     */
+    public function setTable($sTable)
+    {
+        $this->sTable = $sTable;
+        return $this;
+    }
+
+    /**
+     * @param \Phpfox_Database $oDatabase
+     * @return Form
+     */
+    public function setDatabase($oDatabase)
+    {
+        $this->oDatabase = $oDatabase;
+        return $this;
+    }
+
 }
