@@ -23,10 +23,7 @@ class Slider extends \Phpfox_Service implements IFormly
                 'type' => 'string',
                 'name' => 'title',
                 'title' => 'Title',
-                'filter' => function($text)
-                {
-                    return strip_tags($text);
-                },
+                'filter' => [$this, 'filter'],
                 'rules' => 'required|3:250:length',
             ],
             'description' => [
@@ -36,5 +33,10 @@ class Slider extends \Phpfox_Service implements IFormly
                 'rules' => 'required|3:500:length',
             ]
         ];
+    }
+
+    public function filter($text)
+    {
+        return strip_tags($text);
     }
 }
