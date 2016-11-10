@@ -41,7 +41,7 @@ class Category extends \Phpfox_Service implements IFormly
                 }
             ],
             'name'  => [
-                'type' => 'string',
+                'type' => 'multiLangString',
                 'name' => 'name',
                 'title' => _p('Name'),
                 'rules' => 'required',

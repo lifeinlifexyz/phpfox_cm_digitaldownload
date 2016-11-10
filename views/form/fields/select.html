@@ -1,4 +1,4 @@
-<label for="{{ name }}_field">{{ title }}</label>
+<label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
 <select id="{{ name }}_field" class="form-control" name="{{ name }}">
     <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
     {% for key, item in items %}
