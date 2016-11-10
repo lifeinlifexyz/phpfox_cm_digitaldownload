@@ -34,5 +34,11 @@ interface IFormly
      */
     public function getTableName();
 
+    /**
+     * @param array $aFormData
+     * @return IForm
+     */
     public function getForm(array $aFormData = []);
+
+
 }

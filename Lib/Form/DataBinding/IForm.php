@@ -8,4 +8,9 @@ interface IForm
      * @return $this
      */
     public function save();
+
+    /**
+     * @return boolean
+     */
+    public function isValid();
 }

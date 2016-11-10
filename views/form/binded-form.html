@@ -2,7 +2,7 @@
       method="{{ data.method }}"
       enctype="{{ data.enctype }}">
     {% for field in fields %}
-        <div class="form-group {% if field.hasError %} has-error {% endif %}">
+        <div class="table form-group {% if field.hasError %} has-error {% endif %}">
             {{ field }}
         </div>
     {% endfor %}

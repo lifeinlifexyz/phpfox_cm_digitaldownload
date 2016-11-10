@@ -5,9 +5,20 @@
   "version": "1.0.0",
   "icon": "",
   "vendor": "<a href=\"//codemake.org\" target=\"_blank\">CodeMake.Org</a> - See all our products <a href=\"//store.phpfox.com/techie/u/ecodemaster\" target=_new>HERE</a> - contact us at: support@codemake.org",
+  "admincp_action_menu": {
+    "/digitaldownload/admincp/add-category": "New Category"
+  },
   "menu": {
     "name": "Digital",
     "url": "/digital",
     "icon": "smile-o"
+  },
+  "settings": {
+    "cm_dd_enabled": {
+      "info": "Digital Download App Enabled",
+      "type": "input:radio",
+      "value": 1,
+      "js_variable": true
+    }
   }
 }

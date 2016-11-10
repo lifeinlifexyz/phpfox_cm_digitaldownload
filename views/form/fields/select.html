@@ -1,0 +1,19 @@
+<label for="{{ name }}_field">{{ title }}</label>
+<select id="{{ name }}_field" class="form-control" name="{{ name }}">
+    <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
+    {% for key, item in items %}
+    <option {% if value == key %}selected{% endif %} value="{{ key }}">{{ item }}</option>
+    {% endfor %}
+</select>
+
+{% if hasError %}
+<span class="help-block">
+        <ul>
+            {% for error in errors %}
+            <li>
+                {{ error }}
+            </li>
+            {% endfor %}
+        </ul>
+    </span>
+{% endif %}
