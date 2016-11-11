@@ -44,9 +44,9 @@ class Category extends \Phpfox_Service implements IFormly
             'name'  => [
                 'type' => 'mstring',
                 'name' => 'name',
-                'module' => 'digitaldownload',
+//                'module' => 'digitaldownload',
                 'title' => _p('Name'),
-//                'rules' => 'required',
+                'rules' => 'required',
             ],
             'is_active'  => [
                 'type' => 'boolean',

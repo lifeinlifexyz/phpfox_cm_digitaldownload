@@ -18,13 +18,15 @@ class AddCategoryController extends Phpfox_Component
 		 */
 		$oCategoryService = Phpfox::getService('digitaldownload.category');
 
+		$oCategoryService->setKey(19);
+		if (($iSubtEditId = $this->request()->getInt('sub'))) {
+			$oCategoryService->setKey($iSubtEditId);
+		}
+
         $oForm = $oCategoryService->getForm([
 			'action' => $this->url()->makeUrl('current'),
 		]);
 
-		if (($iSubtEditId = $this->request()->getInt('sub'))) {
-            $oCategoryService->setKey($iSubtEditId);
-		}
 
 		if ($_POST && $oForm->isValid()) {
 			$oForm->save();
