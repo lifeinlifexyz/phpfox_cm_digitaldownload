@@ -1,11 +1,25 @@
+<br>
 {% for aLanguage in aLanguages%}
 <div class="form-group">
     <div class="table_left">
-        {% if required and aLanguage.is_default %}<span class="required">*</span>{% endif %} {{ _p(title) }}&nbsp;<strong>{{ aLanguage.title }}</strong>:
+        {% if required %}<span class="required">*</span>{% endif %} {{ _p(title) }}&nbsp;<strong>{{ aLanguage.title }}</strong>:
     </div>
     <div class="table_right">
-        <input class="form-control" type="text" name="{{ name }}_{{ aLanguage.language_id }}"/>
+
+        <input class="form-control" type="text" name="{{ name }}_{{ aLanguage.language_id }}"
+               value="{% if value %} {{ _p(value, [], aLanguage.language_id) }} {% endif %}"/>
     </div>
     <div class="clear"></div>
 </div>
 {% endfor %}
+{% if hasError %}
+<span class="help-block">
+        <ul>
+            {% for error in errors %}
+                <li>
+                    {{ error }}
+                </li>
+            {% endfor %}
+        </ul>
+    </span>
+{% endif %}

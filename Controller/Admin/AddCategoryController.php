@@ -13,39 +13,28 @@ class AddCategoryController extends Phpfox_Component
 {
 	public function process()
 	{
-		$bIsEdit = false;
-		$bIsSub = false;
-//        $aLanguages = \Language_Service_Language::instance()->getAll();
 		/**
 		 * @var $oCategoryService IFormly
 		 */
 		$oCategoryService = Phpfox::getService('digitaldownload.category');
-		$oForm = $oCategoryService->getForm([
+
+        $oForm = $oCategoryService->getForm([
 			'action' => $this->url()->makeUrl('current'),
 		]);
-//		if (($iSubtEditId = $this->request()->getInt('sub'))) {
-//			$aRow = Phpfox::getService('groups.category')->getForEdit($iSubtEditId);
-//			$iEditId = $iSubtEditId;
-//			$bIsEdit = true;
-//			$bIsSub = true;
-//			$this->template()->assign([
-//					'aForms'  => $aRow,
-//					'iEditId' => $iEditId,
-//				]
-//			);
-//		}
-//
+
+		if (($iSubtEditId = $this->request()->getInt('sub'))) {
+            $oCategoryService->setKey($iSubtEditId);
+		}
+
 		if ($_POST && $oForm->isValid()) {
 			$oForm->save();
+            //todo:: redirect after save
 		}
 
 		$this->template()
 			->setTitle(_p('Add category'))
 			->setBreadCrumb(_p('Add category'))
-			->assign([
-					'form' => $oForm,
-				]
-			);
+			->assign('form' , $oForm);
 	}
 
 	/**

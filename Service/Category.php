@@ -35,16 +35,18 @@ class Category extends \Phpfox_Service implements IFormly
                 'type' => 'select',
                 'name' => 'parent_id',
                 'title' => _p('Parent'),
+                'translate' => true,
                 'items' => $aCatItems,
                 'filter' => function($sValue) {
                     return (int) $sValue;
                 }
             ],
             'name'  => [
-                'type' => 'multiLangString',
+                'type' => 'mstring',
                 'name' => 'name',
+                'module' => 'digitaldownload',
                 'title' => _p('Name'),
-                'rules' => 'required',
+//                'rules' => 'required',
             ],
             'is_active'  => [
                 'type' => 'boolean',

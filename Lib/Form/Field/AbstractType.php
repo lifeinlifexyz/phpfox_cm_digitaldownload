@@ -119,7 +119,7 @@ abstract class AbstractType implements IType, \JsonSerializable
 
         $bResult = true;
 
-        if (!$this->isEmpty()) {
+        if (!$this->isEmpty() && (count($this->aRules) > 0)) {
 
             $oValidator = &$this->oValidator;
             $oValidator->setRules($this->aRules)
@@ -133,6 +133,7 @@ abstract class AbstractType implements IType, \JsonSerializable
                 $bResult = false;
                 $this->aErrors = $oValidator->getErrors()[$aInfo['name']];
             }
+
         } elseif(in_array('required', $this->aRules[$aInfo['name']]) && $this->isEmpty()) {
             $this->aErrors[] = isset($aInfo['errorMessages'][$aInfo['name'] . '.required'])
                 ? $aInfo['errorMessages'][$aInfo['name'] . '.required']

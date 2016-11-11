@@ -2,7 +2,13 @@
 <select id="{{ name }}_field" class="form-control" name="{{ name }}">
     <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
     {% for key, item in items %}
-    <option {% if value == key %}selected{% endif %} value="{{ key }}">{{ item }}</option>
+    <option {% if value == key %}selected{% endif %} value="{{ key }}">
+        {% if translate %}
+            {{ _p(item) }}
+        {% else %}
+            {{ item }}
+        {% endif %}
+    </option>
     {% endfor %}
 </select>
 
