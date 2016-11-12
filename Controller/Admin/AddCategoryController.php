@@ -13,29 +13,32 @@ class AddCategoryController extends Phpfox_Component
 {
 	public function process()
 	{
+		Phpfox::isAdmin();
 		/**
 		 * @var $oCategoryService IFormly
 		 */
 		$oCategoryService = Phpfox::getService('digitaldownload.category');
 
-		$oCategoryService->setKey(19);
-		if (($iSubtEditId = $this->request()->getInt('sub'))) {
-			$oCategoryService->setKey($iSubtEditId);
+		if (($iId = $this->request()->getInt('id'))) {
+			$oCategoryService->setKey($iId);
 		}
 
         $oForm = $oCategoryService->getForm([
 			'action' => $this->url()->makeUrl('current'),
 		]);
 
+		if ($iId) {
+			unset($oForm['parent_id']);
+		}
 
 		if ($_POST && $oForm->isValid()) {
 			$oForm->save();
-            //todo:: redirect after save
+			$this->url()->send('admincp.app', ['id' => 'CM_DigitalDownload'], _p('Successfully saved the category.'));
 		}
-
+		$sTitle = !empty($iId) ? _p('Edit category') : _p('Add category');
 		$this->template()
-			->setTitle(_p('Add category'))
-			->setBreadCrumb(_p('Add category'))
+			->setTitle($sTitle)
+			->setBreadCrumb($sTitle)
 			->assign('form' , $oForm);
 	}
 
@@ -45,6 +48,6 @@ class AddCategoryController extends Phpfox_Component
 	 */
 	public function clean()
 	{
-		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_admincp_add_clean')) ? eval($sPlugin) : false);
+		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_admincp_add_category_clean')) ? eval($sPlugin) : false);
 	}
 }

@@ -28,4 +28,10 @@ interface IType
      * @return array
      */
     public function getErrors();
+
+    /**
+     * @param $sTpl
+     * @return $this
+     */
+    public function setTemplate($sTpl);
 }

@@ -3,7 +3,7 @@
 namespace Apps\CM_DigitalDownload\Lib\Form\Field;
 
 
-class MultiLangType extends AbstractType
+abstract class MultiLangType extends AbstractType
 {
     protected $oLang;
     protected $oRequest;

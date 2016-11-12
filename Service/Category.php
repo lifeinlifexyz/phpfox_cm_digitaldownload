@@ -4,6 +4,7 @@ namespace Apps\CM_DigitalDownload\Service;
 
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
+use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 
 class Category extends \Phpfox_Service implements IFormly
 {
@@ -18,46 +19,55 @@ class Category extends \Phpfox_Service implements IFormly
      */
     public function getFieldsInfo()
     {
-
-        $aCats =  $this->database()
-            ->select("*")
-            ->from(\Phpfox::getT($this->_sTable))
-            ->execute('getslaverows');
-
-        $aCatItems = [];
-
-        foreach($aCats as $aCat) {
-            $aCatItems[$aCat[$this->sKeyName]] = $aCat['name'];
-        }
-
         return [
-            'parent_id'  => [
-                'type' => 'select',
+            'parent_id' => [
+                'type' => 'tree',
                 'name' => 'parent_id',
+                'parent' => 'parent_id',
+                'key' => 'category_id',
                 'title' => _p('Parent'),
                 'translate' => true,
-                'items' => $aCatItems,
-                'filter' => function($sValue) {
-                    return (int) $sValue;
+                'items' => $this->getList(),
+                'filter' => function ($sValue) {
+                    return (int)$sValue;
                 }
             ],
-            'name'  => [
+            'name' => [
                 'type' => 'mstring',
                 'name' => 'name',
 //                'module' => 'digitaldownload',
                 'title' => _p('Name'),
                 'rules' => 'required',
             ],
-            'is_active'  => [
+            'is_active' => [
                 'type' => 'boolean',
                 'name' => 'is_active',
                 'title' => _p('Active'),
                 'rules' => '0:1:in',
-                'filter' => function($sValue) {
-                    return (int) $sValue;
+                'filter' => function ($sValue) {
+                    return (int)$sValue;
                 }
             ],
         ];
+    }
+
+    public function getList()
+    {
+        return $this->database()
+            ->select("*")
+            ->from(\Phpfox::getT($this->_sTable))
+            ->order("`ordering` ASC")
+            ->execute('getslaverows');
+    }
+
+    public function all()
+    {
+        $aList = $this->getList();
+        $aResult = [];
+        foreach ($aList as &$aRow) {
+            $aResult[$aRow['parent_id']][] = $aRow;
+        }
+        return $aResult;
     }
 
 }

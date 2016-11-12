@@ -1,11 +1,11 @@
 <?php
-
 \Phpfox_Module::instance()
     ->addServiceNames([
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Service\Category',
     ])
     ->addComponentNames('controller', [
-    'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
+        'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
+        'digitaldownload.admincp.categories' => '\Apps\CM_DigitalDownload\Controller\Admin\CategoriesController',
     ])
     ->addAliasNames('digitaldownload', 'CM_DigitalDownload')
     ->addTemplateDirs([
@@ -19,7 +19,9 @@ event('app_settings', function ($settings){
     }
 });
 
-
-group('/digitaldownload', function (){
-    route('/admincp/add-category', 'digitaldownload.admincp.add-category');
+group('/admincp/digitaldownload/', function(){
+    route('categories', 'digitaldownload.admincp.categories');
+});
+group('/digitaldownload/', function (){
+    route('admincp/add-category', 'digitaldownload.admincp.add-category');
 });

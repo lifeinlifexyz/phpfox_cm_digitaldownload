@@ -174,7 +174,11 @@ abstract class AbstractType implements IType, \JsonSerializable
 
     public function __toString()
     {
-        return (string)$this->render();
+        try {
+            return (string)$this->render();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -230,5 +234,14 @@ abstract class AbstractType implements IType, \JsonSerializable
     {
         $this->oValidator = $oValidator;
         return $this;
+    }
+
+    /**
+     * @param $sTpl
+     * @return $this
+     */
+    public function setTemplate($sTpl)
+    {
+        $this->aInfo['template'] = $sTpl;
     }
 }
