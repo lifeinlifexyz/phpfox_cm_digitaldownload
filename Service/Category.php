@@ -70,4 +70,16 @@ class Category extends \Phpfox_Service implements IFormly
         return $aResult;
     }
 
+    /**
+     * activae/deactivate category by id
+     * @param $iStatus integer
+     * @param $iId integer
+     * @return bool
+     */
+    public function setStatus($iStatus, $iId)
+    {
+        return $this->database()->update(\Phpfox::getT($this->_sTable),
+            ['`is_active`' => $iStatus], '`category_id`=' . $iId);
+    }
+
 }

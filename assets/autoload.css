@@ -1,6 +1,24 @@
 /**
  * Nestable
  */
+#manage-categories .red .fa {
+    color: #fa7a7a;
+}
+#manage-categories .red:hover .fa{
+    color: #f73737;
+}
+
+#manage-categories .blue .fa {
+    color: #89bceb;
+}
+#manage-categories .blue:hover .fa{
+    color: #358fe4;
+}
+
+#manage-categories .green .fa {
+    color: #46be8a;
+}
+
 .dd {
     position: relative;
     display: block;
@@ -27,7 +45,7 @@
     top: 12px;
 }
 
-.dd-list .actions *{
+.dd-list .actions * {
     display: inline-block;
     margin-left: 6px;
 }
@@ -51,9 +69,12 @@
     font-size: 13px;
     line-height: 20px;
 }
+
 .dd-handle {
     margin-right: 150px;
+    cursor: move;
 }
+
 .dd-content {
     display: block;
     margin: 10px;
@@ -62,7 +83,6 @@
     background: #f8faff;
     color: #7c9eb2;
 
-    cursor: move;
     text-decoration: none;
     font-weight: 700;
     box-sizing: border-box;

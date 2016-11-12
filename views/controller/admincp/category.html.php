@@ -11,9 +11,25 @@ defined('PHPFOX') or exit('NO DICE!');
                     </div>
 
                     <div class="pull-right actions">
-                        <a href="{url link='digitaldownload.admincp.add-category.' id=$category.category_id}" class="popup" title="{phrase var='admincp.edit'}"><i class="fa fa-pencil-square"></i></a>
-                        <a href="" title="{phrase var='admincp.delete'}"><i class="fa fa-remove"></i></a>
-                        <a href="" title="{_p('Fields')}"><i class="fa fa-list"></i></a>
+                        <a href="{url link='digitaldownload.admincp.add-category.' id=$category.category_id}" class="popup blue"
+                           title="{phrase var='admincp.edit'}">
+                            <i class="fa fa-pencil-square"></i>
+                        </a>
+
+                        <a href="" title="{phrase var='admincp.delete'}" class="red"><i class="fa fa-remove"></i></a>
+
+                        <a href="{url link='admincp.digitaldownload.category.status' status=0 id=$category.category_id}"
+                           title="{phrase var='admincp.deactivate'}"
+                           {if !$category.is_active}style="display:none"{/if} class="red deactivate">
+                            <i class="fa fa-circle"></i>
+                        </a>
+                        <a href="{url link='admincp.digitaldownload.category.status' status=1 id=$category.category_id}
+                        " title="{phrase var='admincp.activate'}"
+                           {if $category.is_active}style="display:none"{/if} class="activate">
+                            <i class="fa fa-circle-o"></i>
+                        </a>
+
+                        <a href="" title="{_p('Fields')}" class="green"><i class="fa fa-list"></i></a>
                 </div>
                 </div>
 

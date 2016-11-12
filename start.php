@@ -21,6 +21,14 @@ event('app_settings', function ($settings){
 
 group('/admincp/digitaldownload/', function(){
     route('categories', 'digitaldownload.admincp.categories');
+
+    route('category/status', function(){
+        \Phpfox::isAdmin(true);
+        $iStatus = request()->getInt('status');
+        $iId = request()->getInt('id');
+        Phpfox::getService('digitaldownload.category')->setStatus($iStatus, $iId);
+    });
+
 });
 group('/digitaldownload/', function (){
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
