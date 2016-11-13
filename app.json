@@ -9,7 +9,9 @@
     "/digitaldownload/admincp/add-category": "New Category"
   },
   "admincp_menu": {
-    "Categories": "digitaldownload.categories"
+    "Categories": "digitaldownload.categories",
+    "Fields": "digitaldownload.fields",
+    "Add Fields": "digitaldownload.fields.add"
   },
   "menu": {
     "name": "Digital",

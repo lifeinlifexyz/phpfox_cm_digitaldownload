@@ -1,9 +1,11 @@
-<form class="form" role="form" action="{{ data.action }}"
-      method="{{ data.method }}"
-      enctype="{{ data.enctype }}">
-    {% for field in fields %}
+<div id="form-{{ data.action }}">
+    <form class="form" role="form" action="{{ data.action }}"
+          method="{{ data.method }}"
+          enctype="{{ data.enctype }}">
+        {% for field in fields %}
         <div class="form-group {% if field.hasError %} has-error {% endif %}">
             {{ field }}
         </div>
-    {% endfor %}
-</form>
+        {% endfor %}
+    </form>
+</div>

@@ -18,6 +18,7 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
         $this->sKeyName = $sKeyName;
         $this->sTable = $sTable;
         $this->oDatabase = $oDataBase;
+        $aData['form_id'] = isset($aData['form_id']) ? $aData['form_id'] : md5(microtime() . rand(1, 100));
         parent::__construct($oView, $aData);
     }
 

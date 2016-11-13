@@ -7,8 +7,6 @@ Array.prototype.getUnique = function() {
     return a;
 }
 
-
-
 $Ready(function () {
 
     $('#manage-categories').nestable();

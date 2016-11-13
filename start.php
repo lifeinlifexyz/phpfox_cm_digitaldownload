@@ -1,11 +1,18 @@
 <?php
+
+//todo:: филд тип поля не правильно показвает иархию
+
 \Phpfox_Module::instance()
     ->addServiceNames([
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Service\Category',
+        'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
         'digitaldownload.admincp.categories' => '\Apps\CM_DigitalDownload\Controller\Admin\CategoriesController',
+        'digitaldownload.admincp.fields' => '\Apps\CM_DigitalDownload\Controller\Admin\FieldsController',
+        'digitaldownload.admincp.add-field' => '\Apps\CM_DigitalDownload\Controller\Admin\AddFieldController',
+        'digitaldownload.admincp.save-field' => '\Apps\CM_DigitalDownload\Controller\Admin\SaveFieldController',
     ])
     ->addAliasNames('digitaldownload', 'CM_DigitalDownload')
     ->addTemplateDirs([
@@ -20,8 +27,10 @@ event('app_settings', function ($settings){
 });
 
 group('/admincp/digitaldownload/', function(){
+
     route('categories', 'digitaldownload.admincp.categories');
-    route('categories', 'digitaldownload.admincp.categories');
+    route('fields', 'digitaldownload.admincp.fields');
+    route('fields/add', 'digitaldownload.admincp.add-field');
 
     /**
      * set status
@@ -53,4 +62,5 @@ group('/admincp/digitaldownload/', function(){
 });
 group('/digitaldownload/', function (){
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
+    route('admincp/save-field', 'digitaldownload.admincp.save-field');
 });
