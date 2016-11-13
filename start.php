@@ -21,12 +21,25 @@ event('app_settings', function ($settings){
 
 group('/admincp/digitaldownload/', function(){
     route('categories', 'digitaldownload.admincp.categories');
+    route('categories', 'digitaldownload.admincp.categories');
 
-    route('category/status', function(){
+    /**
+     * set status
+     */
+    route('categories/status', function(){
         \Phpfox::isAdmin(true);
         $iStatus = request()->getInt('status');
-        $iId = request()->getInt('id');
-        Phpfox::getService('digitaldownload.category')->setStatus($iStatus, $iId);
+        $iIds = request()->get('ids');
+        Phpfox::getService('digitaldownload.category')->setStatus($iStatus, $iIds);
+    });
+
+    /**
+     * set order
+     */
+    route('categories/order', function(){
+        \Phpfox::isAdmin(true);
+        $aOrder = request()->get('order');
+        Phpfox::getService('digitaldownload.category')->order($aOrder);
     });
 
 });

@@ -18,14 +18,15 @@ defined('PHPFOX') or exit('NO DICE!');
 
                         <a href="" title="{phrase var='admincp.delete'}" class="red"><i class="fa fa-remove"></i></a>
 
-                        <a href="{url link='admincp.digitaldownload.category.status' status=0 id=$category.category_id}"
+                        <a data-url="{url link='admincp.digitaldownload.categories.status'}"
+                           href="{url link='admincp.digitaldownload.categories.status' status=0 ids[]=$category.category_id}"
                            title="{phrase var='admincp.deactivate'}"
-                           {if !$category.is_active}style="display:none"{/if} class="red deactivate">
+                           {if !$category.is_active}style="display:none"{/if} class="red deactivate status">
                             <i class="fa fa-circle"></i>
                         </a>
-                        <a href="{url link='admincp.digitaldownload.category.status' status=1 id=$category.category_id}
-                        " title="{phrase var='admincp.activate'}"
-                           {if $category.is_active}style="display:none"{/if} class="activate">
+                        <a data-url="{url link='admincp.digitaldownload.categories.status'}"
+                           href="{url link='admincp.digitaldownload.categories.status' status=1 id=$category.category_id}" title="{phrase var='admincp.activate'}"
+                           {if $category.is_active}style="display:none"{/if} class="activate status">
                             <i class="fa fa-circle-o"></i>
                         </a>
 
