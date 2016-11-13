@@ -42,6 +42,14 @@ group('/admincp/digitaldownload/', function(){
         Phpfox::getService('digitaldownload.category')->order($aOrder);
     });
 
+    /**
+     * delete category
+     */
+    route('categories/delete', function(){
+        \Phpfox::isAdmin(true);
+        Phpfox::getService('digitaldownload.category')->delete(request()->getInt('id'));
+    });
+
 });
 group('/digitaldownload/', function (){
     route('admincp/add-category', 'digitaldownload.admincp.add-category');

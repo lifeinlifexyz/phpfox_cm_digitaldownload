@@ -16,7 +16,10 @@ defined('PHPFOX') or exit('NO DICE!');
                             <i class="fa fa-pencil-square"></i>
                         </a>
 
-                        <a href="" title="{phrase var='admincp.delete'}" class="red"><i class="fa fa-remove"></i></a>
+                        <a href="{url link='admincp.digitaldownload.categories.delete' id=$category.category_id}"
+                           title="{phrase var='admincp.delete'}" class="red delete">
+                            <i class="fa fa-remove"></i>
+                        </a>
 
                         <a data-url="{url link='admincp.digitaldownload.categories.status'}"
                            href="{url link='admincp.digitaldownload.categories.status' status=0 ids[]=$category.category_id}"

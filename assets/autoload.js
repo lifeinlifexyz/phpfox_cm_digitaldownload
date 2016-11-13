@@ -8,8 +8,6 @@ Array.prototype.getUnique = function() {
 }
 
 
-var routeLoaded = false;
-
 
 $Ready(function () {
 
@@ -100,5 +98,30 @@ $Ready(function () {
                 $('.ajax_processing').remove();
             }
         });
+    });
+
+    $('#manage-categories .actions .delete').on('click', function(e) {
+        e.preventDefault();
+        var sure = confirm(oTranslations['core.are_you_sure']);
+        if (sure) {
+            $Core.processing();
+            var deleteNode = $(this).closest('.dd-item');
+            var url = $(this).attr('href');
+            //set childs to root
+            deleteNode.find('.dd-item').each(function(){
+                $(this).find('.dd-item, button[data-action="collapse"],button[data-action="expand"]').remove();
+                $(this).find('button[data-action="collapse"],button[data-action="expand"]').hide();
+                $(this).clone().appendTo('#manage-categories > ol');
+                $(this).remove();
+            });
+            deleteNode.remove();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                success: function() {
+                    $('#manage-categories').trigger('change');
+                }
+            });
+        }
     });
 });

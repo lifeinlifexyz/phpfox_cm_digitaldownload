@@ -100,4 +100,10 @@ class Category extends \Phpfox_Service implements IFormly
         return $this;
     }
 
+    public function delete($iId)
+    {
+        $this->database()->delete(\Phpfox::getT($this->_sTable),  '`category_id` = ' . $iId);
+        //todo:: trigger event after category deleted
+    }
+
 }
