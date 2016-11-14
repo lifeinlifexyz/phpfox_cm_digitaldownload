@@ -1,9 +1,11 @@
 <div class="rules-input-box">
+    <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}:</label>
+
     <input type="hidden" name="{{ name }}" value="{{ value }}" />
     <ul class="rules-box"></ul>
     <div class="row">
        <div class="col-sm-5">
-           <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
+           <label>&nbsp;</label>
            <select id="{{ name }}_field" class="form-control">
                <option value="0">{{ _p('None') }}</option>
                {% for key, item in items %}
@@ -27,6 +29,7 @@
            <div style="width: 100%" class="btn brn-default add-rule hidden" title="{{ _p('Add') }}"><i class="fa fa-plus"></i></div>
        </div>
     </div>
+    <br>
 </div>
 
 
