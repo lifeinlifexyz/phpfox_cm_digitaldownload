@@ -1,0 +1,172 @@
+<div class="rules-input-box">
+    <input type="hidden" name="{{ name }}" value="{{ app.request.parameter.get(name) }}" />
+    <ul class="rules-box"></ul>
+    <div class="row">
+       <div class="col-sm-5">
+           <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
+           <select id="{{ name }}_field" class="form-control">
+               <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
+               {% for key, item in items %}
+               <option {% if value == key %}selected{% endif %} value="{{ key }}">
+                   {% if translate %}
+                   {{ _p(item) }}
+                   {% else %}
+                   {{ item }}
+                   {% endif %}
+               </option>
+               {% endfor %}
+           </select>
+       </div>
+       <div class="col-sm-5">
+           <label class="rule-desc">
+           </label>
+           <input type="text" class="form-control rule-attr hidden">
+       </div>
+       <div class="col-sm-2">
+           <label>&nbsp;</label>
+           <div style="width: 100%" class="btn brn-default add-rule hidden" title="{{ _p('Add') }}"><i class="fa fa-plus"></i></div>
+       </div>
+    </div>
+</div>
+
+
+{% if hasError %}
+<span class="help-block">
+        <ul>
+            {% for error in errors %}
+            <li>
+                {{ error }}
+            </li>
+            {% endfor %}
+        </ul>
+    </span>
+{% endif %}
+
+<script>
+    var ruleSelector = '#{{ name }}_field';
+    var rulesDesc = {
+        required: {
+        },
+        alphabet: {
+        },
+        num: {
+        },
+        email: {
+        },
+        min: {
+             desc: "{{ _p('Input Min Value (int)') }}"
+        },
+        max: {
+             desc: "{{ _p('Input Max Value (int)') }}"
+        },
+        minLength: {
+            desc: "{{ _p('Input Min Length (int)') }}"
+        },
+        maxLength: {
+            desc: "{{ _p('Input Max Length (int)') }}"
+        }
+    };
+    $Ready(function(){
+        var rules = {};
+        var rulesSelectorTarget = $(ruleSelector);
+        var editValue = rulesSelectorTarget.closest('.rules-input-box').find('input[type="hidden"]').val();
+
+        if (editValue.length > 0) {
+            restoreRules(editValue);
+        }
+
+        rulesSelectorTarget.on('change', function(){
+            var selectedRule = $(this).val();
+            if (rulesDesc[selectedRule] != undefined && rulesDesc[selectedRule].desc != undefined) {
+                $(this).closest('.rules-input-box').find('.rule-attr').removeClass('hidden');
+            } else {
+                $(this).closest('.rules-input-box').find('.rule-attr').addClass('hidden');
+            }
+
+            if (rulesDesc[selectedRule] != undefined) {
+                $(this).closest('.rules-input-box').find('.add-rule').removeClass('hidden');
+                $(this).closest('.rules-input-box').find('.rule-desc').text((rulesDesc[selectedRule].desc || ''));
+            } else {
+                $(this).closest('.rules-input-box').find('.add-rule').addClass('hidden');
+            }
+        });
+
+        rulesSelectorTarget.closest('.rules-input-box').find('.add-rule').on('click', function(){
+            var hasError = false;
+            var rule =  rulesSelectorTarget.val();
+            var ruleAttr = $(this).closest('.rules-input-box').find('.rule-attr').val();
+
+            var ruleObj = {};
+            ruleObj.name = rule;
+
+            if (rulesDesc[rule] != undefined && rulesDesc[rule].desc != undefined && !(ruleAttr.length > 0)) {
+                hasError = true;
+                $(this).closest('.rules-input-box').find('.rule-attr').css('border', '1px solid red');
+            }
+
+            if (ruleAttr.length > 0) {
+                ruleObj.attr = ruleAttr;
+            }
+
+            if(!hasError) {
+                rules[rule] = ruleObj;
+            }
+            $(this).closest('.rules-input-box').find('.rule-attr').val('');
+            renderRules();
+        });
+
+        function renderRules()
+        {
+            var box = rulesSelectorTarget.closest('.rules-input-box').find('.rules-box');
+            var rulesHtml = '';
+            var sendValue = '';
+            for (var ruleName in rules) {
+                var ruleObj = rules[ruleName];
+                var tpl = '<li>';
+                if (ruleObj.attr != undefined) {
+                    tpl += ruleObj.attr + ':';
+                    sendValue += ruleObj.attr + ':' + ruleName;
+                } else {
+                    sendValue += ruleName;
+                }
+                sendValue += '|';
+                tpl += ruleName +
+                        '<span class="delete-rule" data-rule="' + ruleName + '">' +
+                            '<i class="fa fa-remove"></i>' +
+                        '</span>' +
+                '</li>';
+                rulesHtml += tpl;
+            }
+            box.html(rulesHtml);
+            box.find('.delete-rule').off('click').on('click', function() {
+                var deleteRule = $(this).data('rule');
+                delete rules[deleteRule];
+                renderRules();
+            });
+            rulesSelectorTarget.closest('.rules-input-box').find('input[type="hidden"]').val(sendValue.slice(0, -1));
+        }
+        function restoreRules(sRules) {
+            if (sRules.indexOf('|') == -1) {
+                    rules[sRules] = {
+                        name: sRules
+                    };
+            } else {
+                var aRules = sRules.split('|');
+                for (var i = 0; i < aRules.length; i++) {
+                    var sRule = aRules[i];
+                    if (sRule.indexOf(':') == -1) {
+                        rules[sRule] = {};
+                    } else {
+                        var aRule = sRule.split(':');
+                        sRule = aRule.pop();
+                        rules[sRule] = {
+                           name: sRule,
+                           attr: aRule.join(':')
+                        };
+                    }
+                }
+            }
+            renderRules();
+        }
+    })
+</script>

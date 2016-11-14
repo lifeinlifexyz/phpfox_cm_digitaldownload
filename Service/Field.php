@@ -46,17 +46,18 @@ class Field extends \Phpfox_Service implements IFormly
             'rules' => [
                 'type' => 'select',
                 'name' => 'rules',
+                'template' => '@CM_DigitalDownload/form/fields/rules-input.html',
                 'title' => _p('Validation rules'),
                 'items' => [
                     'required' => _p('Required'),
                     'alphabet' => _p('Alphabet'),
+                    'num' => _p('Numeric'),
                     'email' => _p('Email'),
                     'min' => _p('Min Value'),
                     'max' => _p('Max Value'),
-                    'minLength' => _p('Max Length'),
+                    'minLength' => _p('Min Length'),
                     'maxLength' => _p('Max Length'),
                     'length' => _p('Length'),
-                    'in' => _p('In'),
                 ],
             ],
             'is_active' => [
@@ -76,8 +77,8 @@ class Field extends \Phpfox_Service implements IFormly
         return [
             'boolean' => _p('Boolean'),
             'mstring' => _p('Multi language string'),
-            'string' => _p('Multi language string'),
-            'select' => _p('Multi language string'),
+            'string' => _p('String'),
+            'select' => _p('Select'),
         ];
     }
 
