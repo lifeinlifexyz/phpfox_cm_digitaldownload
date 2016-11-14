@@ -1,13 +1,13 @@
 <div class="rules-input-box">
-    <input type="hidden" name="{{ name }}" value="{{ app.request.parameter.get(name) }}" />
+    <input type="hidden" name="{{ name }}" value="{{ value }}" />
     <ul class="rules-box"></ul>
     <div class="row">
        <div class="col-sm-5">
            <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
            <select id="{{ name }}_field" class="form-control">
-               <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
+               <option value="0">{{ _p('None') }}</option>
                {% for key, item in items %}
-               <option {% if value == key %}selected{% endif %} value="{{ key }}">
+               <option value="{{ key }}">
                    {% if translate %}
                    {{ _p(item) }}
                    {% else %}
@@ -70,7 +70,6 @@
         var rules = {};
         var rulesSelectorTarget = $(ruleSelector);
         var editValue = rulesSelectorTarget.closest('.rules-input-box').find('input[type="hidden"]').val();
-
         if (editValue.length > 0) {
             restoreRules(editValue);
         }
