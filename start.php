@@ -63,4 +63,5 @@ group('/admincp/digitaldownload/', function(){
 group('/digitaldownload/', function (){
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
     route('admincp/save-field', 'digitaldownload.admincp.save-field');
+    route('admincp/delete-field', 'digitaldownload.admincp.fields');
 });

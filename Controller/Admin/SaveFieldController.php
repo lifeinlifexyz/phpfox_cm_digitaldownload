@@ -34,16 +34,20 @@ class SaveFieldController extends Phpfox_Component
         }
 
         if ($oForm->isValid()) {
-
-            $oForm->save();
-
-            if (!$iId) {
-                $oFieldService->addField($oForm);
+            try {
+                db()->beginTransaction();
+                $oForm->save();
+                if (!$iId) {
+                    $oFieldService->addField($oForm);
+                }
+                db()->commit();
+            } catch (\Exception $e) {
+                db()->rollback();
+                throw  $e;
             }
 
             $sMessage = _p('Successfully saved the field.');
-
-            $this->url()->send('admincp.app',['id' => 'CM_DigitalDownload'], $sMessage);
+            $this->url()->send('admincp.app', ['id' => 'CM_DigitalDownload'], $sMessage);
         } else {
             $oForm->addField('hidden', [
                 'name' => 'field_id',

@@ -149,8 +149,27 @@ class Field extends \Phpfox_Service implements IFormly
 
     public function delete($iId)
     {
-        $this->database()->delete(\Phpfox::getT($this->_sTable), '`field_id` = ' . $iId);
-        //todo:: trigger event after category deleted
+        try {
+            $sFieldName = $this->database()
+                ->select('name')
+                ->from(\Phpfox::getT($this->_sTable))
+                ->where('`field_id` = ' . $iId)
+                ->execute('getslavefield');
+            if (!$sFieldName) {
+                return false;
+            }
+            $this->database()->beginTransaction();
+            $this->database()->delete(\Phpfox::getT($this->_sTable), '`field_id` = ' . $iId);
+            $this->database()->dropField(\Phpfox::getT($this->sAttachTable), $sFieldName);
+            $this->database()->commit();
+
+            return true;
+        } catch (\Exception $e)
+        {
+            $this->database()->rollback();
+            throw $e;
+        }
+
     }
 
 }

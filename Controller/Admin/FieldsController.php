@@ -18,6 +18,16 @@ class FieldsController extends Phpfox_Component
 		 * @var $oFieldService IFormly
 		 */
 		$oFieldService = Phpfox::getService('digitaldownload.field');
+		$aDelete = $this->request()->get('delete');
+
+		if (!empty($aDelete)) {
+			foreach($aDelete as $sFieldID) {
+				$oFieldService->delete($sFieldID);
+			}
+			$sMessage =  (count($aDelete) > 1) ? _p('Successfully deleted fields.') : _p('Successfully deleted the field.');
+			$this->url()->send('admincp.app', ['id' => 'CM_DigitalDownload'], $sMessage);
+		}
+
 		$this->template()
 			->setTitle(_p('Fields'))
 			->setBreadCrumb(_p('Fields'))
