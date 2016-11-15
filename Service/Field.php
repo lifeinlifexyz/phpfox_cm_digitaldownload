@@ -117,17 +117,11 @@ class Field extends \Phpfox_Service implements IFormly
             ->execute('getslaverows');
     }
 
-    /**
-     * activae/deactivate category by ids
-     * @param $iStatus integer
-     * @param $iIds array
-     * @return bool
-     */
-    public function setStatus($iStatus, $iIds)
+    public function setStatus($iId, $iStatus)
     {
-        $iIds = (array)$iIds;
+        $iId = (int) $iId;
         return $this->database()->update(\Phpfox::getT($this->_sTable),
-            ['`is_active`' => $iStatus], '`category_id` in (' . implode(',', $iIds) . ')');
+            ['`is_active`' => $iStatus], '`field_id` = ' . $iId);
     }
 
     public function delete($iId)

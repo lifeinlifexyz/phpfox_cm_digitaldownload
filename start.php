@@ -1,6 +1,7 @@
 <?php
 
 //todo:: филд тип поля не правильно показвает иархию
+//todo:: активация филда. чекбок ведет себе не корректно
 
 \Phpfox_Module::instance()
     ->addServiceNames([
@@ -25,6 +26,14 @@ event('app_settings', function ($settings){
         \Phpfox::getService('admincp.module.process')->updateActivity('CM_DigitalDownload', $settings['cm_dd_enabled']);
     }
 });
+
+if (setting('pf_group_enabled')) {
+
+    \Phpfox_Module::instance()->addComponentNames('ajax', [
+        'digitaldownload.ajax'        => '\Apps\CM_DigitalDownload\Ajax\Ajax',
+    ]);
+
+}
 
 group('/admincp/digitaldownload/', function(){
 

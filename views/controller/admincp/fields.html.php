@@ -17,6 +17,7 @@ defined('PHPFOX') or exit('NO DICE!');
 			<th>{_p('Title')}</th>
 			<th>{_p('Type')}</th>
 			<th>{_p('Rules')}</th>
+			<th class="t_center" style="width:60px;">{_p var='Active'}</th>
 		</tr>
 		{foreach from=$aFields key=iKey item=aItem}
 		<tr class="checkRow{if is_int($iKey/2)} tr{else}{/if}" data-sort-id="{$aItem.field_id}">
@@ -39,6 +40,14 @@ defined('PHPFOX') or exit('NO DICE!');
 			<td>{phrase var=$aItem.caption_phrase}</td>
 			<td>{$aItem.type}</td>
 			<td>{$aItem.rules}</td>
+			<td class="t_center">
+				<div class="js_item_is_active"{if !$aItem.is_active} style="display:none;"{/if}>
+					<a href="#?call=digitaldownload.setFieldStatus&amp;id={$aItem.field_id}&amp;status=0" class="js_item_active_link" title="{_p var='Deactivate'}">{img theme='misc/bullet_green.png' alt=''}</a>
+				</div>
+				<div class="js_item_is_not_active"{if $aItem.is_active} style="display:none;"{/if}>
+					<a href="#?call=digitaldownload.setFieldStatus&amp;id={$aItem.field_id}&amp;status=1" class="js_item_active_link" title="{_p var='Activate'}">{img theme='misc/bullet_red.png' alt=''}</a>
+				</div>
+			</td>
 		</tr>
 		{/foreach}
 	</table>
