@@ -34,4 +34,9 @@ interface IType
      * @return $this
      */
     public function setTemplate($sTpl);
+
+    /**
+     * @return array
+     */
+    public function getColumnDefinitions();
 }

@@ -19,7 +19,7 @@ class SaveFieldController extends Phpfox_Component
          */
         $oFieldService = Phpfox::getService('digitaldownload.field');
 
-        if (($iId = $this->request()->getInt('id'))) {
+        if (($iId = $this->request()->getInt('field_id'))) {
             $oFieldService->setKey($iId);
         }
 
@@ -28,13 +28,27 @@ class SaveFieldController extends Phpfox_Component
             'form_id' => 'digitaldownload-field',
         ]);
 
+        if ($iId) {
+            unset($oForm['name']);
+            unset($oForm['type']);
+        }
+
         if ($oForm->isValid()) {
+
             $oForm->save();
-            $this->url()->send('admincp.app',
-                [
-                    'id' => 'CM_DigitalDownload',
-                ],
-                _p('Successfully saved the field.'));
+
+            if (!$iId) {
+                $oFieldService->addField($oForm);
+            }
+
+            $sMessage = _p('Successfully saved the field.');
+
+            $this->url()->send('admincp.app',['id' => 'CM_DigitalDownload'], $sMessage);
+        } else {
+            $oForm->addField('hidden', [
+                'name' => 'field_id',
+                'value' => $iId,
+            ]);
         }
         $sTitle = !empty($iId) ? _p('Edit field') : _p('Add field');
         $this->template()

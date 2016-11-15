@@ -1,0 +1,12 @@
+<input type="hidden" name="{{ name }}" id="{{ name }}_field" value="{{ value }}" />
+{% if hasError %}
+    <span class="help-block">
+        <ul>
+            {% for error in errors %}
+                <li>
+                    {{ error }}
+                </li>
+            {% endfor %}
+        </ul>
+    </span>
+{% endif %}

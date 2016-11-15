@@ -28,6 +28,18 @@ class AddFieldController extends Phpfox_Component
             'form_id' => 'digitaldownload-field',
         ]);
 
+        if ($iId) {
+
+            $oForm->addField('hidden', [
+                'name' => 'field_id',
+                'value' => $iId,
+            ]);
+
+            unset($oForm['name']);
+            unset($oForm['type']);
+
+        }
+
         $sTitle = !empty($iId) ? _p('Edit field') : _p('Add field');
         $this->template()
             ->setTitle($sTitle)

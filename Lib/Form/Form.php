@@ -48,16 +48,20 @@ class Form implements \ArrayAccess, JsonSerializable
      */
     public function addField($sType, $aData)
     {
-        $sTypeClass = $this->getTypeClassName($sType);
-        $sFieldName = $aData['name'];
         /**
          * @var $oType AbstractType
          */
-        $oType = new $sTypeClass($aData);
+        $oType = $this->createType($sType, $aData);
         $oType->setView($this->oView);
         $oType->setValidator($this->oValidator);
-        $this->aFields[$sFieldName] = $oType;
+        $this->aFields[$aData['name']] = $oType;
         return $this;
+    }
+
+    public function createType($sType, $aData)
+    {
+        $sTypeClass = $this->getTypeClassName($sType);
+        return new $sTypeClass($aData);
     }
 
     /**

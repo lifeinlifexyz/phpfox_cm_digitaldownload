@@ -2,9 +2,9 @@
 
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
-use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 
 class Field extends \Phpfox_Service implements IFormly
 {
@@ -12,6 +12,7 @@ class Field extends \Phpfox_Service implements IFormly
 
     protected $_sTable = 'digital_download_fields';
     protected $sKeyName = 'field_id';
+    protected $sAttachTable = 'digital_download';
 
     /**
      * return array of fields info
@@ -20,6 +21,11 @@ class Field extends \Phpfox_Service implements IFormly
     public function getFieldsInfo()
     {
         $aTypeList = $this->getTypesList();
+        $aAllFields = $this->all();
+        $aExitsFields = [];
+        foreach($aAllFields as $aField) {
+            $aExitsFields[] = $aField['name'];
+        }
         return [
             'type' => [
                 'type' => 'select',
@@ -35,7 +41,10 @@ class Field extends \Phpfox_Service implements IFormly
                 'type' => 'string',
                 'name' => 'name',
                 'title' => _p('Name'),
-                'rules' => 'required|alphabet',
+                'rules' => 'required|alphabet|' . implode(':', $aExitsFields) . ':notin',
+                'errorMessages' => [
+                    'name.notin' =>_p('The value entered into \'NAME\' field is already used, please choose a different value.'),
+                ]
             ],
             'caption_phrase' => [
                 'type' => 'mstring',
@@ -57,7 +66,6 @@ class Field extends \Phpfox_Service implements IFormly
                     'max' => _p('Max Value'),
                     'minLength' => _p('Min Length'),
                     'maxLength' => _p('Max Length'),
-                    'length' => _p('Length'),
                 ],
             ],
             'is_active' => [
@@ -80,6 +88,24 @@ class Field extends \Phpfox_Service implements IFormly
             'string' => _p('String'),
             'select' => _p('Select'),
         ];
+    }
+
+    /**
+     * @param Form $oForm
+     * @return $this
+     */
+    public function addField(Form $oForm)
+    {
+        $sType = $oForm->getFieldValue('type');
+        $sName = $oForm->getFieldValue('name');
+        $oType = $oForm->createType($sType, ['name' => '', 'title' => '']);
+        $aColumnsDefs = $oType->getColumnDefinitions();
+        foreach($aColumnsDefs as &$aColumnsDef) {
+            $aColumnsDef['table'] = \Phpfox::getT($this->sAttachTable);
+            $aColumnsDef['field'] = $sName;
+            $this->database()->addField($aColumnsDef);
+        }
+        return $this;
     }
 
     public function all()

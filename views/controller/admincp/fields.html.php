@@ -26,7 +26,7 @@ defined('PHPFOX') or exit('NO DICE!');
 				<a href="#" class="js_drop_down_link" title="Manage">{img theme='misc/bullet_arrow_down.png' alt=''}</a>
 				<div class="link_menu">
 					<ul>
-						<li><a href="{url link='admincp.digitalfowload.fields.add' id=$aItem.field_id}">_p('Edit')}</a></li>
+						<li><a class="popup" href="{url link='admincp.digitaldownload.fields.add' id=$aItem.field_id}">{_p('Edit')}</a></li>
 						<li><a href="{url link='admincp.digitaldownload.fields' delete=$aItem.field_id}" onclick="return confirm('{phrase var='core.are_you_sure'}');">{_p('Delete')}</a></li>
 					</ul>
 				</div>
@@ -34,7 +34,7 @@ defined('PHPFOX') or exit('NO DICE!');
 			<td class="t_center">
 				{$aItem.name}
 			</td>
-			<td>{_p($aItem.caption_phrase)}</td>
+			<td>{phrase var=$aItem.caption_phrase}</td>
 			<td>{$aItem.type}</td>
 			<td>{$aItem.rules}</td>
 		</tr>

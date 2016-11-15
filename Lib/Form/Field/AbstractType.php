@@ -16,6 +16,12 @@ abstract class AbstractType implements IType, \JsonSerializable
 
     protected $aErrors = [];
 
+    protected $aColumnDefinitions = [
+          [
+              'type' => 'VARCHAR(250)',
+              'null' => 'NULL',
+          ]
+    ];
     protected $bHasError = false;
 
     /**
@@ -187,6 +193,13 @@ abstract class AbstractType implements IType, \JsonSerializable
     public function getInfo()
     {
         return $this->aInfo;
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumnDefinitions() {
+        return $this->aColumnDefinitions;
     }
 
     /**

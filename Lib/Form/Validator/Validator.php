@@ -20,6 +20,7 @@ class Validator implements IValidator
         'maxLength' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\MaxLength@validate',
         'length' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Length@validate',
         'in' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\In@validate',
+        'notin' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\NotIn@validate',
         'alphabet' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Alphabet@validate',
         'num' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Numeric@validate',
     ];
