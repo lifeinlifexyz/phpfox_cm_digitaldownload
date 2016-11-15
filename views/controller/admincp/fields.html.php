@@ -8,7 +8,7 @@ defined('PHPFOX') or exit('NO DICE!');
 </div>
 {if count($aFields)}
 <form method="post" action="{url link='digitaldownload.admincp.delete-field'}">
-	<table id="js_drag_drop" cellpadding="0" cellspacing="0">
+	<table id="_sort" data-sort-url="{url link='digitaldownload.admincp.fields.order'}" cellpadding="0" cellspacing="0">
 		<tr>
 			<th></th>
 			<th style="width:10px;"><input type="checkbox" name="delete[]" value="" id="js_check_box_all" class="main_checkbox" /></th>
@@ -19,8 +19,10 @@ defined('PHPFOX') or exit('NO DICE!');
 			<th>{_p('Rules')}</th>
 		</tr>
 		{foreach from=$aFields key=iKey item=aItem}
-		<tr class="checkRow{if is_int($iKey/2)} tr{else}{/if}">
-			<td class="drag_handle"><input type="hidden" name="val[ordering][{$aItem.field_id}]" value="{$aItem.ordering}" /></td>
+		<tr class="checkRow{if is_int($iKey/2)} tr{else}{/if}" data-sort-id="{$aItem.field_id}">
+			<td class="t_center">
+				<i class="fa fa-sort"></i>
+			</td>
 			<td><input type="checkbox" name="delete[]" class="checkbox" value="{$aItem.field_id}" id="js_id_row{$aItem.field_id}" /></td>
 			<td class="t_center">
 				<a href="#" class="js_drop_down_link" title="Manage">{img theme='misc/bullet_arrow_down.png' alt=''}</a>

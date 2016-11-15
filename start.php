@@ -64,4 +64,26 @@ group('/digitaldownload/', function (){
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
     route('admincp/save-field', 'digitaldownload.admincp.save-field');
     route('admincp/delete-field', 'digitaldownload.admincp.fields');
+
+    route('admincp/fields/order', function (){
+        auth()->isAdmin(true);
+
+        $ids = request()->get('ids');
+        $ids = trim($ids, ',');
+        $ids = explode(',', $ids);
+        $values = [];
+        foreach ($ids as $key => $id) {
+            $values[ $id ] = $key + 1;
+        }
+        \Phpfox::getService('core.process')->updateOrdering([
+                'table'  => 'digital_download_fields',
+                'key' => 'field_id',
+                'values' => $values,
+            ]
+        );
+
+        //todo::remove fields cache
+
+        return true;
+    });
 });

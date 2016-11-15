@@ -130,23 +130,6 @@ class Field extends \Phpfox_Service implements IFormly
             ['`is_active`' => $iStatus], '`category_id` in (' . implode(',', $iIds) . ')');
     }
 
-
-    /**
-     * @param array $aOrders
-     * @return $this
-     */
-    public function order($aOrders = [])
-    {
-        foreach ($aOrders as $iKey => $aOrder) {
-            $aData = [
-                'parent_id' => $aOrder['parent_id'],
-                'ordering' => $iKey,
-            ];
-            $this->database()->update(\Phpfox::getT($this->_sTable), $aData, '`category_id` = ' . $aOrder['id']);
-        }
-        return $this;
-    }
-
     public function delete($iId)
     {
         try {
