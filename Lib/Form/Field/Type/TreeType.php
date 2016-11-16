@@ -25,27 +25,39 @@ class TreeType extends AbstractType
 
     protected function getVars()
     {
-        $aTmp = [];
+        $aList = [];
         $sParentField = $this->aInfo['parent_field'];
 
         foreach ($this->aInfo['items'] as $aRow) {
-            $aTmp[$aRow[$sParentField]][] = $aRow;
+            $aList[$aRow[$sParentField]][] = $aRow;
         }
 
-        $this->aInfo['tree_values'] = $aTmp;
+        $aTree = $this->buildTree($aList);
+//        dd($aTree);
+        $this->aInfo['tree_values'] = $aTree;
 
         return parent::getVars();
     }
 
-    /**
-     * @param Tree $oTree
-     * @return SelectType
-     */
-    public function setTree($oTree)
+    private function buildTree(&$aList, $pid = 0, $iLevel = 0)
     {
-        $this->oTree = $oTree;
-        return $this;
-    }
+        $aTree = [];
 
+        if (!isset($aList[$pid])) {
+            return $aTree;
+        }
+
+        foreach ($aList[$pid] as $aChild)
+        {
+            $aChild['level'] = $iLevel;
+            $aChilds =  $this->buildTree($aList, $aChild[$this->aInfo['key_field']], $iLevel);
+            if ($aChilds) {
+                $iLevel++;
+                $aChild['childs'] = $aChilds;
+            }
+            $aTree[] = $aChild;
+        }
+        return $aTree;
+    }
 
 }

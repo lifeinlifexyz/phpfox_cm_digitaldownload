@@ -1,14 +1,19 @@
-{% if tree_values[pid] %}
-    {% for item in tree_values[pid] %}
-        <option value="{{ item[key_field] }}" {% if value == item[key_field] %} selected {% endif %}>
-            {{ space }}
-            {% if translate %}
-                {{ _p(item[title_field]) }}
-            {% else %}
-                {{ item[title_field] }}
-            {% endif %}
-        </option>
-        {% set space = space ~ '..' %}
-        {{ include(tree_option_tmp, {pid: item[key_field], tree_values: tree_values, space: space}) }}
-    {% endfor %}
-{% endif %}
+{% for item in tree %}
+    <option value="{{ item[key_field] }}" {% if value == item[key_field] %} selected {% endif %}>
+
+        {% for i in 0..depth %}
+            {% set space = space ~ '&nbsp;&nbsp;' %}
+        {% endfor %}
+
+        {{ space }}
+
+        {% if translate %}
+            {{ _p(item[title_field]) }}
+        {% else %}
+            {{ item[title_field] }}
+        {% endif %}
+    </option>
+    {% if item['childs'] is iterable %}
+        {{ include(tree_option_tmp, {tree: item['childs'], depth: depth + 1, space: space}) }}
+    {% endif %}
+{% endfor %}

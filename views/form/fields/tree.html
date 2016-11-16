@@ -1,7 +1,7 @@
 <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
 <select id="{{ name }}_field" class="form-control" name="{{ name }}">
     <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
-    {{ include(tree_option_tmp, {pid: root_id, tree_values: tree_values, space: ''}) }}
+    {{ include(tree_option_tmp, {tree: tree_values, depth: 0}) }}
 </select>
 
 {% if hasError %}
