@@ -35,7 +35,7 @@ class Category extends \Phpfox_Service implements IFormly
             'name' => [
                 'type' => 'mstring',
                 'name' => 'name',
-//                'module' => 'digitaldownload',
+                'module' => 'digitaldownload',
                 'title' => _p('Name'),
                 'rules' => 'required',
             ],
@@ -103,6 +103,7 @@ class Category extends \Phpfox_Service implements IFormly
     public function delete($iId)
     {
         $this->database()->delete(\Phpfox::getT($this->_sTable),  '`category_id` = ' . $iId);
+        \Phpfox::getService('digitaldownload.categoryField')->delete($iId);
         //todo:: trigger event after category deleted
     }
 

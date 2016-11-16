@@ -7,9 +7,11 @@
     ->addServiceNames([
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Service\Category',
         'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
+        'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
+        'digitaldownload.admincp.category-fields' => '\Apps\CM_DigitalDownload\Controller\Admin\CategoryFieldsController',
         'digitaldownload.admincp.categories' => '\Apps\CM_DigitalDownload\Controller\Admin\CategoriesController',
         'digitaldownload.admincp.fields' => '\Apps\CM_DigitalDownload\Controller\Admin\FieldsController',
         'digitaldownload.admincp.add-field' => '\Apps\CM_DigitalDownload\Controller\Admin\AddFieldController',
@@ -38,6 +40,7 @@ if (setting('pf_group_enabled')) {
 group('/admincp/digitaldownload/', function(){
 
     route('categories', 'digitaldownload.admincp.categories');
+    route('category/fields', 'digitaldownload.admincp.category-fields');
     route('fields', 'digitaldownload.admincp.fields');
     route('fields/add', 'digitaldownload.admincp.add-field');
 

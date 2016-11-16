@@ -50,6 +50,7 @@ class Field extends \Phpfox_Service implements IFormly
                 'type' => 'mstring',
                 'name' => 'caption_phrase',
                 'title' => _p('Caption'),
+                'module' => 'digitaldownload',
                 'rules' => 'required',
             ],
             'rules' => [

@@ -33,7 +33,7 @@ defined('PHPFOX') or exit('NO DICE!');
                             <i class="fa fa-circle-o"></i>
                         </a>
 
-                        <a href="" title="{_p('Fields')}" class="green"><i class="fa fa-list"></i></a>
+                        <a href="{url link='admincp.digitaldownload.category.fields' id=$category.category_id}" title="{_p('Fields')}" class="green popup"><i class="fa fa-list"></i></a>
                 </div>
                 </div>
 
