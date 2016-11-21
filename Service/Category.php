@@ -70,6 +70,24 @@ class Category extends \Phpfox_Service implements IFormly
         return $aResult;
     }
 
+    public function getActive()
+    {
+        //todo:: save to cache
+        $aList = $this->database()
+            ->select("*")
+            ->from(\Phpfox::getT($this->_sTable))
+            ->where('is_active=1')
+            ->order("`ordering` ASC")
+            ->execute('getslaverows');
+
+        $aResult = [];
+        foreach ($aList as &$aRow) {
+            $aResult[$aRow['parent_id']][] = $aRow;
+        }
+
+        return $aResult;
+    }
+
     /**
      * activae/deactivate category by ids
      * @param $iStatus integer

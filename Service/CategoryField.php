@@ -34,6 +34,17 @@ class CategoryField extends \Phpfox_Service
             ->execute('getslaverows');
     }
 
+    public function getInfoByCategoryId($iId)
+    {
+        return $this->database()
+            ->select('f.*')
+            ->from(\Phpfox::getT($this->_sTable), 'c')
+            ->leftJoin(\Phpfox::getT('digital_download_fields'), 'f', 'f.field_id = c.field_id')
+            ->where('`category_id` = ' . $iId)
+            ->order('`ordering` ASC')
+            ->execute('getslaverows');
+    }
+
     public function getByFieldId($iId)
     {
         return $this->database()

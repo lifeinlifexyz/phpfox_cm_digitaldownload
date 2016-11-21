@@ -39,6 +39,13 @@ function installv1_0_0()
       KEY `category_id` (`category_id`)
         );");
 
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download') . "` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `category_id` int(11) NOT NULL,
+      PRIMARY KEY (`id`),
+      KEY `category_id` (`category_id`)
+      );");
+
 }
 
 installv1_0_0();

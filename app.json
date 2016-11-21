@@ -15,9 +15,9 @@
     "Add Field": "digitaldownload.fields.add"
   },
   "menu": {
-    "name": "Digital",
-    "url": "/digital",
-    "icon": "smile-o"
+    "name": "Digital Download",
+    "url": "/digitaldownload",
+    "icon": "download"
   },
   "settings": {
     "cm_dd_enabled": {
@@ -25,6 +25,23 @@
       "type": "input:radio",
       "value": 1,
       "js_variable": true
+    }
+  },
+  "user_group_settings": {
+    "cm_dd_add": {
+      "info": "Can add digital download?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
     }
   }
 }

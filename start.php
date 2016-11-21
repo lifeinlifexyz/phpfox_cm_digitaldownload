@@ -8,6 +8,7 @@
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Service\Category',
         'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
         'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
+        'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\DigitalDownload',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
@@ -16,6 +17,9 @@
         'digitaldownload.admincp.fields' => '\Apps\CM_DigitalDownload\Controller\Admin\FieldsController',
         'digitaldownload.admincp.add-field' => '\Apps\CM_DigitalDownload\Controller\Admin\AddFieldController',
         'digitaldownload.admincp.save-field' => '\Apps\CM_DigitalDownload\Controller\Admin\SaveFieldController',
+        'digitaldownload.index' => '\Apps\CM_DigitalDownload\Controller\IndexController',
+        'digitaldownload.add' => '\Apps\CM_DigitalDownload\Controller\AddController',
+        'digitaldownload.category' => '\Apps\CM_DigitalDownload\Controller\CategoryController',
     ])
     ->addAliasNames('digitaldownload', 'CM_DigitalDownload')
     ->addTemplateDirs([
@@ -29,7 +33,7 @@ event('app_settings', function ($settings){
     }
 });
 
-if (setting('pf_group_enabled')) {
+if (setting('cm_dd_enabled')) {
 
     \Phpfox_Module::instance()->addComponentNames('ajax', [
         'digitaldownload.ajax'        => '\Apps\CM_DigitalDownload\Ajax\Ajax',
@@ -73,6 +77,7 @@ group('/admincp/digitaldownload/', function(){
 
 });
 group('/digitaldownload/', function (){
+
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
     route('admincp/save-field', 'digitaldownload.admincp.save-field');
     route('admincp/delete-field', 'digitaldownload.admincp.fields');
@@ -98,4 +103,9 @@ group('/digitaldownload/', function (){
 
         return true;
     });
+
+    if (setting('cm_dd_enabled')) {
+        route('/', 'digitaldownload.index');
+        route('add', 'digitaldownload.add');
+    }
 });
