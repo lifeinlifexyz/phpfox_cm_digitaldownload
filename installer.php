@@ -42,6 +42,10 @@ function installv1_0_0()
     db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download') . "` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `category_id` int(11) NOT NULL,
+      `digital_download` VARCHAR( 255 ) NOT NULL,
+      `privacy` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  '0.00',
+      `price_currency_id` CHAR( 3 ) NOT NULL
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`)
       );");

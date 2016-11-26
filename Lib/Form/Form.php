@@ -35,10 +35,23 @@ class Form implements \ArrayAccess, JsonSerializable
      */
     protected $oValidator;
 
-    public function __construct(View $oView, $aData = [])
+    public function __construct(View &$oView, $aData = [])
     {
         $this->oView = $oView;
         $this->aData = array_merge($this->aDefaultFormData, $aData);
+
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('isModule', function($sModule){
+            return \Phpfox::isModule($sModule);
+        }));
+
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('privacy_field', function($sName, $sInfo){
+
+            \Phpfox::getBlock('privacy.form', [
+                'privacy_name' => $sName,
+                'privacy_info' => $sInfo,
+            ]);
+            return '';
+        }));
     }
 
 

@@ -3,6 +3,7 @@ namespace Apps\CM_DigitalDownload\Lib\Form\DataBinding;
 
 
 use Apps\CM_DigitalDownload\Lib\Form\Field\AbstractType;
+use Core\Event;
 use Core\View;
 
 class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
@@ -30,7 +31,10 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
     {
         $aValues = $this->getFieldsValue();
 
-        //todo:: set before and after save events;
+        $mValues = Event::trigger('before_save_' . $this->sTable, $aValues);
+        if (is_array($mValues)) {
+            $aValues = array_merge($aValues, $mValues);
+        }
         if (is_null($this->mKey)) {
             $bRes = $this->oDatabase->insert($this->sTable, $aValues);
         } else {
@@ -40,6 +44,8 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
         if (!$bRes) {
             throw new \Exception("Unable to save object to \" {$this->sTable} \" ");
         }
+
+        Event::trigger('after_save_' . $this->sTable, $bRes);
 
         return $this;
     }
@@ -65,7 +71,16 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
              * @var $oField AbstractType
              */
             $aFieldsInfo = $oField->getInfo();
-            if (isset($aFieldsInfo['filter'])) {
+            if (isset($aFieldsInfo['multi_column']) && $aFieldsInfo['multi_column']) {
+                $aValues = $oField->getValue();
+                foreach($aValues as $sName => $mValue) {
+                    if (isset($aFieldsInfo['filter'][$sName])) {
+                        $aResult[$sName] = call_user_func($aFieldsInfo['filter'][$sName], $mValue);
+                    } else {
+                        $aResult[$sName] = $mValue;
+                    }
+                }
+            } elseif (isset($aFieldsInfo['filter'])) {
                 $aResult[$sField] = call_user_func($aFieldsInfo['filter'], $oField->getValue());
             } else {
                 $aResult[$sField] = $oField->getValue();

@@ -31,43 +31,21 @@ class AddController extends Phpfox_Component
 
         $oDigitalDownload = \Phpfox::getService('digitaldownload.dd');
         $oDigitalDownload->setCategoryId($iCategory);
-        $oForm = $oDigitalDownload->getForm();
+        $oForm = $oDigitalDownload->getForm([
+            'enctype' => 'multipart/form-data'
+        ]);
 
         if ($_POST && $oForm->isValid()) {
-            (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_save_digitaldownload')) ? eval($sPlugin) : false);
+            (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
             $oForm->save();
             (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_add_digitaldownload')) ? eval($sPlugin) : false);
-
         }
-
-
-
-        $bIsEdit = false;
-        $bIsNewPage = false;
-        $sStep = $this->request()->get('req3');
-        $aPage = [];
 
         $this->template()->setTitle(_p('Creating a Digital Download'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
             ->setBreadCrumb(_p('Add Digital Download'), $this->url()->makeUrl('digitaldownload.add'))
-//            ->setPhrase([
-//                    'core.select_a_file_to_upload',
-//                ]
-//            )
-//            ->setHeader([
-//                    'privacy.css' => 'module_user',
-//                    'progress.js' => 'static_script',
-//                ]
-//            )
-//            ->setHeader(['<script type="text/javascript">$Behavior.groupsProgressBarSettings = function(){ if ($Core.exists(\'#js_groups_block_customize_holder\')) { oProgressBar = {holder: \'#js_groups_block_customize_holder\', progress_id: \'#js_progress_bar\', uploader: \'#js_progress_uploader\', add_more: false, max_upload: 1, total: 1, frame_id: \'js_upload_frame\', file_id: \'image\'}; $Core.progressBarInit(); } }</script>'])
             ->assign([
                     'oForm' => $oForm,
-//                    'aTypes'       => Phpfox::getService('groups.type')->get(),
-//                    'bIsEdit'      => $bIsEdit,
-//                    'iMaxFileSize' => user('pf_group_max_upload_size', 500) ? Phpfox::getLib('phpfox.file')->filesize((user('pf_group_max_upload_size', 500) / 1024) * 1048576) : null,
-//                    'aWidgetEdits' => Phpfox::getService('groups')->getWidgetsForEdit(),
-//                    'bIsNewPage'   => $bIsNewPage,
-//                    'sStep'        => $sStep,
                 ]
             );
     }

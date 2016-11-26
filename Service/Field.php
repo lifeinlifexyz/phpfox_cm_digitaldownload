@@ -26,6 +26,7 @@ class Field extends \Phpfox_Service implements IFormly
         foreach($aAllFields as $aField) {
             $aExitsFields[] = $aField['name'];
         }
+
         return [
             'type' => [
                 'type' => 'select',
@@ -41,7 +42,9 @@ class Field extends \Phpfox_Service implements IFormly
                 'type' => 'string',
                 'name' => 'name',
                 'title' => _p('Name'),
-                'rules' => 'required|alphabet|' . implode(':', $aExitsFields) . ':notin',
+                'rules' => 'required|alphabet|' . (!empty($aExitsFields)
+                        ? implode(':', $aExitsFields) . ':notin'
+                        : 'notin'),
                 'errorMessages' => [
                     'name.notin' =>_p('The value entered into \'NAME\' field is already used, please choose a different value.'),
                 ]
@@ -63,6 +66,7 @@ class Field extends \Phpfox_Service implements IFormly
                     'alphabet' => _p('Alphabet'),
                     'num' => _p('Numeric'),
                     'email' => _p('Email'),
+                    'url' => _p('Url'),
                     'min' => _p('Min Value'),
                     'max' => _p('Max Value'),
                     'minLength' => _p('Min Length'),
@@ -88,6 +92,7 @@ class Field extends \Phpfox_Service implements IFormly
             'mstring' => _p('Multi language string'),
             'string' => _p('String'),
             'select' => _p('Select'),
+            'text' => _p('Text'),
         ];
     }
 
@@ -103,7 +108,9 @@ class Field extends \Phpfox_Service implements IFormly
         $aColumnsDefs = $oType->getColumnDefinitions();
         foreach($aColumnsDefs as &$aColumnsDef) {
             $aColumnsDef['table'] = \Phpfox::getT($this->sAttachTable);
-            $aColumnsDef['field'] = $sName;
+            $aColumnsDef['field'] = isset($aColumnsDef['field'])
+                ? $aColumnsDef['field'] . '_' . $sName
+                : $sName;
             $this->database()->addField($aColumnsDef);
         }
         return $this;

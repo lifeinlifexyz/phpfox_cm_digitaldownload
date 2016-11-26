@@ -14,6 +14,7 @@ class Validator implements IValidator
     protected $aKnownRules = [
         'required' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Required@validate',
         'email' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Email@validate',
+        'url' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Url@validate',
         'min' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Min@validate',
         'max' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Max@validate',
         'minLength' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\MinLength@validate',
