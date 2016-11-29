@@ -15,4 +15,9 @@ class BooleanType extends AbstractType
             'default' => 'DEFAULT \'0\'',
         ]
     ];
+
+    public function getDisplay()
+    {
+        return (isset($this['value']) && $this['value']) ? _p('Yes') : _p('No');
+    }
 }

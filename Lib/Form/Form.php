@@ -4,13 +4,14 @@ namespace Apps\CM_DigitalDownload\Lib\Form;
 
 use Apps\CM_DigitalDownload\Lib\Form\Exception\FieldNotFoundException;
 use Apps\CM_DigitalDownload\Lib\Form\Field\AbstractType;
+use Apps\CM_DigitalDownload\Lib\Form\Field\Factory;
 use Apps\CM_DigitalDownload\Lib\Form\Validator\IValidator;
 use Core\View;
 use JsonSerializable;
 
 class Form implements \ArrayAccess, JsonSerializable
 {
-    protected $aTypes = [];
+    protected $oFactory;
 
     protected $aFields = [];
 
@@ -39,6 +40,7 @@ class Form implements \ArrayAccess, JsonSerializable
     {
         $this->oView = $oView;
         $this->aData = array_merge($this->aDefaultFormData, $aData);
+        $this->oFactory = new Factory();
 
         $this->oView->env()->addFunction(new \Twig_SimpleFunction('isModule', function($sModule){
             return \Phpfox::isModule($sModule);
@@ -64,17 +66,11 @@ class Form implements \ArrayAccess, JsonSerializable
         /**
          * @var $oType AbstractType
          */
-        $oType = $this->createType($sType, $aData);
+        $oType = $this->oFactory->createType($sType, $aData);
         $oType->setView($this->oView);
         $oType->setValidator($this->oValidator);
         $this->aFields[$aData['name']] = $oType;
         return $this;
-    }
-
-    public function createType($sType, $aData)
-    {
-        $sTypeClass = $this->getTypeClassName($sType);
-        return new $sTypeClass($aData);
     }
 
     /**
@@ -195,20 +191,13 @@ class Form implements \ArrayAccess, JsonSerializable
      */
     public function registerType($sTypeName, $sTypeClassName)
     {
-        $this->aTypes[$sTypeName] = $sTypeClassName;
+        $this->oFactory->registerType($sTypeName, $sTypeClassName);
         return $this;
     }
 
     public function __set($sName, $mValue)
     {
         $this->aData[$sName] = $mValue;
-    }
-
-    private function getTypeClassName($sType)
-    {
-        return isset($this->aTypes[$sType])
-            ? $this->aTypes[$sType]
-            : '\Apps\CM_DigitalDownload\Lib\Form\Field\Type\\' . ucfirst($sType) . 'Type';
     }
 
 
@@ -302,6 +291,24 @@ class Form implements \ArrayAccess, JsonSerializable
     public function setValidator($oValidator)
     {
         $this->oValidator = $oValidator;
+        return $this;
+    }
+
+    /**
+     * @return Factory
+     */
+    public function getFactory()
+    {
+        return $this->oFactory;
+    }
+
+    /**
+     * @param $oFactory
+     * @return $this
+     */
+    public function setFactory($oFactory)
+    {
+        $this->oFactory = $oFactory;
         return $this;
     }
 }

@@ -9,4 +9,10 @@ class StaticType extends AbstractType
     protected $aInfo  = [
         'template' => '@CM_DigitalDownload/form/fields/static.html',
     ];
+
+    public function getFilter($sTableAlias)
+    {
+        $aInfo = $this->aInfo;
+        return null;
+    }
 }

@@ -1,0 +1,12 @@
+<form class="form" role="form" action="{{ data.action }}"
+      method="GET">
+    {% for field in fields %}
+        <div class="table form-group">
+            {{ field }}
+        </div>
+    {% endfor %}
+    <br>
+    <div class="form-group">
+        <input class="btn btn-primary" type="submit" value="{{ _p('Search') }}">
+    </div>
+</form>

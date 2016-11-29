@@ -20,4 +20,9 @@ class HiddenType extends AbstractType
         parent::__construct($aData);
     }
 
+    public function getFilter($sTableAlias)
+    {
+        return null;
+    }
+
 }

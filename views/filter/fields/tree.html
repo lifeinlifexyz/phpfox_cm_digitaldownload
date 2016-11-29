@@ -1,0 +1,7 @@
+<div class="table_left">{{ title }}</div>
+<div class="table_right">
+    <select id="{{ name }}_field" class="form-control" name="{{ name }}">
+        <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('All') }}</option>
+        {{ include(tree_option_tmp, {tree: tree_values, depth: 0}) }}
+    </select>
+</div>

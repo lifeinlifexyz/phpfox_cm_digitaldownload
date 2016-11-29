@@ -32,4 +32,10 @@ class PrivacyType extends StringType
             return 0;
         }
     }
+
+    public function getFilter($sTableAlias)
+    {
+        $aInfo = $this->aInfo;
+        return null;
+    }
 }

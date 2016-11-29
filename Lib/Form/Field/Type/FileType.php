@@ -63,4 +63,8 @@ class FileType extends AbstractType
     public function isEmpty(){
         return !$this->hasFile();
     }
+    public function getFilter($sTableAlias)
+    {
+        return null;
+    }
 }

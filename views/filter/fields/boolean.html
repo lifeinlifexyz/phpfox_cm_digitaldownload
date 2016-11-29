@@ -1,0 +1,11 @@
+<div class="table_left">{{ title }}</div>
+<div class="table_right">
+    <label>
+        <input type="radio" name="{{ name }}" value="1" class="v_middle checkbox" {% if value == 1 %} checked {% endif %}/>
+        {{ _p('Yes')}}
+    </label>
+    <label>
+        <input type="radio" name="{{ name }}" value="0" class="v_middle checkbox" {% if value == 0 %} checked {% endif %}/>
+        {{ _p('No')}}
+    </label>
+</div>

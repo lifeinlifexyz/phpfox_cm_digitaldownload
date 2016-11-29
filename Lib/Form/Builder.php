@@ -2,6 +2,7 @@
 
 namespace Apps\CM_DigitalDownload\Lib\Form;
 
+use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterForm;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
 use Apps\CM_DigitalDownload\Lib\Form\Validator\IValidator;
 use Core\Request;
@@ -52,6 +53,22 @@ class Builder
             $oForm->setFieldValue($aField['name'], $mValue);
         }
 
+        return $oForm;
+    }
+
+    public function buildFilterForm(array $aFields, array $aFormData = [])
+    {
+        $oForm = new  FilterForm($this->oView, $aFormData);
+
+        foreach ($aFields as $aField) {
+            $sType = $aField['type'];
+            $oForm->addField($sType, $aField);
+            $mValue = (!is_null($this->oRequest->get($aField['name'], null)))
+                ? $this->oRequest->get($aField['name'])
+                : (isset($aField['value']) ? $aField['value'] : null);
+
+            $oForm->setFieldValue($aField['name'], $mValue);
+        }
         return $oForm;
     }
 }

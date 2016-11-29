@@ -1,0 +1,19 @@
+<div class="table_left">{{ title }}</div>
+<div class="table_right">
+    <div class="">
+        <select class="form-control" name="{{ name }}_currency_id">
+            {% for sCurrency, aCurrency in aCurrencies %}
+            <option value="{{ sCurrency }}"
+                    {% if aCurrency.is_default%}
+                    selected="selected"
+                    {% endif %}
+            >
+                {{ _p(aCurrency.name) }}
+            </option>
+            {% endfor %}
+        </select>
+        <div class="p_top_8">
+            <input class="form-control" type="text" name="{{ name }}" value="{{ value }}" id="{{ name }}_field" size="10" maxlength="100" onfocus="this.select();" />
+        </div>
+    </div>
+</div>

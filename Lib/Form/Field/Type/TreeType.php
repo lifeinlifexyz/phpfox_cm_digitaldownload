@@ -60,4 +60,14 @@ class TreeType extends AbstractType
         return $aTree;
     }
 
+    public function getFilter($sTableAlias)
+    {
+        $aInfo = $this->aInfo;
+        return [
+            'type' => 'input:text',
+            'field_name' => $aInfo['name'],
+            'size' => 17,
+        ];
+    }
+
 }

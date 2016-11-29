@@ -43,5 +43,25 @@
         "no": "No"
       }
     }
+  },
+  "component" : {
+    "block" : {
+      "filter" : ""
+    },
+    "controller" : {
+      "index" : "digitaldownload.index",
+      "add" : "digitaldownload.add",
+      "view" : "digitaldownload.view"
+    }
+  },
+  "component_block" : {
+    "Digital download filter" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.index",
+      "component" : "filter",
+      "location" : "3",
+      "is_active" : "1",
+      "ordering" : "3"
+    }
   }
 }

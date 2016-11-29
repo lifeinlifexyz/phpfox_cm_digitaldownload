@@ -7,6 +7,7 @@ use Phpfox;
 
 class PriceType extends AbstractType
 {
+    protected $sCurrency = '';
 
     protected $aColumnDefinitions = [
         [
@@ -48,6 +49,31 @@ class PriceType extends AbstractType
         return [
             $this->aInfo['name'] => parent::getValue(),
             $this->aInfo['name'] . '_currency_id' => request()->get($this->aInfo['name'] . '_currency_id'),
+        ];
+    }
+
+    public function setMValue($aRow)
+    {
+        $this->sCurrency = $aRow[$this->aInfo['name'] . '_currency_id'];
+        $this->aInfo['value'] = $aRow[$this->aInfo['name']];
+    }
+
+    public function getDisplay()
+    {
+
+        return ($this->aInfo['value'] != '0.00')
+            ? Phpfox::getService('core.currency')->getSymbol($this->sCurrency)
+                . ' ' . number_format($this->aInfo['value'], 2)
+            : _p('Free');
+    }
+
+    public function getFilter($sTableAlias)
+    {
+        $aInfo = $this->aInfo;
+        return [
+            'type' => 'input:text',
+            'field_name' => $aInfo['name'],
+            'size' => 17,
         ];
     }
 

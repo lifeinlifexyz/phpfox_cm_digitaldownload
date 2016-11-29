@@ -73,14 +73,15 @@ class Field extends \Phpfox_Service implements IFormly
                     'maxLength' => _p('Max Length'),
                 ],
             ],
+            'is_filter' => [
+                'type' => 'boolean',
+                'name' => 'is_filter',
+                'title' => _p('Is in filter form?'),
+            ],
             'is_active' => [
                 'type' => 'boolean',
                 'name' => 'is_active',
                 'title' => _p('Active'),
-                'rules' => '0:1:in',
-                'filter' => function ($sValue) {
-                    return (int)$sValue;
-                }
             ],
         ];
     }
@@ -155,6 +156,23 @@ class Field extends \Phpfox_Service implements IFormly
             throw $e;
         }
 
+    }
+
+    public function getFilterable()
+    {
+        //todo::cache
+        return $this->database()
+            ->select('f.*')
+            ->from(\Phpfox::getT($this->_sTable), 'f')
+            ->leftJoin(\Phpfox::getT('digital_download_category_fields'), 'cf', 'f.field_id = cf.field_id')
+            ->leftJoin(\Phpfox::getT('digital_download_category'), 'c', 'c.category_id = cf.category_id')
+            ->where([
+                    '`f`.`is_active` = 1',
+                    'AND `c`.`is_active` = 1',
+                    'AND `f`.`is_filter` = 1'
+                ])
+            ->order('`f`.`ordering` ASC')
+            ->execute('getslaverows');
     }
 
 }

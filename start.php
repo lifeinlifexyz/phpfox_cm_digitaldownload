@@ -9,6 +9,7 @@
         'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
         'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
         'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\DigitalDownload',
+        'digitaldownload.browse' => '\Apps\CM_DigitalDownload\Service\Browse',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
@@ -17,14 +18,14 @@
         'digitaldownload.admincp.fields' => '\Apps\CM_DigitalDownload\Controller\Admin\FieldsController',
         'digitaldownload.admincp.add-field' => '\Apps\CM_DigitalDownload\Controller\Admin\AddFieldController',
         'digitaldownload.admincp.save-field' => '\Apps\CM_DigitalDownload\Controller\Admin\SaveFieldController',
-        'digitaldownload.index' => '\Apps\CM_DigitalDownload\Controller\IndexController',
-        'digitaldownload.add' => '\Apps\CM_DigitalDownload\Controller\AddController',
+
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Controller\CategoryController',
     ])
     ->addAliasNames('digitaldownload', 'CM_DigitalDownload')
     ->addTemplateDirs([
         'digitaldownload' => PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'views',
         'cm_forms' => PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'views'. PHPFOX_DS . 'form',
+        'cm_filter_form' => PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'views'. PHPFOX_DS . 'filter',
     ]);
 
 event('app_settings', function ($settings){
@@ -37,8 +38,13 @@ if (setting('cm_dd_enabled')) {
 
     \Phpfox_Module::instance()->addComponentNames('ajax', [
         'digitaldownload.ajax'        => '\Apps\CM_DigitalDownload\Ajax\Ajax',
+    ])->addComponentNames('controller', [
+        'digitaldownload.index' => '\Apps\CM_DigitalDownload\Controller\IndexController',
+        'digitaldownload.add' => '\Apps\CM_DigitalDownload\Controller\AddController',
+    ])->addComponentNames('block', [
+        'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
+        'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
     ]);
-
 }
 
 group('/admincp/digitaldownload/', function(){
@@ -106,6 +112,8 @@ group('/digitaldownload/', function (){
 
     if (setting('cm_dd_enabled')) {
         route('/', 'digitaldownload.index');
+        route('my', 'digitaldownload.index');
         route('add', 'digitaldownload.add');
+        route('edit', 'digitaldownload.edit');
     }
 });

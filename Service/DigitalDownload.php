@@ -1,16 +1,49 @@
 <?php
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 
 class DigitalDownload  extends \Phpfox_Service implements IFormly
 {
     use FormlyTrait;
+    use FilterTrait;
 
     protected $_sTable = 'digital_download';
     protected $sKeyName = 'id';
     protected $iCategoryId = null;
+
+    public function getFilterFields()
+    {
+        //todo:: save to cache category fields
+        $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable();
+        $aFields = [];
+        $aFields['category_id'] = [
+            'type' => 'tree',
+            'name' => 'category_id',
+            'parent' => 'parent_id',
+            'key' => 'category_id',
+            'title' => _p('Category'),
+            'translate' => true,
+            'template' => '@CM_DigitalDownload/filter/fields/tree.html',
+            'items' => \Phpfox::getService('digitaldownload.category')->getList(),
+            'table_alias' => 'd',
+        ];
+
+        foreach($aRawFields as &$aRawField) {
+            $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
+        }
+
+        $aFields['price'] = [
+            'type' => 'price',
+            'name' => 'price',
+            'title' => _p('Price'),
+            'table_alias' => 'd',
+        ];
+
+        return $aFields;
+    }
 
     /**
      * return array of fields info
@@ -61,7 +94,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         return $aFields;
     }
 
-    protected function buildFieldInfo($aRawField)
+    protected function buildFieldInfo($aRawField, $bFilter = false)
     {
         //todo:: build field info array certain field type. it is simple type with out extra data
         $aRes =  [
@@ -70,6 +103,11 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             'title' => _p($aRawField['caption_phrase']),
             'rules' => !empty($aRawField['rules']) ?  $aRawField['rules']: null,
         ];
+
+        if ($bFilter) {
+            $aRes['template'] = '@CM_DigitalDownload/filter/fields/' . $aRawField['type'] . '.html';
+            $aRes['table_alias'] = 'd';
+        }
 
         return $aRes;
     }

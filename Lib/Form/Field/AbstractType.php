@@ -81,6 +81,15 @@ abstract class AbstractType implements IType, \JsonSerializable
         return $this;
     }
 
+    public function setCondition(\Phpfox_Search &$oSearch, $aSearch)
+    {
+        $sKey = $this->aInfo['column'];
+        $sTAlias = $this->aInfo['table_alias'];
+        if (($sValue = $oSearch->get($sKey)) || (isset($aSearch[$sKey]) && $sValue = $aSearch[$sKey])) {
+            $oSearch->setCondition('AND `' . $sTAlias . '`.' . $sKey . '` = ' . $sValue);
+        }
+    }
+
     /**
      * @return array
      */
@@ -88,6 +97,11 @@ abstract class AbstractType implements IType, \JsonSerializable
     {
         $this->aInfo['required'] = isset($this->aInfo['rules']) && (strpos($this->aInfo['rules'], 'required') !== false);
         return $this->aInfo;
+    }
+
+    public function getDisplay()
+    {
+       return $this->getValue();
     }
 
     /**

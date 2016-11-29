@@ -1,0 +1,15 @@
+<div class="table_left">{{ title }}</div>
+<div class="table_right">
+    <select id="{{ name }}_field" class="form-control" name="{{ name }}">
+        <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('All') }}</option>
+        {% for key, item in items %}
+        <option {% if value == key %}selected{% endif %} value="{{ key }}">
+            {% if translate %}
+            {{ _p(item) }}
+            {% else %}
+            {{ item }}
+            {% endif %}
+        </option>
+        {% endfor %}
+    </select>
+</div>

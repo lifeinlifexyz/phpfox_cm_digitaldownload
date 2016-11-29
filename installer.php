@@ -27,6 +27,7 @@ function installv1_0_0()
       `extra` text(5000) DEFAULT NULL,
       `time_stamp` int(10) unsigned NOT NULL DEFAULT '0',
       `is_active` tinyint(1) NOT NULL DEFAULT '0',
+      `is_filter` tinyint(1) NOT NULL DEFAULT '0',
       `ordering` int(11) unsigned NOT NULL DEFAULT '0',
       PRIMARY KEY (`field_id`),
       KEY `is_active` (`is_active`)
@@ -45,9 +46,11 @@ function installv1_0_0()
       `digital_download` VARCHAR( 255 ) NOT NULL,
       `privacy` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  '0.00',
-      `price_currency_id` CHAR( 3 ) NOT NULL
+      `price_currency_id` CHAR( 3 ) NOT NULL,
+      `is_active` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       PRIMARY KEY (`id`),
-      KEY `category_id` (`category_id`)
+      KEY `category_id` (`category_id`),
+      KEY `is_active` (`is_active`)
       );");
 
 }
