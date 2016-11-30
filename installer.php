@@ -47,11 +47,27 @@ function installv1_0_0()
       `privacy` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  '0.00',
       `price_currency_id` CHAR( 3 ) NOT NULL,
+      `user_id` INT( 11 ) NOT NULL DEFAULT  '0',
       `is_active` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
-      KEY `is_active` (`is_active`)
+      KEY `is_active` (`is_active`),
+      KEY `user_id` (`user_id`),
       );");
+
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_images') . "` (
+      `image_id` int(11) NOT NULL AUTO_INCREMENT,
+      `dd_id` int(11) NOT NULL,
+      `server_id` int(11) NOT NULL,
+      `image_path` varchar(255) NOT NULL,
+      `caption` varchar(255) NOT NULL,
+       PRIMARY KEY (`image_id`),
+       KEY `dd_id` (`dd_id`)
+      );");
+
+    if (!is_dir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/')) {
+        mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
+    }
 
 }
 

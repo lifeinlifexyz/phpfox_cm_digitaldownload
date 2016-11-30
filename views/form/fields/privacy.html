@@ -1,15 +1,19 @@
 {% if isModule('privacy') %}
+<div class="table_left">
     <label>{{ title }}</label>
+</div>
+<div class="table_right">
     {{ privacy_field(name, privacy_info, value) }}
-    {% if hasError %}
-    <span class="help-block">
-            <ul>
-                {% for error in errors %}
-                <li>
-                    {{ error }}
-                </li>
-                {% endfor %}
-            </ul>
-        </span>
-    {% endif %}
+</div>
+{% if hasError %}
+<span class="help-block">
+    <ul>
+        {% for error in errors %}
+        <li>
+            {{ error }}
+        </li>
+        {% endfor %}
+    </ul>
+</span>
+{% endif %}
 {% endif %}

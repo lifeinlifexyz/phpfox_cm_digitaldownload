@@ -41,19 +41,6 @@ class Form implements \ArrayAccess, JsonSerializable
         $this->oView = $oView;
         $this->aData = array_merge($this->aDefaultFormData, $aData);
         $this->oFactory = new Factory();
-
-        $this->oView->env()->addFunction(new \Twig_SimpleFunction('isModule', function($sModule){
-            return \Phpfox::isModule($sModule);
-        }));
-
-        $this->oView->env()->addFunction(new \Twig_SimpleFunction('privacy_field', function($sName, $sInfo){
-
-            \Phpfox::getBlock('privacy.form', [
-                'privacy_name' => $sName,
-                'privacy_info' => $sInfo,
-            ]);
-            return '';
-        }));
     }
 
 
@@ -310,5 +297,13 @@ class Form implements \ArrayAccess, JsonSerializable
     {
         $this->oFactory = $oFactory;
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFields()
+    {
+        return $this->aFields;
     }
 }

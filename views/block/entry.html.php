@@ -11,6 +11,10 @@ defined('PHPFOX') or exit('NO DICE!');
            <p>
                <a itemprop="url" href="{url link='digitaldownload'}{$aEntry.id}" title="{$aEntry|clean}">{$aEntry}</a>
            </p>
+           {if $aEntry.user_id == Phpfox::getUserId()}
+           <a href="{url link='digitaldownload.add'}{$aEntry.id}#detail">{_p('Edit')}</a>
+           <a href="{url link='digitaldownload.delete'}{$aEntry.id}">{_p('Delete')}</a>
+           {/if}
        </div>
    </div>
 </article>

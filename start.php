@@ -10,6 +10,7 @@
         'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
         'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\DigitalDownload',
         'digitaldownload.browse' => '\Apps\CM_DigitalDownload\Service\Browse',
+        'digitaldownload.images' => '\Apps\CM_DigitalDownload\Service\Images',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
@@ -44,6 +45,7 @@ if (setting('cm_dd_enabled')) {
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
+        'digitaldownload.managephotos'    => '\Apps\CM_DigitalDownload\Block\ManagePhotos',
     ]);
 }
 
@@ -114,6 +116,7 @@ group('/digitaldownload/', function (){
         route('/', 'digitaldownload.index');
         route('my', 'digitaldownload.index');
         route('add', 'digitaldownload.add');
-        route('edit', 'digitaldownload.edit');
+        route('add/:id', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
+        route('add/:id/*', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
     }
 });

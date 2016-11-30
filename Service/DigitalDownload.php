@@ -51,6 +51,14 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
      */
     public function getFieldsInfo()
     {
+        if ($this->mKey) {
+            $this->aAttr =  $this->database()
+                ->select('*')
+                ->from(\Phpfox::getT($this->_sTable))
+                ->where('`id` = ' . $this->mKey)
+                ->execute('getRow');
+            $this->iCategoryId = $this->aAttr['category_id'];
+        }
         if (!$this->iCategoryId) {
             throw new \InvalidArgumentException('Category id is null');
         }
@@ -120,6 +128,22 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     {
         $this->iCategoryId = $iCategoryId;
         return $this;
+    }
+
+    public function getDisplayer($iId)
+    {
+        $iId = (int) $iId;
+
+        $oDisplay = new Display($this);
+        //todo::save row to cache;
+        $aRow = $this->database()
+            ->select('d.*')
+            ->from(\Phpfox::getT($this->_sTable), 'd')
+            ->where('id = ' . $iId)
+            ->get();
+
+        $oDisplay->setRow($aRow);
+        return $oDisplay;
     }
 
 }

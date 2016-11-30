@@ -1,5 +1,9 @@
-<label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
-<input class="form-control" type="text" name="{{ name }}" id="{{ name }}_field" value="{{ value }}" />
+<div class="table_left">
+    <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
+</div>
+<div class="table_right">
+    <input class="form-control" type="text" name="{{ name }}" id="{{ name }}_field" value="{{ value }}" />
+</div>
 {% if hasError %}
     <span class="help-block">
         <ul>

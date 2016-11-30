@@ -1,0 +1,5 @@
+{% for field in fields %}
+<div class="table form-group {% if field.hasError %} has-error {% endif %}">
+    {{ field }}
+</div>
+{% endfor %}

@@ -9,6 +9,26 @@ Array.prototype.getUnique = function() {
 
 $Ready(function () {
 
+    if (window.cm_dd_assets) {
+        for (var i in window.cm_dd_assets) {
+
+            var cm_asset = window.cm_dd_assets[i];
+            if (typeof cm_asset != 'string') {
+                continue;
+            }
+
+            if (cm_asset.indexOf('.js') != -1) {
+                if (!$('script[src^="' + cm_asset + '"]').length) {
+                    $('body').append('<script type="text/javascript" src="' + cm_asset + '"></script>')
+                }
+            } else if (cm_asset.indexOf('.css') != -1) {
+                if (!$('link[href^="' + cm_asset + '"]').length) {
+                    $('head').append('<link rel="stylesheet" href="' + cm_asset + '"/>')
+                }
+            }
+        }
+    }
+
     $('#manage-categories').nestable();
 
     $('#manage-categories').on('change', function(){

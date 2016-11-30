@@ -31,6 +31,9 @@ class IndexController extends Phpfox_Component
 			$aDisplays[$iPageCnt] = Phpfox::getPhrase('core.per_page', array('total' => $iPageCnt));
 		}
 
+		$aSectionMenu = [
+			_p('All') => '',
+		];
 
 		$aSort = [
 			'latest' => ['d.id', _p('Latest added')],
@@ -52,12 +55,21 @@ class IndexController extends Phpfox_Component
 		];
 		$oFormFilter = \Phpfox::getService('digitaldownload.dd')->getFilterForm();
 		$oSearch = $oFormFilter->setSearch(\Phpfox::getLib('search'))->defineConditions();
-		$oSearch->setCondition('`d`.`is_active` = 1');
+
+		if (Phpfox::isUser()) {
+			$aSectionMenu[_p('My')] = 'digitaldownload.my';
+		}
+
+		switch($this->request()->get('req2')) {
+			case 'my':
+				$oSearch->setCondition('`d`.`user_id` = ' . \Phpfox::getUserId());
+				break;
+			default:
+				$oSearch->setCondition('`d`.`is_active` = 1');
+
+		}
 		$oSearch->set($aSearchParams);
-		$aSectionMenu = [
-			_p('All') => '',
-			_p('My') => 'digitaldownload.my'
-		];
+
 
 		$iPage = $this->request()->getInt('page');
 		$iPageSize = $oSearch->getDisplay();

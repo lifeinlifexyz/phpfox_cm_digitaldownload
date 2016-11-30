@@ -13,6 +13,10 @@ trait FormlyTrait
      */
     private $_oFormBuilder = null;
     protected $mKey = null;
+    /**
+     * @var null|array
+     */
+    protected $aAttr = null;
 
     /**
      * return primary key name(id)
@@ -71,7 +75,14 @@ trait FormlyTrait
                 }
             }
 
+        } elseif ($this->aAttr) {
+            foreach($this->aAttr as $sFieldName => &$mValue) {
+                if (isset($aFields[$sFieldName])) {
+                    $aFields[$sFieldName]['value'] = $mValue;
+                }
+            }
         }
+
         /**
          * @var $oForm Form
          */
@@ -89,7 +100,7 @@ trait FormlyTrait
     protected function getFormBuilder()
     {
         if (is_null($this->_oFormBuilder)) {
-            $this->_oFormBuilder = new Builder(request(), \Core\Controller::$__view, new Validator());
+            $this->_oFormBuilder = Builder::getInstance(request(), \Core\Controller::$__view, new Validator());
         }
         return $this->_oFormBuilder;
     }

@@ -1,9 +1,12 @@
-<label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
-<select id="{{ name }}_field" class="form-control" name="{{ name }}">
-    <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
-    {{ include(tree_option_tmp, {tree: tree_values, depth: 0}) }}
-</select>
-
+<div class="table_left">
+    <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
+</div>
+<div class="table_right">
+    <select id="{{ name }}_field" class="form-control" name="{{ name }}">
+        <option value="0" {% if value is empty %} selected {% endif %}>{{ _p('None') }}</option>
+        {{ include(tree_option_tmp, {tree: tree_values, depth: 0}) }}
+    </select>
+</div>
 {% if hasError %}
 <span class="help-block">
         <ul>

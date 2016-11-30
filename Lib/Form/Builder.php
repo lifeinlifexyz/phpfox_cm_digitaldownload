@@ -11,6 +11,7 @@ use \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form as BindedForm;
 
 class Builder
 {
+    private static $instance = null;
     /**
      * @var Request
      */
@@ -25,12 +26,36 @@ class Builder
     protected $oValidator;
 
 
-    public function __construct(Request $oRequest, View $oView, IValidator $oValidator)
+    private function __construct(Request $oRequest, View $oView, IValidator $oValidator)
     {
         $this->oRequest = $oRequest;
         $this->oView = $oView;
         $this->oValidator = $oValidator;
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('isModule', function($sModule){
+            return \Phpfox::isModule($sModule);
+        }));
+
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('privacy_field', function($sName, $sInfo){
+
+            \Phpfox::getBlock('privacy.form', [
+                'privacy_name' => $sName,
+                'privacy_info' => $sInfo,
+            ]);
+            return '';
+        }));
     }
+
+    /**
+     * @return null
+     */
+    public static function getInstance(Request $oRequest, View $oView, IValidator $oValidator)
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self($oRequest, $oView, $oValidator);
+        }
+        return self::$instance;
+    }
+
 
     /**
      * @param array $aFields
