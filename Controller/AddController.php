@@ -56,10 +56,17 @@ class AddController extends Phpfox_Component
 
         if ($_POST && $oForm->isValid()) {
             (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
+
             $oForm->addField('hidden', [
                 'name' => 'user_id',
                 'value' => Phpfox::getUserId(),
             ]);
+
+            $oForm->addField('hidden', [
+                'name' => 'time_stamp',
+                'value' => time(),
+            ]);
+
             $oForm->save();
             (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_add_digitaldownload')) ? eval($sPlugin) : false);
         }

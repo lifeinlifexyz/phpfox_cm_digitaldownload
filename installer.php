@@ -50,6 +50,7 @@ function installv1_0_0()
       `images` TEXT NOT NULL DEFAULT  '';
       `user_id` INT( 11 ) NOT NULL DEFAULT  '0',
       `is_active` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `time_stamp` INT( 10 ) NOT NULL,
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),

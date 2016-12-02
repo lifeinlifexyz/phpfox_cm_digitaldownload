@@ -70,4 +70,10 @@ class TreeType extends AbstractType
         ];
     }
 
+    public function getDisplay()
+    {
+        $aVars = $this->getVars();
+        d($aVars);
+    }
+
 }

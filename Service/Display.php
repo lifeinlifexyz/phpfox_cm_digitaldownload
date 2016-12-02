@@ -41,6 +41,10 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 $aImg['image_path'] = isset($aImg['image_path']) ? $aImg['image_path'] : null;
                 return $aImg;
                 break;
+            case 'url':
+                $iId = $this->aRow['id'];
+                return  \Phpfox::getLib('url')->makeUrl('digitaldownload.' . $iId);
+                break;
             default:
                 return parent::offsetGet($offset);
         }

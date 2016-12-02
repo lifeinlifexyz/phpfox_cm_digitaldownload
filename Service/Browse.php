@@ -46,8 +46,9 @@ class Browse  extends \Phpfox_Service
         $this->_iCnt = $this->database()->select('count(*)')->from(\Phpfox::getT($this->_sTable), 'd')->where($this->_aConditions)->count();
 
         $aDD = $this->database()
-            ->select('`d`.*')
+            ->select('`d`.*, u.*')
             ->from(\Phpfox::getT($this->_sTable), 'd')
+            ->leftJoin(\Phpfox::getT('user'), 'u', 'u.user_id= d.user_id')
             ->where($this->_aConditions)
             ->limit($this->_iPage, $this->_iLimit, $this->_iCnt)
             ->all();

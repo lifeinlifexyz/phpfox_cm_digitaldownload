@@ -280,3 +280,19 @@ rules input
 .dd3-handle:hover {
     background: #ddd;
 }
+
+
+/*Browsing styles*/
+.cm-dd-search-item-img {
+    float: left;
+}
+
+.cm-dd-search-item-content {
+    margin-left: 130px;
+}
+
+.cm-dd-search-item {
+    background: #ffffff;
+    border-bottom: 1px #e6e6e6 solid;
+    padding: 20px 0;
+}
