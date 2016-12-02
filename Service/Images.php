@@ -13,24 +13,25 @@ use Phpfox_Request;
 class Images extends \Phpfox_Service
 {
 
-    protected $_sTable = 'digital_download_images';
 
-    public function upload($iDDId)
+    public function upload($oDD)
     {
         $oFile = Phpfox_File::instance();
         $aImage = $oFile->load('image', ['jpg', 'gif', 'png']);
 
         if ($aImage !== false) {
             $sDirImage = Phpfox::getParam('core.dir_pic') . 'digitaldownload/';
-            $sFileName = $oFile->upload('image', $sDirImage, $iDDId . rand(1, 100));
-
-            $iId = $this->database()->insert(Phpfox::getT($this->_sTable), [
+            $sFileName = $oFile->upload('image', $sDirImage, $oDD['id'] . rand(1, 100));
+            $aVal = $oDD->getRow();
+            $aImages = $oDD['images'];
+            $aImages[] = [
                 'image_path' => $sFileName,
                 'server_id' => Phpfox_Request::instance()->getServer('PHPFOX_SERVER_ID'),
-                'dd_id' => $iDDId
-            ]);
+            ];
+            $aVal['images'] = json_encode($aImages);
+            Phpfox::getService('digitaldownload.dd')->updateById($aVal['id'], $aVal);
             // thumbnails will be created automatically
-            return [$iId, $sFileName];
+            return [count($aImages), $sFileName];
         } else {
             return false;
         }
@@ -39,13 +40,8 @@ class Images extends \Phpfox_Service
 
    public function getImagesByDDId($iId)
    {
-       //todo:: save to cache
-       return $this->database()
-           ->select("*")
-           ->from(Phpfox::getT($this->_sTable))
-           ->where('dd_id = ' . $iId)
-           ->order('image_id DESC')
-           ->all();
+       $oDisplay = \Phpfox::getService('digitaldownload.dd')->getDisplayer($iId);
+       return $oDisplay['images'];
    }
 
     /**

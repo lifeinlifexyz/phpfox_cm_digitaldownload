@@ -5,6 +5,7 @@ use Apps\CM_DigitalDownload\Lib\Collection\Collection;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTraid;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
+use Core\Theme;
 
 class Browse  extends \Phpfox_Service
 {
@@ -56,7 +57,7 @@ class Browse  extends \Phpfox_Service
 
     public function getCollection()
     {
-        list($iCnt, $aRows) = $this->get();
+        list(, $aRows) = $this->get();
         $oDisplay = new Display(\Phpfox::getService('digitaldownload.dd'));
         $oCollection = new Collection($aRows, $oDisplay);
         return $oCollection;

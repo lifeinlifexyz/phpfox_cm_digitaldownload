@@ -22,10 +22,11 @@ class ManagePhotos extends \Phpfox_Component
 
         $iAllowedPhotos = 3;
 
-        $aPhotos = \Phpfox::getService('digitaldownload.images')->getImagesByDDId($this->getParam('id'));
+        $oDD = $this->getParam('oDD');
+        $aImages = $oDD['images'];
 
         $aPhotoData = [
-            'count' => count($aPhotos),
+            'count' => count($aImages),
             'max' => $iAllowedPhotos,
             'ddId' => $this->getParam('id'),
         ];
@@ -36,7 +37,7 @@ class ManagePhotos extends \Phpfox_Component
             '<script type="text/javascript">window.cm_dd_photo_data=' . json_encode($aPhotoData) . '</script>',
         ])->assign([
             'sMaxPhotosPhrase' => _p('You can add up to {{ iMax }} to your digital download.', ['iMax' => $iAllowedPhotos]),
-            'aPhotos' => $aPhotos,
+            'aPhotos' => $aImages,
         ]);
 
         return 'block';

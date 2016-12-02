@@ -29,6 +29,11 @@ class AddController extends Phpfox_Component
 
         if (($bEdit = $this->request()->get('req3'))) {
             $oDigitalDownload->setKey((int)$bEdit);
+            $oDD = $oDigitalDownload->getDisplayer($bEdit);
+            $this->setParam('oDD', $oDD);
+            if (!Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getMessage()) {
+                return Phpfox::getLib('module')->setController('error.404');
+            }
         }
 
         if (!$bEdit) {
@@ -46,7 +51,7 @@ class AddController extends Phpfox_Component
             'enctype' => 'multipart/form-data'
         ]);
         if ($sAction == 'upload') {
-            $this->upload($bEdit);
+            $this->upload($oDD);
         }
 
         if ($_POST && $oForm->isValid()) {
@@ -92,30 +97,40 @@ class AddController extends Phpfox_Component
             );
     }
 
-    private function upload($iDDId)
+    private function upload($oDD)
     {
-        //todo:: validate
-        $aRes = [
-            'error' => true,
-            'messages' => [_p('System error')],
-        ];
-        $oImgService = Phpfox::getService('digitaldownload.images');
-        if (($mFile = $oImgService->upload($iDDId))) {
-            list($iImageId, $sFile) = $mFile;
+        $aPhotos = $oDD['images'];
+        $iPhotoMax = 3; //todo:: get from plan
+
+        if (count($aPhotos) >= $iPhotoMax) {
             $aRes = [
-                'error' => false,
-                'image_url' => Phpfox::getLib('phpfox.image.helper')->display([
-                    'path' => 'core.url_pic',
-                    'file' => 'digitaldownload/' . $sFile,
-                    'server_id' => $this->request()->getServer('PHPFOX_SERVER_ID'),
-                    'suffix' => '_200',
-                    'max_width' => '200',
-                    'return_url' => true,
-                ]),
-                'id' => $iImageId,
+                'error' => true,
+                'messages' => [_p('You have reached images limit')],
             ];
-        } else {
-            $aRes['messages'] = \Phpfox_Error::get();
+        }
+
+        $oImgService = Phpfox::getService('digitaldownload.images');
+        if (!isset($aRes)) {
+            if (($mFile = $oImgService->upload($oDD))) {
+                list($iImageId, $sFile) = $mFile;
+                $aRes = [
+                    'error' => false,
+                    'image_url' => Phpfox::getLib('phpfox.image.helper')->display([
+                        'path' => 'core.url_pic',
+                        'file' => 'digitaldownload/' . $sFile,
+                        'server_id' => $this->request()->getServer('PHPFOX_SERVER_ID'),
+                        'suffix' => '_200',
+                        'max_width' => '200',
+                        'return_url' => true,
+                    ]),
+                    'id' => $iImageId,
+                ];
+            } else {
+                $aRes = [
+                    'error' => true,
+                    'messages' => \Phpfox_Error::get(),
+                ];
+            }
         }
         header('Content-type: application/json');
         echo json_encode($aRes);

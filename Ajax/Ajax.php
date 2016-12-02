@@ -20,7 +20,16 @@ class Ajax extends Phpfox_Ajax
         $oDD = \Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDid);
 
         if (Phpfox::getUserId() == $oDD['user_id']) {
-            \Phpfox::getService('digitaldownload.images')->delete($iId);
+            $aImages = $oDD['images'];
+            if (isset($aImages[$iId])) {
+                $aImage = $aImages[$iId];
+                $sFilePath = Phpfox::getParam('core.dir_pic') . 'digitaldownload/' . sprintf($aImage['image_path'], '');
+                \Phpfox_File::instance()->unlink($sFilePath);
+                unset($aImages[$iId]);
+            }
+            $aVal = $oDD->getRow();
+            $aVal['images'] = json_encode($aImages);
+            \Phpfox::getService('digitaldownload.dd')->updateById($iDDid, $aVal);
         } else {
             $this->alert(_p('You are not owner for this item'));
         }

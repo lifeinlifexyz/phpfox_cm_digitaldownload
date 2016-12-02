@@ -22,4 +22,18 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
         $this->oForm = $this->oDD->setCategoryId($aRow['category_id'])->getForm();
         return $this;
     }
+
+    public function getRow()
+    {
+        return $this->aRow;
+    }
+
+    public function offsetGet($offset)
+    {
+        if ($offset == 'images') {
+            return !empty($this->aRow['images']) ? json_decode($this->aRow['images'], true) : [];
+        } else {
+            return parent::offsetGet($offset);
+        }
+    }
 }

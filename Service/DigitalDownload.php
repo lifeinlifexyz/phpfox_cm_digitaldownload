@@ -146,4 +146,9 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         return $oDisplay;
     }
 
+    public function updateById($iID, $aVal)
+    {
+        return $this->database()->update(\Phpfox::getT($this->_sTable), $aVal, '`id` = ' . $iID);
+    }
+
 }

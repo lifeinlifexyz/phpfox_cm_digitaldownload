@@ -1,12 +1,12 @@
 <div class="dd-manage-photos">
     <p class="alert alert-info">{$sMaxPhotosPhrase}</p>
     <ul class="pictures">
-        {foreach from=$aPhotos name=dd_photos item="aItem"}
-        <li id="dd_photo_{$aItem.image_id}">
+        {foreach from=$aPhotos name=dd_photos key=iKey item="aItem"}
+        <li id="dd_photo_{$iKey}">
             <div class="picture">
                 {img path='core.url_pic' file='digitaldownload/'.$aItem.image_path server_id=$aItem.server_id suffix='_150' max_width=150}
             </div>
-            <a title="{_p('Delete')}" data-id="{$aItem.image_id}" data-dd-id="{$bEdit}" class="item-controls delete">
+            <a title="{_p('Delete')}" data-id="{$iKey}" data-dd-id="{$bEdit}" class="item-controls delete">
                 <i class="fa fa-remove"></i>
             </a>
         </li>
