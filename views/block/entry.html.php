@@ -5,7 +5,7 @@ defined('PHPFOX') or exit('NO DICE!');
 <article itemscope itemtype="http://schema.org/Product">
    <div class="row">
        <div class="col-sm-3">
-           {*img server_id=$aListing.server_id title=$aListing.title path='marketplace.url_image' file=$aListing.image_path suffix='_120_square' itemprop='image'*}
+            {img path='core.url_pic' file='digitaldownload/'.$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_120_square' itemprop='image'}
        </div>
        <div class="col-sm-9">
            <p>

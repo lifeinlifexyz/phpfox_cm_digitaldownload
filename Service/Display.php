@@ -30,10 +30,19 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 
     public function offsetGet($offset)
     {
-        if ($offset == 'images') {
-            return !empty($this->aRow['images']) ? json_decode($this->aRow['images'], true) : [];
-        } else {
-            return parent::offsetGet($offset);
+        switch($offset) {
+            case 'images':
+                return !empty($this->aRow['images']) ? json_decode($this->aRow['images'], true) : [];
+                break;
+            case 'main_image':
+                $aImgs = $this->offsetGet('images');
+                $aImg =  array_shift($aImgs);
+                $aImg['server_id'] = isset($aImg['server_id']) ? $aImg['server_id'] : null;
+                $aImg['image_path'] = isset($aImg['image_path']) ? $aImg['image_path'] : null;
+                return $aImg;
+                break;
+            default:
+                return parent::offsetGet($offset);
         }
     }
 }
