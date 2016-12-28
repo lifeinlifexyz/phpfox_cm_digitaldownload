@@ -12,6 +12,9 @@ function installv1_0_0()
       `time_stamp` int(10) unsigned NOT NULL DEFAULT '0',
       `used` int(10) unsigned NOT NULL DEFAULT '0',
       `ordering` int(11) unsigned NOT NULL DEFAULT '0',
+      `title` VARCHAR( 255 ) NULL ,
+      `keywords` VARCHAR( 255 ) NULL ,
+      `description` TEXT NULL ,
       PRIMARY KEY (`category_id`),
       KEY `parent_id` (`parent_id`,`is_active`),
       KEY `is_active` (`is_active`,`name_url`)

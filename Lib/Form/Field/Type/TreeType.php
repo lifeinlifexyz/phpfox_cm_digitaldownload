@@ -111,4 +111,9 @@ class TreeType extends AbstractType
         return  $aRes;
     }
 
+    public function getValueArray()
+    {
+        return $this->getNode($this->aInfo['items'], $this->getValue(), $this->aInfo['key_field']);
+    }
+
 }

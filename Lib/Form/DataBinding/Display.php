@@ -109,14 +109,19 @@ class Display implements \ArrayAccess
 
     public function __toString()
     {
+       return $this->parseVars($this->sTitleSettings);
+    }
+
+    protected function parseVars($sStr)
+    {
         $sPattern = '/\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)/';
-        preg_match_all($sPattern, $this->sTitleSettings, $aMatches);
+        preg_match_all($sPattern, $sStr, $aMatches);
         if (isset($aMatches[1]) && count($aMatches[1])) {
-            $sTitle = $this->sTitleSettings;
+            $sRes = $sStr;
             foreach($aMatches[1] as $sVar) {
-                $sTitle = str_replace('$' . $sVar, $this->offsetGet($sVar), $sTitle);
+                $sRes = str_replace('$' . $sVar, $this->offsetGet($sVar), $sRes);
             }
-            return $sTitle;
+            return $sRes;
         }
         return get_called_class();
     }

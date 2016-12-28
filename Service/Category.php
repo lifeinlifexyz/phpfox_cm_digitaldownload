@@ -39,6 +39,22 @@ class Category extends \Phpfox_Service implements IFormly
                 'title' => _p('Name'),
                 'rules' => 'required',
             ],
+            'title' => [
+                'type' => 'string',
+                'value' => '$title',
+                'name' => 'title',
+                'title' => _p('Title setting for items'),
+            ],
+            'keywords' => [
+                'type' => 'string',
+                'name' => 'keywords',
+                'title' => _p('SEO Keywords for item page'),
+            ],
+            'description' => [
+                'type' => 'text',
+                'name' => 'description',
+                'title' => _p('SEO Description for item page'),
+            ],
             'is_active' => [
                 'type' => 'boolean',
                 'name' => 'is_active',
@@ -70,7 +86,7 @@ class Category extends \Phpfox_Service implements IFormly
         return $aResult;
     }
 
-    public function getActive()
+    public function getActive($bRaw = false)
     {
         //todo:: save to cache
         $aList = $this->database()
@@ -79,7 +95,9 @@ class Category extends \Phpfox_Service implements IFormly
             ->where('is_active=1')
             ->order("`ordering` ASC")
             ->execute('getslaverows');
-
+        if ($bRaw) {
+            return $aList;
+        }
         $aResult = [];
         foreach ($aList as &$aRow) {
             $aResult[$aRow['parent_id']][] = $aRow;
