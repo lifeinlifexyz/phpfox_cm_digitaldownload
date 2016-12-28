@@ -6,6 +6,7 @@ namespace Apps\CM_DigitalDownload\Service;
 class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 {
     private $oDD;
+
     public function __construct(DigitalDownload $oDD)
     {
         $this->oDD = $oDD;
@@ -45,6 +46,9 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 $iId = $this->aRow['id'];
                 return  \Phpfox::getLib('url')->makeUrl('digitaldownload.' . $iId);
                 break;
+            case 'category':
+                $this->oForm->addField('tree', $this->oDD->getCategoryField());
+                $offset = 'category_id';
             default:
                 return parent::offsetGet($offset);
         }

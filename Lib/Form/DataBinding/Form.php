@@ -24,7 +24,7 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
     }
 
     /**
-     * @return $this
+     * @return int
      * @throws \Exception
      */
     public function save()
@@ -36,18 +36,18 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
             $aValues = array_merge($aValues, $mValues);
         }
         if (is_null($this->mKey)) {
-            $bRes = $this->oDatabase->insert($this->sTable, $aValues);
+            $iId = $this->oDatabase->insert($this->sTable, $aValues);
         } else {
-            $bRes = $this->oDatabase->update($this->sTable, $aValues, $this->sKeyName . ' = ' . $this->mKey);
+            $iId = $this->oDatabase->update($this->sTable, $aValues, $this->sKeyName . ' = ' . $this->mKey);
         }
 
-        if (!$bRes) {
+        if (!$iId) {
             throw new \Exception("Unable to save object to \" {$this->sTable} \" ");
         }
 
-        Event::trigger('after_save_' . $this->sTable, $bRes);
+        Event::trigger('after_save_' . $this->sTable, $iId);
 
-        return $this;
+        return $iId;
     }
 
     /**

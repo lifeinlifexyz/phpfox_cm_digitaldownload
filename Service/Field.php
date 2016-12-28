@@ -105,14 +105,17 @@ class Field extends \Phpfox_Service implements IFormly
     {
         $sType = $oForm->getFieldValue('type');
         $sName = $oForm->getFieldValue('name');
-        $oType = $oForm->createType($sType, ['name' => '', 'title' => '']);
+        $oType = $oForm->getFieldFactory()->createType($sType, ['name' => '', 'title' => '']);
         $aColumnsDefs = $oType->getColumnDefinitions();
+        $sTable = \Phpfox::getT($this->sAttachTable);
         foreach($aColumnsDefs as &$aColumnsDef) {
-            $aColumnsDef['table'] = \Phpfox::getT($this->sAttachTable);
+            $aColumnsDef['table'] = $sTable;
             $aColumnsDef['field'] = isset($aColumnsDef['field'])
                 ? $aColumnsDef['field'] . '_' . $sName
                 : $sName;
-            $this->database()->addField($aColumnsDef);
+            if (!$this->database()->isField($sTable, $sName)) {
+                $this->database()->addField($aColumnsDef);
+            }
         }
         return $this;
     }

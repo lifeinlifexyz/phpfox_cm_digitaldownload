@@ -306,4 +306,12 @@ class Form implements \ArrayAccess, JsonSerializable
     {
         return $this->aFields;
     }
+
+    /**
+     * @return Factory
+     */
+    public function getFieldFactory()
+    {
+        return $this->oFactory;
+    }
 }

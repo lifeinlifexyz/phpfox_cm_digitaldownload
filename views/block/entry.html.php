@@ -10,7 +10,7 @@ defined('PHPFOX') or exit('NO DICE!');
    </div>
    <div class="cm-dd-search-item-content">
        <div class="category">
-           {$aEntry.category_id}
+           {$aEntry.category}
        </div>
        <h2 itemprop="name">
            <a itemprop="url" href="{$aEntry.url}" title="{$aEntry|clean}">{$aEntry}</a>

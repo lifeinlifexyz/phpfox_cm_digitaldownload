@@ -19,17 +19,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         //todo:: save to cache category fields
         $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable();
         $aFields = [];
-        $aFields['category_id'] = [
-            'type' => 'tree',
-            'name' => 'category_id',
-            'parent' => 'parent_id',
-            'key' => 'category_id',
-            'title' => _p('Category'),
-            'translate' => true,
-            'template' => '@CM_DigitalDownload/filter/fields/tree.html',
-            'items' => \Phpfox::getService('digitaldownload.category')->getList(),
-            'table_alias' => 'd',
-        ];
+        $aFields['category_id'] = $this->getCategoryField();
 
         foreach($aRawFields as &$aRawField) {
             $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
@@ -43,6 +33,21 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         ];
 
         return $aFields;
+    }
+
+    public function getCategoryField()
+    {
+        return [
+            'type' => 'tree',
+            'name' => 'category_id',
+            'parent' => 'parent_id',
+            'key' => 'category_id',
+            'title' => _p('Category'),
+            'translate' => true,
+            'template' => '@CM_DigitalDownload/filter/fields/tree.html',
+            'items' => \Phpfox::getService('digitaldownload.category')->getList(),
+            'table_alias' => 'd',
+        ];
     }
 
     /**

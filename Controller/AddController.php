@@ -67,7 +67,7 @@ class AddController extends Phpfox_Component
                 'value' => time(),
             ]);
 
-            $oForm->save();
+            $iId = $oForm->save();
             (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_add_digitaldownload')) ? eval($sPlugin) : false);
         }
         $sTitle = $bEdit ? _p('Editing') : _p('Creating');

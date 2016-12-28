@@ -26,6 +26,11 @@ class Factory
         return $this;
     }
 
+    /**
+     * @param $sType
+     * @param $aData
+     * @return AbstractType
+     */
     public function createType($sType, $aData)
     {
         $sTypeClass = $this->getTypeClassName($sType);
