@@ -8,6 +8,10 @@ use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 class TreeType extends AbstractType
 {
 
+    /**
+     * @var Tree
+     */
+    protected $oTree;
     protected $aInfo = [
         'template' => '@CM_DigitalDownload/form/fields/tree.html',
         'tree_option_tmp' => '@CM_DigitalDownload/form/fields/tree-option.html',
@@ -22,43 +26,25 @@ class TreeType extends AbstractType
     public function __construct(array $aData)
     {
         parent::__construct($aData);
+
+        $this->oTree = isset($aData['tree_manager'])
+            ? $aData['tree_manager']
+            : new Tree();
+
+        $this->oTree
+            ->setParentField($this->aInfo['parent_field'])
+            ->setTitleField($this->aInfo['title_field'])
+            ->setKeyField($this->aInfo['key_field'])
+            ->setRootId($this->aInfo['root_id']);
+
     }
 
     protected function getVars()
     {
-        $aList = [];
-        $sParentField = $this->aInfo['parent_field'];
-
-        foreach ($this->aInfo['items'] as $aRow) {
-            $aList[$aRow[$sParentField]][] = $aRow;
-        }
-
-        $aTree = $this->buildTree($aList);
-        $this->aInfo['tree_values'] = $aTree;
-
+        $this->aInfo['tree_values'] = $this->oTree->build($this->aInfo['items']);
         return parent::getVars();
     }
 
-    private function buildTree(&$aList, $pid = 0, $iLevel = 0)
-    {
-        $aTree = [];
-
-        if (!isset($aList[$pid])) {
-            return $aTree;
-        }
-
-        foreach ($aList[$pid] as $aChild)
-        {
-            $aChild['level'] = $iLevel;
-            $aChilds =  $this->buildTree($aList, $aChild[$this->aInfo['key_field']], $iLevel);
-            if ($aChilds) {
-                $iLevel++;
-                $aChild['childs'] = $aChilds;
-            }
-            $aTree[] = $aChild;
-        }
-        return $aTree;
-    }
 
     public function getFilter($sTableAlias)
     {
@@ -76,44 +62,21 @@ class TreeType extends AbstractType
         if (is_null($iValue)) {
             return '';
         }
-        $aItems = $this->aInfo['items'];
-        $aValue = $this->getNode($aItems, $iValue, $this->aInfo['key_field']);
-        $aNode = $aValue;
-        $sPField = $this->aInfo['parent_field'];
-        $sSeperator = $this->aInfo['display_seperator'];
+
+        $aBranches = $this->oTree->parents($this->aInfo['items'], $iValue);
         $sTitleField = $this->aInfo['title_field'];
-        $aBranches = [];
-        while(isset($aNode[$sPField])) //walk to root
-        {
-            $aNode = $this->getNode($aItems, $aNode[$sPField], $this->aInfo['key_field']);
-            if (!empty($aNode)) {
-                $aBranches[] = $aNode;
-            }
-        }
-        $aBranches = array_reverse($aBranches);
+        $sSeperator = $this->aInfo['display_seperator'];
+
         $sRes = '';
-        foreach($aBranches as $aItem) {
+        foreach($aBranches as &$aItem) {
             $sRes .= _p($aItem[$sTitleField]) . $sSeperator;
         }
-        $sRes .= _p($aValue[$sTitleField]);
-        return $sRes;
-    }
-
-    protected function getNode($aItems, $mValue, $sKey)
-    {
-        $aRes = [];
-        foreach($aItems as &$aItem) {
-            if ($aItem[$sKey] == $mValue) {
-                $aRes = $aItem;
-                break;
-            }
-        }
-        return  $aRes;
+        return rtrim($sRes, $sSeperator);
     }
 
     public function getValueArray()
     {
-        return $this->getNode($this->aInfo['items'], $this->getValue(), $this->aInfo['key_field']);
+        return $this->oTree->getValueArray($this->aInfo['items'], $this->getValue());
     }
 
 }

@@ -17,10 +17,10 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     public function getFilterFields()
     {
         //todo:: save to cache category fields
-        $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable();
         $aFields = [];
         $aFields['category_id'] = $this->getCategoryFieldData();
 
+        $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable();
         foreach($aRawFields as &$aRawField) {
             $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
         }
