@@ -84,14 +84,13 @@ class Builder
     public function buildFilterForm(array $aFields, array $aFormData = [])
     {
         $oForm = new  FilterForm($this->oView, $aFormData);
-
+        $aSearch = $this->oRequest->getArray('search');
         foreach ($aFields as $aField) {
             $sType = $aField['type'];
             $oForm->addField($sType, $aField);
-            $mValue = (!is_null($this->oRequest->get($aField['name'], null)))
-                ? $this->oRequest->get($aField['name'])
+            $mValue = (isset($aSearch[$aField['name']]))
+                ? $aSearch[$aField['name']]
                 : (isset($aField['value']) ? $aField['value'] : null);
-
             $oForm->setFieldValue($aField['name'], $mValue);
         }
         return $oForm;

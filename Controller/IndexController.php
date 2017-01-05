@@ -40,8 +40,6 @@ class IndexController extends Phpfox_Component
 			'most-viewed' => ['d.total_view', _p('Most viewed')],
 			'most-talked' => ['d.total_comment',  _p('Most discused')]
 		];
-		$sDefaultOrderName = 'd.id';
-		$sDefaultSort = 'DESC';
 		/**
 		 * @var $oFormFilter FilterForm
 		 */
