@@ -86,7 +86,7 @@ abstract class AbstractType implements IType, \JsonSerializable
         $sKey = $this->aInfo['column'];
         $sTAlias = $this->aInfo['table_alias'];
         if (($sValue = $oSearch->get($sKey)) || (isset($aSearch[$sKey]) && $sValue = $aSearch[$sKey])) {
-            $oSearch->setCondition('AND `' . $sTAlias . '`.' . $sKey . '` = ' . $sValue);
+            $oSearch->setCondition('AND `' . $sTAlias . '`.`' . $sKey . '` = ' . $sValue);
         }
     }
 

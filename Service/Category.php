@@ -43,17 +43,17 @@ class Category extends \Phpfox_Service implements IFormly
                 'type' => 'string',
                 'value' => '$title',
                 'name' => 'title',
-                'title' => _p('Title setting for items'),
+                'title' => _p('Title for item'),
             ],
             'keywords' => [
                 'type' => 'string',
                 'name' => 'keywords',
-                'title' => _p('SEO Keywords for item page'),
+                'title' => _p('SEO Keywords for item'),
             ],
             'description' => [
                 'type' => 'text',
                 'name' => 'description',
-                'title' => _p('SEO Description for item page'),
+                'title' => _p('SEO Description for item'),
             ],
             'is_active' => [
                 'type' => 'boolean',

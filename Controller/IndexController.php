@@ -21,7 +21,7 @@ class IndexController extends Phpfox_Component
 
 		//add button to add new Digital Download
 		if (user('cm_dd_add' , '0') == '1') {
-			sectionMenu(_p('Add a Digital Download'), url('/digitaldownload/add'));
+			sectionMenu(_p('Add'), url('/digitaldownload/add'));
 		}
 
 		$aPages = [21, 31, 41, 51];
@@ -40,7 +40,6 @@ class IndexController extends Phpfox_Component
 			'most-viewed' => ['d.total_view', _p('Most viewed')],
 			'most-talked' => ['d.total_comment',  _p('Most discused')]
 		];
-
 		$sDefaultOrderName = 'd.id';
 		$sDefaultSort = 'DESC';
 		/**
@@ -49,12 +48,21 @@ class IndexController extends Phpfox_Component
 		$aSearchParams = [
 			'type' => 'browse',
 			'search_tool' => [
+				'when_field' => 'time_stamp',
+				'table_alias' => 'd',
 				'sort' => $aSort,
 				'show' => $aPages,
+				'search' => [
+					'name' => 'keywords',
+					'field' => Phpfox::getService('digitaldownload.field')->getFilterableFieldsName(),
+					'default_value' => _p('Keywords') . '...',
+					'action' => '',
+				]
 			]
 		];
+		$oSearch = \Phpfox::getLib('search')->set($aSearchParams);
 		$oFormFilter = \Phpfox::getService('digitaldownload.dd')->getFilterForm();
-		$oSearch = $oFormFilter->setSearch(\Phpfox::getLib('search'))->defineConditions();
+		$oSearch = $oFormFilter->setSearch($oSearch)->defineConditions();
 
 		if (Phpfox::isUser()) {
 			$aSectionMenu[_p('My')] = 'digitaldownload.my';
@@ -65,7 +73,7 @@ class IndexController extends Phpfox_Component
 				$oSearch->setCondition('`d`.`user_id` = ' . \Phpfox::getUserId());
 				break;
 			default:
-				$oSearch->setCondition('`d`.`is_active` = 1');
+				$oSearch->setCondition('AND `d`.`is_active` = 1');
 
 		}
 		$oSearch->set($aSearchParams);

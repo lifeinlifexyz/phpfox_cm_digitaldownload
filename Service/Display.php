@@ -14,7 +14,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
     }
 
     /**
-     * @param mixed $aRow
+     * @param array $aRow
      * @return Display
      */
     public function setRow($aRow)

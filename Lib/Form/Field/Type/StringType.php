@@ -25,7 +25,7 @@ class StringType extends AbstractType
         $sKey = $this->aInfo['column'];
         $sTAlias = $this->aInfo['table_alias'];
         if (($sValue = $oSearch->get($sKey)) || (isset($aSearch[$sKey]) && $sValue = $aSearch[$sKey])) {
-            $oSearch->setCondition('AND `' . $sTAlias . '`.' . $sKey . '` LIKE \'%' . $sValue . '%\'');
+            $oSearch->setCondition('AND `' . $sTAlias . '`.`' . $sKey . '` LIKE \'%' . $sValue . '%\'');
         }
     }
 }

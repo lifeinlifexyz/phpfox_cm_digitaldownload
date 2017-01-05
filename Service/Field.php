@@ -178,4 +178,16 @@ class Field extends \Phpfox_Service implements IFormly
             ->execute('getslaverows');
     }
 
+    public function getFilterableFieldsName()
+    {
+        //todo::cache
+        $aFields = $this->getFilterable();
+        $aList = [];
+        foreach($aFields as $aField) {
+            $aList[$aField['name']] = $aField['name'];
+        }
+        $aList['price'] = 'price';
+        return $aList;
+    }
+
 }
