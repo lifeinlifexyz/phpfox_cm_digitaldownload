@@ -76,7 +76,7 @@ class Field extends \Phpfox_Service implements IFormly
             'is_filter' => [
                 'type' => 'boolean',
                 'name' => 'is_filter',
-                'title' => _p('Is in filter form?'),
+                'title' => _p('Is searchable?'),
             ],
             'is_active' => [
                 'type' => 'boolean',

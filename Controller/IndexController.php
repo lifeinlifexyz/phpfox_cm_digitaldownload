@@ -77,7 +77,6 @@ class IndexController extends Phpfox_Component
 		$oSearch->set($aSearchParams);
 
 
-		$iPage = $this->request()->getInt('page');
 		$iPageSize = $oSearch->getDisplay();
 		$aDD = Phpfox::getService('digitaldownload.browse')->conditions($oSearch->getConditions())
 			->sort($oSearch->getSort())
