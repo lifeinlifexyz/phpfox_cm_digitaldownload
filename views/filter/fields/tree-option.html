@@ -1,12 +1,10 @@
+{% for i in 0..depth %}
+    {% set space = space ~ '&nbsp;&nbsp;' %}
+{% endfor %}
+
 {% for item in tree %}
     <option value="{{ item[key_field] }}" {% if value == item[key_field] %} selected {% endif %}>
-
-        {% for i in 0..depth %}
-            {% set space = space ~ '&nbsp;&nbsp;' %}
-        {% endfor %}
-
         {{ space }}
-
         {% if translate %}
             {{ _p(item[title_field]) }}
         {% else %}

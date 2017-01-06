@@ -68,7 +68,7 @@ class IndexController extends Phpfox_Component
 
 		switch($this->request()->get('req2')) {
 			case 'my':
-				$oSearch->setCondition('`d`.`user_id` = ' . \Phpfox::getUserId());
+				$oSearch->setCondition('AND `d`.`user_id` = ' . \Phpfox::getUserId());
 				break;
 			default:
 				$oSearch->setCondition('AND `d`.`is_active` = 1');
