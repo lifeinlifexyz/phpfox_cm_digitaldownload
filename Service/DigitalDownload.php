@@ -4,6 +4,7 @@ namespace Apps\CM_DigitalDownload\Service;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
+use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 
 class DigitalDownload  extends \Phpfox_Service implements IFormly
 {
@@ -13,14 +14,29 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     protected $_sTable = 'digital_download';
     protected $sKeyName = 'id';
     protected $iCategoryId = null;
+    /**
+     * @var Tree
+     */
+    protected $oTreeManager;
+
+    public function __construct()
+    {
+        $this->oTreeManager = new Tree();
+    }
 
     public function getFilterFields()
     {
         //todo:: save to cache category fields
+        $aSearch = request()->getArray('search');
+
+        $iCategoryId = isset($aSearch['category_id']) ? $aSearch['category_id'] : 0;
         $aFields = [];
         $aFields['category_id'] = $this->getCategoryFieldData();
+        $aFields['category_id']['template'] = '@CM_DigitalDownload/filter/fields/category.html';
 
-        $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable();
+        $aCategoryIds = $this->oTreeManager->getAllChildValues($aFields['category_id']['items'], $iCategoryId, [$iCategoryId]);
+
+        $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable($aCategoryIds);
         foreach($aRawFields as &$aRawField) {
             $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
         }
@@ -44,7 +60,6 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             'key' => 'category_id',
             'title' => _p('Category'),
             'translate' => true,
-            'template' => '@CM_DigitalDownload/filter/fields/tree.html',
             'items' => is_null($aItems) ? \Phpfox::getService('digitaldownload.category')->getActive(true) : $aItems,
             'table_alias' => 'd',
         ];

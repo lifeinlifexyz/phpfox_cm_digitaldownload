@@ -12,6 +12,8 @@ class TreeType extends AbstractType
      * @var Tree
      */
     protected $oTree;
+    protected $sConditionValue = null;
+
     protected $aInfo = [
         'template' => '@CM_DigitalDownload/form/fields/tree.html',
         'tree_option_tmp' => '@CM_DigitalDownload/form/fields/tree-option.html',
@@ -39,21 +41,17 @@ class TreeType extends AbstractType
 
     }
 
+    public function setConditionValue($mConditionValue)
+    {
+        $sConditionValue = is_array($mConditionValue) ? '(' . implode(', ', $mConditionValue) . ')' : $mConditionValue;
+        $this->sConditionValue = $sConditionValue;
+        return $this;
+    }
+
     protected function getVars()
     {
         $this->aInfo['tree_values'] = $this->oTree->build($this->aInfo['items']);
         return parent::getVars();
-    }
-
-
-    public function getFilter($sTableAlias)
-    {
-        $aInfo = $this->aInfo;
-        return [
-            'type' => 'input:text',
-            'field_name' => $aInfo['name'],
-            'size' => 17,
-        ];
     }
 
     public function getDisplay()
@@ -79,4 +77,22 @@ class TreeType extends AbstractType
         return $this->oTree->getValueArray($this->aInfo['items'], $this->getValue());
     }
 
+    public function setCondition(\Phpfox_Search &$oSearch, $aSearch)
+    {
+        $sKey = $this->aInfo['column'];
+        $sTAlias = $this->aInfo['table_alias'];
+        if (($sValue = $oSearch->get($sKey)) || (isset($aSearch[$sKey]) && $sValue = $aSearch[$sKey])) {
+            $oSearch->setCondition('AND `' . $sTAlias . '`.`' . $sKey . '` IN ' . $this->getConditionValue($sValue));
+        }
+    }
+
+    public function getConditionValue($sValue)
+    {
+        if (is_null($this->sConditionValue)) {
+            $aCondValue = $this->oTree->getAllChildValues($this->aInfo['items'], $sValue, [$sValue]);
+            $this->setConditionValue($aCondValue);
+        }
+        return $this->sConditionValue;
+
+    }
 }

@@ -3,9 +3,10 @@ namespace Apps\CM_DigitalDownload\Lib\Tree;
 
 class Tree
 {
-    protected $sParentField;
-    protected $sTitleField;
-    protected $sKeyField;
+
+    protected $sParentField = 'parent_id';
+    protected $sTitleField = 'name';
+    protected $sKeyField = 'category_id';
     protected $iRootId = 0;
 
     public function setOptions(array $aOption)
@@ -24,7 +25,7 @@ class Tree
         foreach ($aItems as $aRow) {
             $aList[$aRow[$this->sParentField]][] = $aRow;
         }
-        return $this->buildTree($aList);
+        return $this->buildTree($aList, $this->iRootId);
     }
 
     public function parents($aItems, $mValue)
@@ -49,9 +50,19 @@ class Tree
         return $this->getNode($aItems, $iValue, $this->sKeyField);
     }
 
-    public function childs()
+    public function getAllChildValues($aItems, $mValue, $aChilds = [])
     {
+        foreach ($aItems as $iKey => $aItem) {
 
+            if($aItem[$this->sParentField] ==  $mValue) {
+                unset($aItems[$iKey]);
+                $aChilds[] = $aItem[$this->sKeyField];
+
+                $aChilds =  self::getAllChildValues($aItems, $aItem[$this->sKeyField], $aChilds);
+            }
+        }
+
+        return $aChilds;
     }
 
     protected function getNode($aItems, $mValue, $sKey)

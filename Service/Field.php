@@ -161,19 +161,25 @@ class Field extends \Phpfox_Service implements IFormly
 
     }
 
-    public function getFilterable()
+    public function getFilterable(array $aCategoryIds = [])
     {
+        $aCond  = [
+            '`f`.`is_active` = 1',
+            'AND `c`.`is_active` = 1',
+            'AND `f`.`is_filter` = 1'
+        ];
+
+        if (count($aCategoryIds) > 0) {
+            $aCond[] = 'AND `c`.`category_id` in (' . implode(', ', $aCategoryIds) . ')';
+        }
+
         //todo::cache
         return $this->database()
             ->select('f.*')
             ->from(\Phpfox::getT($this->_sTable), 'f')
             ->leftJoin(\Phpfox::getT('digital_download_category_fields'), 'cf', 'f.field_id = cf.field_id')
             ->leftJoin(\Phpfox::getT('digital_download_category'), 'c', 'c.category_id = cf.category_id')
-            ->where([
-                    '`f`.`is_active` = 1',
-                    'AND `c`.`is_active` = 1',
-                    'AND `f`.`is_filter` = 1'
-                ])
+            ->where($aCond)
             ->order('`f`.`ordering` ASC')
             ->execute('getslaverows');
     }
