@@ -1,7 +1,11 @@
 <?php
+define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
+    . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
+    . 'PF.Site/Apps/CM_DigitalDownload/assets/');
 
-//todo:: филд тип поля не правильно показвает иархию
+//todo:: проблемы при добавлении листинга
 //todo:: активация филда. чекбок ведет себе не корректно
+//todo:: после пагинации ползунок цен не работает
 
 \Phpfox_Module::instance()
     ->addServiceNames([

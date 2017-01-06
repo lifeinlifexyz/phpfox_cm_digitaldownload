@@ -2,10 +2,9 @@
 namespace Apps\CM_DigitalDownload\Service;
 
 use Apps\CM_DigitalDownload\Lib\Collection\Collection;
-use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTraid;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
-use Core\Theme;
+use Core\Event;
 
 class Browse  extends \Phpfox_Service
 {
@@ -43,6 +42,7 @@ class Browse  extends \Phpfox_Service
 
     public function get()
     {
+        Event::trigger('before_browse_get', $this->_aConditions);
         $this->_iCnt = $this->database()->select('count(*)')->from(\Phpfox::getT($this->_sTable), 'd')->where($this->_aConditions)->count();
 
         $aDD = $this->database()

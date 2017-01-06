@@ -5,6 +5,7 @@ use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 use Apps\CM_DigitalDownload\Lib\Tree\Tree;
+use Core\Event;
 
 class DigitalDownload  extends \Phpfox_Service implements IFormly
 {
@@ -41,12 +42,17 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         foreach($aRawFields as &$aRawField) {
             $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
         }
-
+        event('before_get_min_max_price', function($aCond) use ($aCategoryIds) {
+           return $aCond[]  = 'AND `price` in (' . implode(', ', $aCategoryIds) . ')';
+        });
         $aFields['price'] = [
             'type' => 'price',
+            'is_search' => true,
             'name' => 'price',
             'title' => _p('Price'),
             'table_alias' => 'd',
+            'template' => '@CM_DigitalDownload/filter/fields/slider.html',
+            'table' => \Phpfox::getT($this->_sTable),
         ];
 
         return $aFields;

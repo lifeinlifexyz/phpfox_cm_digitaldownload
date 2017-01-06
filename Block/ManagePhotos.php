@@ -6,18 +6,14 @@ class ManagePhotos extends \Phpfox_Component
 {
     public function process()
     {
-        $sAssetPath = '//' . \Phpfox::getParam('core.host')
-            . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
-            . 'PF.Site/Apps/CM_DigitalDownload/assets/';
-
         $aAssets = [
-            $sAssetPath . 'upload/css/jquery.fileupload.css',
-            $sAssetPath . 'manage-photos.css',
+            DD_ASSET_PATH . 'upload/css/jquery.fileupload.css',
+            DD_ASSET_PATH . 'manage-photos.css',
 
-            $sAssetPath . 'upload/js/jquery.iframe-transport.js',
-            $sAssetPath . 'upload/js/jquery.fileupload.js',
-            $sAssetPath . 'upload/js/jquery.fileupload-process.js',
-            $sAssetPath . 'manage-photos.js',
+            DD_ASSET_PATH . 'upload/js/jquery.iframe-transport.js',
+            DD_ASSET_PATH . 'upload/js/jquery.fileupload.js',
+            DD_ASSET_PATH . 'upload/js/jquery.fileupload-process.js',
+            DD_ASSET_PATH . 'manage-photos.js',
         ];
 
         $iAllowedPhotos = 3;

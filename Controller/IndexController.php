@@ -85,12 +85,21 @@ class IndexController extends Phpfox_Component
 			->getCollection();
 		$iCnt = $oSearch->getSearchTotal(Phpfox::getService('digitaldownload.browse')->count());
 		\Phpfox_Template::instance()->buildSectionMenu('digitaldownload', $aSectionMenu);
+
+		$aAssets = [
+			DD_ASSET_PATH . 'slider/css/slider.css',
+			DD_ASSET_PATH . 'slider/js/bootstrap-slider.js',
+			DD_ASSET_PATH . 'init-slider.js',
+		];
+
 		$this->template()
+			->setHeader('<script type="text/javascript">window.cm_dd_assets=' . json_encode($aAssets) . '</script>')
 			->setTitle(_p('Digital download'))
 			->setBreadCrumb(_p('Digital download'))
 			->assign([
 				'aDDs' => $aDD,
 				'iCount' => $iCnt,
+				'oFilterForm' => $oFormFilter,
 			]);
 	}
 

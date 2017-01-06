@@ -27,6 +27,7 @@ $Ready(function () {
                 }
             }
         }
+        delete  window.cm_dd_assets; //clear lazy load assets stack
     }
 
     $('#manage-categories').nestable();

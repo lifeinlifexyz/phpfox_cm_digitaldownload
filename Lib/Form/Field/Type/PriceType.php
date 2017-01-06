@@ -4,8 +4,9 @@ namespace Apps\CM_DigitalDownload\Lib\Form\Field\Type;
 
 use Apps\CM_DigitalDownload\Lib\Form\Field\AbstractType;
 use Phpfox;
+//todo::curency sign in filter
 
-class PriceType extends AbstractType
+class PriceType extends IntegerType
 {
     protected $sCurrency = '';
 
@@ -23,6 +24,8 @@ class PriceType extends AbstractType
 
     protected $aInfo  = [
         'template' => '@CM_DigitalDownload/form/fields/price.html',
+        'is_search' => false,
+        'min' => 0,
     ];
 
     public function __construct(array $aData)
@@ -60,21 +63,9 @@ class PriceType extends AbstractType
 
     public function getDisplay()
     {
-
         return ($this->aInfo['value'] != '0.00')
             ? Phpfox::getService('core.currency')->getSymbol($this->sCurrency)
                 . ' ' . number_format($this->aInfo['value'], 2)
             : _p('Free');
     }
-
-    public function getFilter($sTableAlias)
-    {
-        $aInfo = $this->aInfo;
-        return [
-            'type' => 'input:text',
-            'field_name' => $aInfo['name'],
-            'size' => 17,
-        ];
-    }
-
 }
