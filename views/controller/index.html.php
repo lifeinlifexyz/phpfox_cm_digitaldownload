@@ -2,7 +2,7 @@
 defined('PHPFOX') or exit('NO DICE!');
 ?>
 {if  isset($aDDs) && count($aDDs)}
-    {for $i = 0; $i < $iCount; $i++}
+    {for $i = 0; $i < count($aDDs); $i++}
         {assign var="aEntry" value=$aDDs[$i]}
         {module name='digitaldownload.entry'}
     {/for}
