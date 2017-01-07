@@ -99,7 +99,7 @@ group('/digitaldownload/', function (){
     route('admincp/save-field', 'digitaldownload.admincp.save-field');
     route('admincp/delete-field', 'digitaldownload.admincp.fields');
     route('admincp/save-plan', 'digitaldownload.admincp.save-plan');
-    route('admincp/delete-plan', 'digitaldownload.admincp.delete-plan');
+    route('admincp/delete-plan', 'digitaldownload.admincp.plans');
 
     route('admincp/fields/order', function (){
         auth()->isAdmin(true);

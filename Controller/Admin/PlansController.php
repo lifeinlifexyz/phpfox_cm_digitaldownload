@@ -21,8 +21,8 @@ class PlansController extends Phpfox_Component
 		$aDelete = $this->request()->get('delete');
 
 		if (!empty($aDelete)) {
-			foreach($aDelete as $sFieldID) {
-				$oPlanService->delete($sFieldID);
+			foreach($aDelete as $sPlanID) {
+				$oPlanService->delete($sPlanID);
 			}
 			$sMessage =  (count($aDelete) > 1) ? _p('Successfully deleted plans.') : _p('Successfully deleted the plan.');
 			$this->url()->send('admincp.app', ['id' => 'CM_DigitalDownload'], $sMessage);
