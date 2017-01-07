@@ -12,7 +12,8 @@
   "admincp_menu": {
     "Categories": "digitaldownload.categories",
     "Fields": "digitaldownload.fields",
-    "Add Field": "digitaldownload.fields.add"
+    "Add Field": "digitaldownload.fields.add",
+    "Add Plan": "digitaldownload.plan.add"
   },
   "menu": {
     "name": "Digital Download",

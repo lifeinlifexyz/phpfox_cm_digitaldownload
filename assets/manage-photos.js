@@ -1,11 +1,4 @@
-
-
-
-
-
-
-$(function () {
-    'use strict';
+var ddManagePhotos = function() {
     //var siteUrl = $oCore.params('core.home');
     var numberOfPhotos = window.cm_dd_photo_data.count;
     var numberOfPhotosAllowed = window.cm_dd_photo_data.max;
@@ -26,45 +19,45 @@ $(function () {
         forceIframeTransport: true,
         initialIframeSrc: 'upload-dd-Photo' //for fix on Firefox v49
     }).bind('fileuploadstart', function (e, data) {
-            $Core.processing();
-            $(".add-photo-form .error").html("");
-            uploadPhotoForm.addClass("uploading");
-            uploadPhotoFormContainer.css('background-image', 'none');
+        $Core.processing();
+        $(".add-photo-form .error").html("");
+        uploadPhotoForm.addClass("uploading");
+        uploadPhotoFormContainer.css('background-image', 'none');
     }).bind('fileuploaddone', function (e, data) {
-            //console.log(data.result.error); return;
-            var response = JSON.parse($('pre', data.result).text())
-            if (response.error) {
-                var messages = '';
-                for(var i in response.messages) {
-                    if (typeof response.messages[i] != 'string') {
-                        continue;
-                    }
-                    messages += response.messages[i] + '</br>';
+        //console.log(data.result.error); return;
+        var response = JSON.parse($('pre', data.result).text())
+        if (response.error) {
+            var messages = '';
+            for(var i in response.messages) {
+                if (typeof response.messages[i] != 'string') {
+                    continue;
                 }
-                $(".add-photo-form .error").html(messages);
+                messages += response.messages[i] + '</br>';
             }
+            $(".add-photo-form .error").html(messages);
+        }
 
-            var $imageLi = getDisplayImageElement(response.image_url, response.id);
-            $imageLi.hide();
-            $('.add-photo-form').before($imageLi);
-            $imageLi.slideDown(300);
+        var $imageLi = getDisplayImageElement(response.image_url, response.id);
+        $imageLi.hide();
+        $('.add-photo-form').before($imageLi);
+        $imageLi.slideDown(300);
 
-            //makeCaptionsEditable($imageLi);
-            ajaxifyDeleteControls($imageLi);
-            increaseNumberOfPhotos();
+        //makeCaptionsEditable($imageLi);
+        ajaxifyDeleteControls($imageLi);
+        increaseNumberOfPhotos();
 
-            uploadPhotoForm.removeClass("uploading");
-            uploadPhotoFormContainer.css('background-image', uploadPhotoFormContainerBgImage);
-        });
+        uploadPhotoForm.removeClass("uploading");
+        uploadPhotoFormContainer.css('background-image', uploadPhotoFormContainerBgImage);
+    });
 
     function getDisplayImageElement(image_url, id) {
 
         var liElementInnerHtml =
             '<div class="picture">' +
-                '<img style="max-height: 100%" src="' + image_url + '" />' +
+            '<img style="max-height: 100%" src="' + image_url + '" />' +
             '</div>' +
             '<a title="Delete" class="item-controls delete" data-id="'+ id + '" data-dd-id="' + window.cm_dd_photo_data.ddId + '">' +
-                '<i class="fa fa-remove"></i>' +
+            '<i class="fa fa-remove"></i>' +
             '</a>';
 
         var $imageLi = $("<li>").html(liElementInnerHtml).prop('id', 'photo_' + id);
@@ -107,5 +100,6 @@ $(function () {
             return false;
         });
     }
-
-});
+}
+$Ready(ddManagePhotos);
+ddManagePhotos();

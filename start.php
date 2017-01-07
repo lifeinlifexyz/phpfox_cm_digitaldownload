@@ -3,7 +3,6 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
     . 'PF.Site/Apps/CM_DigitalDownload/assets/');
 
-//todo:: проблемы при добавлении листинга
 //todo:: активация филда. чекбок ведет себе не корректно
 //todo:: после пагинации ползунок цен не работает
 
@@ -11,6 +10,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     ->addServiceNames([
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Service\Category',
         'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
+        'digitaldownload.plan' => '\Apps\CM_DigitalDownload\Service\Plan',
         'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
         'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\DigitalDownload',
         'digitaldownload.browse' => '\Apps\CM_DigitalDownload\Service\Browse',
@@ -23,6 +23,8 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.admincp.fields' => '\Apps\CM_DigitalDownload\Controller\Admin\FieldsController',
         'digitaldownload.admincp.add-field' => '\Apps\CM_DigitalDownload\Controller\Admin\AddFieldController',
         'digitaldownload.admincp.save-field' => '\Apps\CM_DigitalDownload\Controller\Admin\SaveFieldController',
+        'digitaldownload.admincp.add-plan' => '\Apps\CM_DigitalDownload\Controller\Admin\AddPlanController',
+        'digitaldownload.admincp.save-plan' => '\Apps\CM_DigitalDownload\Controller\Admin\SavePlanController',
 
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Controller\CategoryController',
     ])
@@ -59,6 +61,7 @@ group('/admincp/digitaldownload/', function(){
     route('category/fields', 'digitaldownload.admincp.category-fields');
     route('fields', 'digitaldownload.admincp.fields');
     route('fields/add', 'digitaldownload.admincp.add-field');
+    route('plan/add', 'digitaldownload.admincp.add-plan');
 
     /**
      * set status
@@ -92,6 +95,7 @@ group('/digitaldownload/', function (){
 
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
     route('admincp/save-field', 'digitaldownload.admincp.save-field');
+    route('admincp/save-plan', 'digitaldownload.admincp.save-plan');
     route('admincp/delete-field', 'digitaldownload.admincp.fields');
 
     route('admincp/fields/order', function (){

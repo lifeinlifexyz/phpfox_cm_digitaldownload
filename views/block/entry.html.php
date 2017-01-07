@@ -28,7 +28,7 @@ defined('PHPFOX') or exit('NO DICE!');
        </ul>
 
        {if $aEntry.user_id == Phpfox::getUserId()}
-       <a href="{url link='digitaldownload.add'}{$aEntry.id}#detail">{_p('Edit')}</a>
+       <a href="{url link='digitaldownload.add' dd_id=$aEntry.id}">{_p('Edit')}</a>
        <a href="{url link='digitaldownload.delete'}{$aEntry.id}">{_p('Delete')}</a>
        {/if}
    </div>

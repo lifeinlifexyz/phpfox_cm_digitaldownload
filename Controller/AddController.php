@@ -27,7 +27,7 @@ class AddController extends Phpfox_Component
         $sAction = $this->request()->get('req4');
         $oDigitalDownload = \Phpfox::getService('digitaldownload.dd');
 
-        if (($bEdit = $this->request()->get('req3'))) {
+        if (($bEdit = $this->request()->get('dd_id'))) {
             $oDigitalDownload->setKey((int)$bEdit);
             $oDD = $oDigitalDownload->getDisplayer($bEdit);
             $this->setParam('oDD', $oDD);
@@ -54,6 +54,7 @@ class AddController extends Phpfox_Component
             $this->upload($oDD);
         }
 
+
         if ($_POST && $oForm->isValid()) {
             (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
 
@@ -66,9 +67,13 @@ class AddController extends Phpfox_Component
                 'name' => 'time_stamp',
                 'value' => time(),
             ]);
-
+            db()->beginTransaction();
             $iId = $oForm->save();
+            db()->commit();
             (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_add_digitaldownload')) ? eval($sPlugin) : false);
+            if ($iId) {
+                $this->url()->send('digitaldownload.add',['dd_id' => $iId], _p('Digital Download successfully saved'));
+            }
         }
         $sTitle = $bEdit ? _p('Editing') : _p('Creating');
         $sUrl = $bEdit ? $this->url()->makeUrl('digitaldownload.add.' . $bEdit) : $this->url()->makeUrl('digitaldownload.add');
@@ -78,6 +83,8 @@ class AddController extends Phpfox_Component
             $aMenus = array(
                 'detail' => _p('Details'),
                 'photo' => _p('Photo'),
+                'invite' => _p('Invite'),
+                'options' => _p('Options'),
             );
 
 
