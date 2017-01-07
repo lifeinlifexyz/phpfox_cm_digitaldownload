@@ -67,6 +67,8 @@ function installv1_0_0()
       `life_time` int(3) NOT NULL,
       `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  \'0.00\',
       `price_currency_id` CHAR( 3 ) NOT NULL,
+      `featured` DECIMAL( 14, 2 ) NOT NULL \'0.00\',
+      `featured_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
        PRIMARY KEY (`plan_id`)
     )');
 

@@ -7,7 +7,7 @@ class Display implements \ArrayAccess
 {
     protected $oForm;
     protected $aRow;
-    protected $sTitleSettings = '$title';
+    protected $cToStrCallback = null;
 
     public function __construct(Form $oForm = null)
     {
@@ -109,7 +109,20 @@ class Display implements \ArrayAccess
 
     public function __toString()
     {
-       return $this->parseVars($this->sTitleSettings);
+        if (!is_null($this->cToStrCallback)) {
+            return call_user_func($this->cToStrCallback, $this);
+        }
+        return implode(':', $this->aRow);
+    }
+
+    /**
+     * @param mixed $cToStrCallback
+     * @return Display
+     */
+    public function setToStrCallback($cToStrCallback)
+    {
+        $this->cToStrCallback = $cToStrCallback;
+        return $this;
     }
 
     protected function parseVars($sStr)

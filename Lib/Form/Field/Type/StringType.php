@@ -10,16 +10,6 @@ class StringType extends AbstractType
         'template' => '@CM_DigitalDownload/form/fields/string.html',
     ];
 
-    public function getFilter($sTableAlias)
-    {
-        $aInfo = $this->aInfo;
-        return [
-                'type' => 'input:text',
-                'field_name' => $aInfo['name'],
-                'size' => 17,
-        ];
-    }
-
     public function setCondition(\Phpfox_Search &$oSearch, $aSearch)
     {
         $sKey = $this->aInfo['column'];

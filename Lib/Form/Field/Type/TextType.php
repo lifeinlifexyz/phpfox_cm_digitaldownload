@@ -15,8 +15,4 @@ class TextType extends StringType
         'template' => '@CM_DigitalDownload/form/fields/text.html',
     ];
 
-    public function getFilter($sTableAlias)
-    {
-        return null;
-    }
 }

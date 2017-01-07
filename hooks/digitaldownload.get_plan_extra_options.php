@@ -1,0 +1,2 @@
+<?php
+$aOptions[] = 'featured';

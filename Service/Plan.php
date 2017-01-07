@@ -2,9 +2,12 @@
 
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Collection\Collection;
+use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
+use Core\Event;
 
 class Plan extends \Phpfox_Service implements IFormly
 {
@@ -20,7 +23,7 @@ class Plan extends \Phpfox_Service implements IFormly
     public function getFieldsInfo()
     {
         //todo extend options
-        return [
+        $aFields = [
             'name' => [
                 'type' => 'mstring',
                 'name' => 'name',
@@ -30,7 +33,7 @@ class Plan extends \Phpfox_Service implements IFormly
             'price' => [
                 'type' => 'price',
                 'name' => 'price',
-                'title' => _p('Price'),
+                'title' => _p('Digital Download Activation'),
                 'rules' => 'required',
                 'value' => '0.00',
             ],
@@ -49,6 +52,10 @@ class Plan extends \Phpfox_Service implements IFormly
                 'value' => 1,
             ],
         ];
+
+        (($sPlugin = \Phpfox_Plugin::get('digitaldownload.collect_plan_fields')) ? eval($sPlugin) : false);
+
+        return $aFields;
     }
 
     public function all()
@@ -60,10 +67,47 @@ class Plan extends \Phpfox_Service implements IFormly
             ->execute('getslaverows');
     }
 
+    public function collection()
+    {
+        $aRows = $this->all();
+        $oDisplay = new Display($this->getForm([
+            'form_id' => 'dd-plan',
+        ]));
+        $oDisplay->setToStrCallback([$this, 'displayExtraOptions']);
+        $oCollection = new Collection($aRows, $oDisplay);
+        return $oCollection;
+    }
+
+    public function displayExtraOptions($oDisplay)
+    {
+        $sOutput = '';
+        try {
+            $aExtraOptions = $this->getExtraOptions();
+            foreach($aExtraOptions as $sOptionName) {
+                if ($oDisplay[$sOptionName . '_allowed']) {
+                    $sOutput .= $oDisplay[$sOptionName];
+                }
+            }
+        } catch (\Exception $e) {
+            if (PHPFOX_DEBUG) {
+                $sOutput .= $e->getMessage();
+            }
+        }
+
+        return $sOutput;
+    }
+
     public function delete($iId)
     {
         $this->database()->delete(\Phpfox::getT($this->_sTable), '`plan_id` = ' . $iId);
         return $this;
+    }
+
+    private function getExtraOptions()
+    {
+        $aOptions = [];
+        (($sPlugin = \Phpfox_Plugin::get('digitaldownload.get_plan_extra_options')) ? eval($sPlugin) : false);
+        return $aOptions;
     }
 
 

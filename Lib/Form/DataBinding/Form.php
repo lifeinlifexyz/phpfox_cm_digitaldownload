@@ -31,10 +31,8 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
     {
         $aValues = $this->getFieldsValue();
 
-        $mValues = Event::trigger('before_save_' . $this->sTable, $aValues);
-        if (is_array($mValues)) {
-            $aValues = array_merge($aValues, $mValues);
-        }
+        (($sPlugin = \Phpfox_Plugin::get('before_save_' . $this->sTable )) ? eval($sPlugin) : false);
+
         if (is_null($this->mKey)) {
             $iId = $this->oDatabase->insert($this->sTable, $aValues);
         } else {
@@ -45,7 +43,7 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
             throw new \Exception("Unable to save object to \" {$this->sTable} \" ");
         }
 
-        Event::trigger('after_save_' . $this->sTable, $iId);
+        (($sPlugin = \Phpfox_Plugin::get('after_save_' . $this->sTable )) ? eval($sPlugin) : false);
 
         return $iId;
     }

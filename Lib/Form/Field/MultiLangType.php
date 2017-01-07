@@ -58,4 +58,9 @@ abstract class MultiLangType extends AbstractType
     {
         return !(bool)$this->oRequest->get($this->aInfo['name'] . '_' . $this->sDefLangId, false);
     }
+
+    public function getDisplay()
+    {
+        return _p($this->aInfo['value']);
+    }
 }

@@ -1,0 +1,30 @@
+<div class="table_left">{{ title }} {{ _p('allowed')}}? :</div>
+<div class="table_right">
+    <label>
+        <input type="radio" name="{{ name }}[allowed]" value="1" class="v_middle checkbox" {% if value_allowed == 1 %} checked {% endif %}/>
+        {{ _p('Yes')}}
+    </label>
+    <label>
+        <input type="radio" name="{{ name }}[allowed]" value="0" class="v_middle checkbox" {% if value_allowed == 0 %} checked {% endif %}/>
+        {{ _p('No')}}
+    </label>
+</div>
+<hr>
+<div class="table_left">
+    <label for="{{ name }}_field_price">{% if required %}<span class="required">*</span>{% endif %} {{ title }} {{ _p('price') }} : </label>
+</div>
+<div class="table_right">
+    <input class="form-control" type="text" name="{{ name }}[price]" value="{{ value }}" id="{{ name }}_field_price" size="10" maxlength="100" onfocus="this.select();" />
+</div>
+
+{% if hasError %}
+<span class="help-block">
+        <ul>
+            {% for error in errors %}
+            <li>
+                {{ error }}
+            </li>
+            {% endfor %}
+        </ul>
+    </span>
+{% endif %}

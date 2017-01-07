@@ -61,7 +61,6 @@ trait FormlyTrait
         $oBuilder = $this->getFormBuilder();
         $aFields = $this->getFieldsInfo();
         $mKey  = $this->getKey();
-
         if (!is_null($mKey)) {
             $aValues = $this->database()
                 ->select('*')
@@ -69,16 +68,14 @@ trait FormlyTrait
                 ->where($this->getKeyName()  . ' = ' . $mKey)
                 ->execute('getRow');
 
+        } elseif ($this->aAttr) {
+            $aValues = $this->aAttr;
+        }
+        if (isset($aValues)) {
             foreach($aValues as $sFieldName => &$mValue) {
                 if (isset($aFields[$sFieldName])) {
                     $aFields[$sFieldName]['value'] = $mValue;
-                }
-            }
-
-        } elseif ($this->aAttr) {
-            foreach($this->aAttr as $sFieldName => &$mValue) {
-                if (isset($aFields[$sFieldName])) {
-                    $aFields[$sFieldName]['value'] = $mValue;
+                    $aFields[$sFieldName]['row_value'] = $aValues;
                 }
             }
         }

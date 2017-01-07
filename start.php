@@ -28,6 +28,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.admincp.save-plan' => '\Apps\CM_DigitalDownload\Controller\Admin\SavePlanController',
 
         'digitaldownload.category' => '\Apps\CM_DigitalDownload\Controller\CategoryController',
+        'digitaldownload.plan' => '\Apps\CM_DigitalDownload\Controller\PlanController',
     ])
     ->addAliasNames('digitaldownload', 'CM_DigitalDownload')
     ->addTemplateDirs([

@@ -6,6 +6,7 @@ namespace Apps\CM_DigitalDownload\Service;
 class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 {
     private $oDD;
+    protected $sTitleSettings = '$title';
 
     public function __construct(DigitalDownload $oDD)
     {
@@ -64,5 +65,10 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
             default:
                 return parent::offsetGet($offset);
         }
+    }
+
+    public function __toString()
+    {
+        return $this->parseVars($this->sTitleSettings);
     }
 }

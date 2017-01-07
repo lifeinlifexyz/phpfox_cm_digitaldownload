@@ -9,9 +9,4 @@ class MstringType extends MultiLangType
     protected $aInfo  = [
         'template' => '@CM_DigitalDownload/form/fields/multi-lang-string.html',
     ];
-
-    public function getDisplay()
-    {
-        return _p($this->aInfo['value']);
-    }
 }

@@ -33,12 +33,10 @@ class PriceType extends IntegerType
         parent::__construct($aData);
 
         $aCurrencies = Phpfox::getService('core.currency')->get();
-        foreach ($aCurrencies as $iKey => $aCurrency)
-        {
+        foreach ($aCurrencies as $iKey => $aCurrency) {
             $aCurrencies[$iKey]['is_default'] = '0';
 
-            if (Phpfox::getService('core.currency')->getDefault() == $iKey)
-            {
+            if (Phpfox::getService('core.currency')->getDefault() == $iKey) {
                 $aCurrencies[$iKey]['is_default'] = '1';
             }
         }
