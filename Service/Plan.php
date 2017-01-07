@@ -30,14 +30,14 @@ class Plan extends \Phpfox_Service implements IFormly
                 'type' => 'string',
                 'name' => 'allowed_count_pictures',
                 'title' => _p('Allowed pictures count'),
-                'rules' => 'num:1:min',
+                'rules' => 'required|num|1:min',
                 'value' => 1,
             ],
             'life_time' => [
                 'type' => 'string',
                 'name' => 'life_time',
                 'title' => _p('Life time(in day)'),
-                'rules' => 'num:1:min',
+                'rules' => 'required|num|1:min',
                 'value' => 1,
             ],
         ];
@@ -48,7 +48,7 @@ class Plan extends \Phpfox_Service implements IFormly
         return $this->database()
             ->select("*")
             ->from(\Phpfox::getT($this->_sTable))
-            ->order("`ordering` ASC")
+            ->order("`plan_id` DESC")
             ->execute('getslaverows');
     }
 

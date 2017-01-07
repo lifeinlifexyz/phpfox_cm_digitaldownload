@@ -23,6 +23,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.admincp.fields' => '\Apps\CM_DigitalDownload\Controller\Admin\FieldsController',
         'digitaldownload.admincp.add-field' => '\Apps\CM_DigitalDownload\Controller\Admin\AddFieldController',
         'digitaldownload.admincp.save-field' => '\Apps\CM_DigitalDownload\Controller\Admin\SaveFieldController',
+        'digitaldownload.admincp.plans' => '\Apps\CM_DigitalDownload\Controller\Admin\PlansController',
         'digitaldownload.admincp.add-plan' => '\Apps\CM_DigitalDownload\Controller\Admin\AddPlanController',
         'digitaldownload.admincp.save-plan' => '\Apps\CM_DigitalDownload\Controller\Admin\SavePlanController',
 
@@ -61,6 +62,7 @@ group('/admincp/digitaldownload/', function(){
     route('category/fields', 'digitaldownload.admincp.category-fields');
     route('fields', 'digitaldownload.admincp.fields');
     route('fields/add', 'digitaldownload.admincp.add-field');
+    route('plans', 'digitaldownload.admincp.plans');
     route('plan/add', 'digitaldownload.admincp.add-plan');
 
     /**
@@ -95,8 +97,9 @@ group('/digitaldownload/', function (){
 
     route('admincp/add-category', 'digitaldownload.admincp.add-category');
     route('admincp/save-field', 'digitaldownload.admincp.save-field');
-    route('admincp/save-plan', 'digitaldownload.admincp.save-plan');
     route('admincp/delete-field', 'digitaldownload.admincp.fields');
+    route('admincp/save-plan', 'digitaldownload.admincp.save-plan');
+    route('admincp/delete-plan', 'digitaldownload.admincp.delete-plan');
 
     route('admincp/fields/order', function (){
         auth()->isAdmin(true);

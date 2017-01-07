@@ -19,7 +19,7 @@ class SavePlanController extends Phpfox_Component
          */
         $oPlanService = Phpfox::getService('digitaldownload.plan');
 
-        if (($iId = $this->request()->getInt('field_id'))) {
+        if (($iId = $this->request()->getInt('plan_id'))) {
             $oPlanService->setKey($iId);
         }
 
@@ -27,11 +27,6 @@ class SavePlanController extends Phpfox_Component
             'action' => $this->url()->makeUrl('current'),
             'form_id' => 'dd-plan',
         ]);
-
-        if ($iId) {
-            unset($oForm['name']);
-            unset($oForm['type']);
-        }
 
         if ($oForm->isValid()) {
             try {
@@ -47,7 +42,7 @@ class SavePlanController extends Phpfox_Component
             $this->url()->send('admincp.app', ['id' => 'CM_DigitalDownload'], $sMessage);
         } else {
             $oForm->addField('hidden', [
-                'name' => 'field_id',
+                'name' => 'plan_id',
                 'value' => $iId,
             ]);
         }

@@ -31,7 +31,7 @@ class AddPlanController extends Phpfox_Component
         if ($iId) {
 
             $oForm->addField('hidden', [
-                'name' => 'field_id',
+                'name' => 'plan_id',
                 'value' => $iId,
             ]);
 

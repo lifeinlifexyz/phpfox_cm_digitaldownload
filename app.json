@@ -13,6 +13,7 @@
     "Categories": "digitaldownload.categories",
     "Fields": "digitaldownload.fields",
     "Add Field": "digitaldownload.fields.add",
+    "Plans": "digitaldownload.plans",
     "Add Plan": "digitaldownload.plan.add"
   },
   "menu": {
