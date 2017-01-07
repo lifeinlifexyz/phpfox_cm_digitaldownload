@@ -27,6 +27,13 @@ class Plan extends \Phpfox_Service implements IFormly
                 'title' => _p('Name'),
                 'rules' => 'required',
             ],
+            'price' => [
+                'type' => 'price',
+                'name' => 'price',
+                'title' => _p('Price'),
+                'rules' => 'required',
+                'value' => '0.00',
+            ],
             'allowed_count_pictures' => [
                 'type' => 'string',
                 'name' => 'allowed_count_pictures',

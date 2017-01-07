@@ -13,6 +13,7 @@ defined('PHPFOX') or exit('NO DICE!');
 			<th style="width:10px;"><input type="checkbox" name="delete[]" value="" id="js_check_box_all" class="main_checkbox" /></th>
 			<th style="width:20px;"></th>
 			<th>{_p('Name')}</th>
+			<th>{_p('Price')}</th>
 			<th>{_p('Allowed pictures count')}</th>
 			<th>{_p('Life time(in day)')}</th>
 		</tr>
@@ -30,6 +31,9 @@ defined('PHPFOX') or exit('NO DICE!');
 			</td>
 			<td>
 				{phrase var=$aItem.name}
+			</td>
+			<td>
+				{$aItem.price_currency_id|currency_symbol}{$aItem.price|number_format:2}
 			</td>
 			<td>{$aItem.allowed_count_pictures}</td>
 			<td>{$aItem.life_time}</td>

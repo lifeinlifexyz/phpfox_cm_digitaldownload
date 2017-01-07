@@ -65,6 +65,8 @@ function installv1_0_0()
       `name` varchar(200) NOT NULL,
       `allowed_count_pictures` int(3) NOT NULL,
       `life_time` int(3) NOT NULL,
+      `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  \'0.00\',
+      `price_currency_id` CHAR( 3 ) NOT NULL,
        PRIMARY KEY (`plan_id`)
     )');
 
