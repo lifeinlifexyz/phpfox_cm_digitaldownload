@@ -14,7 +14,10 @@ defined('PHPFOX') or exit('NO DICE!');
     </div>
 
     <div id="js_mp_block_photo" class="js_mp_block page_section_menu_holder" style="display: none">
-        {module name="digitaldownload.managephotos" id=$bEdit}
+        {module name="digitaldownload.manage-photos" id=$bEdit}
+    </div>
+    <div id="js_mp_block_options" class="js_mp_block page_section_menu_holder" style="display: none">
+        {module name="digitaldownload.manage-options" id=$bEdit}
     </div>
 </form>
 {section_menu_js}

@@ -322,3 +322,10 @@ rules input
     margin-bottom: 20px;
     border-top: 1px solid #ddd;
 }
+
+.dd-manage-options ul {
+    margin-left: 40px;
+}
+.dd-manage-options .dd-activated-options ul {
+    margin-left: 20px;
+}

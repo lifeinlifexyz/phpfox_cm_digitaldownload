@@ -31,7 +31,7 @@ class Images extends \Phpfox_Service
             $aVal['images'] = json_encode($aImages);
             Phpfox::getService('digitaldownload.dd')->updateById($aVal['id'], $aVal);
             // thumbnails will be created automatically
-            return [count($aImages), $sFileName];
+            return [count($aImages) - 1, $sFileName];
         } else {
             return false;
         }

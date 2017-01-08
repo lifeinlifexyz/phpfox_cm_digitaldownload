@@ -33,13 +33,21 @@ class AddController extends Phpfox_Component
                 ->setRow($oDigitalDownload->getForEdit((int)$bEdit))
                 ->getDisplayer($bEdit);
 
+            if ((!Phpfox::isAdmin()) && ($oDD['user_id'] != Phpfox::getUserId())) {
+                return Phpfox::getLib('module')->setController('error.404');
+            }
+
             $this->setParam('oDD', $oDD);
             $this->setParam('aPlan', json_decode($oDD['plan_info'], true));
             unset($oDD['plan_info']);
 
-            if ((!Phpfox::isAdmin()) && ($oDD['user_id'] != Phpfox::getUserId())) {
-                return Phpfox::getLib('module')->setController('error.404');
+            $aOptions = $this->request()->getArray('options');
+
+            if (count($aOptions) > 0) {
+                $this->setParam('aOptions', $aOptions);
+                return Phpfox::getLib('module')->setController('digitaldownload.apply-options');
             }
+
         }
 
         if (!$bEdit) {
@@ -150,7 +158,7 @@ class AddController extends Phpfox_Component
     {
         $aPhotos = $oDD['images'];
         $aPlan = $this->getParam('aPlan');
-        $iPhotoMax = $aPlan['allowed_count_pictures']; //todo:: get from plan
+        $iPhotoMax = $aPlan['allowed_count_pictures'];
 
         if (count($aPhotos) >= $iPhotoMax) {
             $aRes = [

@@ -122,7 +122,7 @@ class Plan extends \Phpfox_Service implements IFormly
         return $this;
     }
 
-    private function getExtraOptions()
+    public function getExtraOptions()
     {
         $aOptions = [];
         (($sPlugin = \Phpfox_Plugin::get('digitaldownload.get_plan_extra_options')) ? eval($sPlugin) : false);
