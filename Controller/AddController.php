@@ -36,9 +36,17 @@ class AddController extends Phpfox_Component
             if ((!Phpfox::isAdmin()) && ($oDD['user_id'] != Phpfox::getUserId())) {
                 return Phpfox::getLib('module')->setController('error.404');
             }
+            $aPlan = json_decode($oDD['plan_info'], true);
+
+            if (!$oDD['is_active'] && $aPlan['price'] == 0) {
+
+                (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_activate_digitaldownload')) ? eval($sPlugin) : false);
+                $oDigitalDownload->activate($oDD['id'], $aPlan);
+                (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_activate_digitaldownload')) ? eval($sPlugin) : false);
+            }
 
             $this->setParam('oDD', $oDD);
-            $this->setParam('aPlan', json_decode($oDD['plan_info'], true));
+            $this->setParam('aPlan', $aPlan);
             unset($oDD['plan_info']);
 
             $aOptions = $this->request()->getArray('options');
@@ -99,7 +107,7 @@ class AddController extends Phpfox_Component
 
             $oForm->addField('hidden', [
                 'name' => 'time_stamp',
-                'value' => time(),
+                'value' => PHPFOX_TIME,
             ]);
             unset($oForm['plan_id']);
             db()->beginTransaction();

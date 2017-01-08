@@ -20,6 +20,8 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
      */
     protected $oTreeManager;
 
+    private $_aDisplayer = [];
+
     public function __construct()
     {
         $this->oTreeManager = new Tree();
@@ -157,22 +159,25 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         return $this;
     }
 
-    public function getDisplayer($iId)
+    public function &getDisplayer($iId)
     {
         $iId = (int) $iId;
+        if (!isset($this->_aDisplayer[$iId])) {
+            $oDisplay = new Display($this);
 
-        $oDisplay = new Display($this);
+            if (is_null($this->aRow)) {
+                $this->aRow =  $this->database()
+                    ->select('d.*')
+                    ->from(\Phpfox::getT($this->_sTable), 'd')
+                    ->where('id = ' . $iId)
+                    ->get();
+            }
 
-        if (is_null($this->aRow)) {
-            $this->aRow =  $this->database()
-                ->select('d.*')
-                ->from(\Phpfox::getT($this->_sTable), 'd')
-                ->where('id = ' . $iId)
-                ->get();
+            $oDisplay->setRow($this->aRow);
+            $this->_aDisplayer[$iId] = $oDisplay;
         }
 
-        $oDisplay->setRow($this->aRow);
-        return $oDisplay;
+        return $this->_aDisplayer[$iId];
     }
 
     public function updateById($iID, $aVal)
@@ -190,6 +195,29 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             ->get();
 
         return $aRow;
+    }
+
+    public function activate($iId, array $aPlan = [])
+    {
+        if (!(count($aPlan) > 0)) {
+            $aPlan = json_decode($this->database()
+                ->select('`info`')
+                ->from(\Phpfox::getT(Plan::DD_PLAN_TABLE))
+                ->where('`dd_id` = ' . $iId)
+                ->get(), true);
+        }
+
+        $oDD = $this->getDisplayer($iId);
+
+        $aVal = [
+            'is_active' => true
+        ];
+
+        if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
+            $aVal['expire_timestamp'] = PHPFOX_TIME + 60 * 60 * 24 * $aPlan['life_time'];
+        }
+
+        $this->updateById($iId, $aVal);
     }
 
 }
