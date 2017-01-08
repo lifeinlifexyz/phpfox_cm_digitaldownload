@@ -72,6 +72,22 @@ function installv1_0_0()
        PRIMARY KEY (`plan_id`)
     )');
 
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digitaldownload_invoice') . '` (
+      `invoice_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+      `dd_id` int(10) unsigned NOT NULL,
+      `user_id` int(10) unsigned NOT NULL,
+      `currency_id` char(3) NOT NULL,
+      `price` decimal(14,2) NOT NULL,
+      `status` varchar(20) DEFAULT NULL,
+      `time_stamp` int(10) unsigned NOT NULL,
+      `time_stamp_paid` int(10) unsigned NOT NULL DEFAULT \'0\',
+      PRIMARY KEY (`invoice_id`),
+      KEY `dd_id` (`dd_id`),
+      KEY `user_id` (`user_id`),
+      KEY `dd_id_2` (`dd_id`,`status`),
+      KEY `dd_id_3` (`dd_id`,`user_id`,`status`)
+    );');
+
     if (!is_dir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/')) {
         mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
     }

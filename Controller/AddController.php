@@ -31,7 +31,7 @@ class AddController extends Phpfox_Component
             $oDigitalDownload->setKey((int)$bEdit);
             $oDD = $oDigitalDownload->getDisplayer($bEdit);
             $this->setParam('oDD', $oDD);
-            if (!Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getMessage()) {
+            if (!Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getUserId()) {
                 return Phpfox::getLib('module')->setController('error.404');
             }
         }
@@ -58,13 +58,25 @@ class AddController extends Phpfox_Component
         $oForm = $oDigitalDownload->getForm([
             'enctype' => 'multipart/form-data'
         ]);
+
         if ($sAction == 'upload') {
             $this->upload($oDD);
         }
 
+        if (isset($iPlan)) {
+            //assign plan to dd
+            $oForm->addField('hidden', [
+                'name' => 'plan_id',
+                'value' => $iPlan,
+            ]);
+        }
 
         if ($_POST && $oForm->isValid()) {
-            (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
+            $sPlugin = $bEdit
+                ? 'digitaldownload.before_update_digitaldownload'
+                : 'digitaldownload.before_create_digitaldownload';
+
+            (($sPlugin = Phpfox_Plugin::get($sPlugin)) ? eval($sPlugin) : false);
 
             $oForm->addField('hidden', [
                 'name' => 'user_id',
@@ -76,12 +88,16 @@ class AddController extends Phpfox_Component
                 'value' => time(),
             ]);
             db()->beginTransaction();
+
             $iId = $oForm->save();
+
+            $sPlugin = $bEdit
+                ? 'digitaldownload.after_update_digitaldownload'
+                : 'digitaldownload.after_create_digitaldownload';
+            (($sPlugin = Phpfox_Plugin::get($sPlugin)) ? eval($sPlugin) : false);
             db()->commit();
-            (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_add_digitaldownload')) ? eval($sPlugin) : false);
-            if ($iId) {
-                $this->url()->send('digitaldownload.add',['dd_id' => $iId], _p('Digital Download successfully saved'));
-            }
+
+            $this->url()->send('digitaldownload.add',['dd_id' => $iId], _p('Digital Download successfully saved'));
         }
         $sTitle = $bEdit ? _p('Editing') : _p('Creating');
         $sUrl = $bEdit ? $this->url()->makeUrl('digitaldownload.add.' . $bEdit) : $this->url()->makeUrl('digitaldownload.add');

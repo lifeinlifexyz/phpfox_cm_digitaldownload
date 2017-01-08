@@ -13,7 +13,7 @@ defined('PHPFOX') or exit('NO DICE!');
         </div>
     </div>
 
-    <div id="js_mp_block_photo" class="js_mp_block page_section_menu_holder">
+    <div id="js_mp_block_photo" class="js_mp_block page_section_menu_holder" style="display: none">
         {module name="digitaldownload.managephotos" id=$bEdit}
     </div>
 </form>

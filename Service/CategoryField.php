@@ -40,7 +40,10 @@ class CategoryField extends \Phpfox_Service
             ->select('f.*')
             ->from(\Phpfox::getT($this->_sTable), 'c')
             ->leftJoin(\Phpfox::getT('digital_download_fields'), 'f', 'f.field_id = c.field_id')
-            ->where('`category_id` = ' . $iId)
+            ->where([
+                'AND `category_id` = ' . $iId,
+                'AND `is_active` = 1',
+            ])
             ->order('`ordering` ASC')
             ->execute('getslaverows');
     }
