@@ -79,12 +79,12 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     public function getFieldsInfo()
     {
         if ($this->mKey) {
-            $this->aAttr =  $this->database()
+            $this->aRow =  $this->database()
                 ->select('*')
                 ->from(\Phpfox::getT($this->_sTable))
                 ->where('`id` = ' . $this->mKey)
-                ->execute('getRow');
-            $this->iCategoryId = $this->aAttr['category_id'];
+                ->get();
+            $this->iCategoryId = $this->aRow['category_id'];
         }
         if (!$this->iCategoryId) {
             throw new \InvalidArgumentException('Category id is null');
@@ -116,7 +116,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             'name' => 'digital_download',
             'title' => _p('Digital download'),
             'dir' => PHPFOX_DIR_FILE . 'digital_download' . PHPFOX_DS,
-            'rules' => 'required',
+//            'rules' => 'required',
         ];
 
         $aFields['privacy'] = [
@@ -162,20 +162,34 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $iId = (int) $iId;
 
         $oDisplay = new Display($this);
-        //todo::save row to cache;
-        $aRow = $this->database()
-            ->select('d.*')
-            ->from(\Phpfox::getT($this->_sTable), 'd')
-            ->where('id = ' . $iId)
-            ->get();
 
-        $oDisplay->setRow($aRow);
+        if (is_null($this->aRow)) {
+            $this->aRow =  $this->database()
+                ->select('d.*')
+                ->from(\Phpfox::getT($this->_sTable), 'd')
+                ->where('id = ' . $iId)
+                ->get();
+        }
+
+        $oDisplay->setRow($this->aRow);
         return $oDisplay;
     }
 
     public function updateById($iID, $aVal)
     {
         return $this->database()->update(\Phpfox::getT($this->_sTable), $aVal, '`id` = ' . $iID);
+    }
+
+    public function getForEdit($iId)
+    {
+        $aRow = $this->database()
+            ->select('`d`.*, `p`.`info` as plan_info')
+            ->from(\Phpfox::getT($this->_sTable), 'd')
+            ->leftJoin(\Phpfox::getT(Plan::DD_PLAN_TABLE), 'p', '`d`.`id` = `p`.`dd_id`')
+            ->where('`d` .`id` = ' . $iId)
+            ->get();
+
+        return $aRow;
     }
 
 }

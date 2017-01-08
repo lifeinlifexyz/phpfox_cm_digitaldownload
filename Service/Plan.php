@@ -7,13 +7,13 @@ use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
-use Core\Event;
 
 class Plan extends \Phpfox_Service implements IFormly
 {
     use FormlyTrait;
 
     protected $_sTable = 'digital_download_plans';
+    const DD_PLAN_TABLE = 'digital_download_dd_plan';
     protected $sKeyName = 'plan_id';
 
     /**
@@ -95,6 +95,25 @@ class Plan extends \Phpfox_Service implements IFormly
         }
 
         return $sOutput;
+    }
+
+    public function assign($iDDId, $iPlanId){
+        $this->database()->delete(\Phpfox::getT(self::DD_PLAN_TABLE), '`dd_id` = ' . $iDDId);
+        $aPlan = $this->get($iPlanId);
+        $aVals = [
+            'plan_id' => $iPlanId,
+            'dd_id' => $iDDId,
+            'info' => json_encode($aPlan),
+        ];
+        return $this->database()->insert(\Phpfox::getT(self::DD_PLAN_TABLE), $aVals);
+    }
+
+    public function get($iPlanId) {
+        return $this->database()
+            ->select('*')
+            ->from(\Phpfox::getT($this->_sTable))
+            ->where('`plan_id` = ' . $iPlanId)
+            ->get();
     }
 
     public function delete($iId)

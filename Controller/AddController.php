@@ -29,9 +29,15 @@ class AddController extends Phpfox_Component
 
         if (($bEdit = $this->request()->get('dd_id'))) {
             $oDigitalDownload->setKey((int)$bEdit);
-            $oDD = $oDigitalDownload->getDisplayer($bEdit);
+            $oDD = $oDigitalDownload
+                ->setRow($oDigitalDownload->getForEdit((int)$bEdit))
+                ->getDisplayer($bEdit);
+
             $this->setParam('oDD', $oDD);
-            if (!Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getUserId()) {
+            $this->setParam('aPlan', json_decode($oDD['plan_info'], true));
+            unset($oDD['plan_info']);
+
+            if ((!Phpfox::isAdmin()) && ($oDD['user_id'] != Phpfox::getUserId())) {
                 return Phpfox::getLib('module')->setController('error.404');
             }
         }
@@ -87,9 +93,14 @@ class AddController extends Phpfox_Component
                 'name' => 'time_stamp',
                 'value' => time(),
             ]);
+            unset($oForm['plan_id']);
             db()->beginTransaction();
 
             $iId = $oForm->save();
+
+            if (!$bEdit && isset($iPlan)) { //if add, assign plan to dd
+                Phpfox::getService('digitaldownload.plan')->assign($iId, $iPlan);
+            }
 
             $sPlugin = $bEdit
                 ? 'digitaldownload.after_update_digitaldownload'
@@ -138,7 +149,8 @@ class AddController extends Phpfox_Component
     private function upload($oDD)
     {
         $aPhotos = $oDD['images'];
-        $iPhotoMax = 3; //todo:: get from plan
+        $aPlan = $this->getParam('aPlan');
+        $iPhotoMax = $aPlan['allowed_count_pictures']; //todo:: get from plan
 
         if (count($aPhotos) >= $iPhotoMax) {
             $aRes = [

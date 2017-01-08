@@ -16,7 +16,7 @@ trait FormlyTrait
     /**
      * @var null|array
      */
-    protected $aAttr = null;
+    protected $aRow = null;
 
     /**
      * return primary key name(id)
@@ -68,8 +68,8 @@ trait FormlyTrait
                 ->where($this->getKeyName()  . ' = ' . $mKey)
                 ->execute('getRow');
 
-        } elseif ($this->aAttr) {
-            $aValues = $this->aAttr;
+        } elseif ($this->aRow) {
+            $aValues = $this->aRow;
         }
         if (isset($aValues)) {
             foreach($aValues as $sFieldName => &$mValue) {
@@ -108,5 +108,10 @@ trait FormlyTrait
     public function setFormBuilder($oFormBuilder)
     {
         $this->_oFormBuilder = $oFormBuilder;
+    }
+
+    public function setRow($aRow) {
+        $this->aRow = $aRow;
+        return $this;
     }
 }

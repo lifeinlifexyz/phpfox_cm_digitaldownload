@@ -15,8 +15,8 @@ class ManagePhotos extends \Phpfox_Component
             DD_ASSET_PATH . 'upload/js/jquery.fileupload-process.js',
             DD_ASSET_PATH . 'manage-photos.js',
         ];
-
-        $iAllowedPhotos = 3;
+        $aPlan = $this->getParam('aPlan');
+        $iAllowedPhotos = $aPlan['allowed_count_pictures'];
 
         $oDD = $this->getParam('oDD');
         $aImages = $oDD['images'];

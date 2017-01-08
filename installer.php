@@ -54,6 +54,8 @@ function installv1_0_0()
       `user_id` INT( 11 ) NOT NULL DEFAULT  '0',
       `is_active` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `time_stamp` INT( 10 ) NOT NULL,
+      `plan_id` INT NOT NULL,
+      `expire_timestamp` INT( 10 ) NOT NULL,
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
@@ -86,6 +88,15 @@ function installv1_0_0()
       KEY `user_id` (`user_id`),
       KEY `dd_id_2` (`dd_id`,`status`),
       KEY `dd_id_3` (`dd_id`,`user_id`,`status`)
+    );');
+
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_dd_plan') . '` (
+      `dd_plan_id` int(11) NOT NULL AUTO_INCREMENT,
+      `dd_id` int(11) NOT NULL,
+      `plan_id` int(11) NOT NULL,
+      `info` text NOT NULL,
+      PRIMARY KEY (`dd_plan_id`),
+      KEY `dd_id` (`dd_id`,`plan_in`)
     );');
 
     if (!is_dir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/')) {
