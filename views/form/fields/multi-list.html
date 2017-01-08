@@ -1,0 +1,26 @@
+<label>{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
+<div class="dd-multi-list">
+    {% for key, item in items %}
+        <label class="checkbox">
+            <input type="checkbox" name="{{ name }}[]" value="{{ key }}" {% if key in value %}checked="checked"{% endif %} />
+            &nbsp;
+            {% if translate %}
+                {{ _p(item) }}
+            {% else %}
+                {{ item }}
+            {% endif %}
+        </label>
+    {% endfor %}
+</div>
+
+{% if hasError %}
+<span class="help-block">
+        <ul>
+            {% for error in errors %}
+            <li>
+                {{ error }}
+            </li>
+            {% endfor %}
+        </ul>
+    </span>
+{% endif %}

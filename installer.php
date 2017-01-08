@@ -73,6 +73,7 @@ function installv1_0_0()
       `price_currency_id` CHAR( 3 ) NOT NULL,
       `featured` DECIMAL( 14, 2 ) NOT NULL \'0.00\',
       `featured_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
+      `user_groups` VARCHAR( 255 ) NULL,
        PRIMARY KEY (`plan_id`)
     )');
 

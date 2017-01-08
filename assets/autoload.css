@@ -329,3 +329,7 @@ rules input
 .dd-manage-options .dd-activated-options ul {
     margin-left: 20px;
 }
+
+.dd-multi-list {
+    margin-left: 20px;
+}

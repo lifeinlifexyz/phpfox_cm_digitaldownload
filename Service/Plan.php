@@ -54,6 +54,17 @@ class Plan extends \Phpfox_Service implements IFormly
         ];
 
         (($sPlugin = \Phpfox_Plugin::get('digitaldownload.collect_plan_fields')) ? eval($sPlugin) : false);
+        $aUserGroups = \Phpfox::getService('user.group')->get();
+        $aGroupItems = [];
+        foreach($aUserGroups as $aUserGroup) {
+            $aGroupItems[$aUserGroup['user_group_id']] = $aUserGroup['title'];
+        }
+        $aFields['user_groups'] = [
+            'type' => 'multilist',
+            'name' => 'user_groups',
+            'title' => _p('Allowed user groups'),
+            'items' => $aGroupItems,
+        ];
 
         return $aFields;
     }
@@ -67,9 +78,16 @@ class Plan extends \Phpfox_Service implements IFormly
             ->execute('getslaverows');
     }
 
-    public function collection()
+    public function forCurUser()
     {
-        $aRows = $this->all();
+        $iGroupId = \Phpfox::getUserBy('user_group_id');
+        $this->database()->where('`user_groups` LIKE \'%' . ((int) $iGroupId) .'%\'');
+        return $this->all();
+    }
+
+    public function collection($bForUser = true)
+    {
+        $aRows = $bForUser ? $this->forCurUser() : $this->all();
         $oDisplay = new Display($this->getForm([
             'form_id' => 'dd-plan',
         ]));
