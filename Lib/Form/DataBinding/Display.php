@@ -89,7 +89,10 @@ class Display implements \ArrayAccess
      */
     public function offsetSet($offset, $value)
     {
-        $this->oForm[$offset]->setValue($value);
+        $this->aRow[$offset] = $value;
+        if (isset($this->oForm[$offset])) {
+            $this->oForm[$offset]->setValue($value);
+        }
     }
 
     /**

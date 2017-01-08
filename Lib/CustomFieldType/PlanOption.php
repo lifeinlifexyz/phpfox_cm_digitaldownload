@@ -30,7 +30,7 @@ class PlanOption extends PriceType
     {
         $this->aInfo['value_allowed'] = isset($this->aInfo['value']['allowed'])
             ? $this->aInfo['value']['allowed']
-            : $this->aInfo['row_value'][$this->aInfo['name'] . '_allowed'];
+            : (isset($this->aInfo['row_value'][$this->aInfo['name'] . '_allowed']) ? $this->aInfo['row_value'][$this->aInfo['name'] . '_allowed']: null);
 
         $this->aInfo['value'] = isset($this->aInfo['value']) ? $this->aInfo['value'] : 0;
 

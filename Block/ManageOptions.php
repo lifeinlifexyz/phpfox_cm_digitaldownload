@@ -9,7 +9,7 @@ class ManageOptions extends \Phpfox_Component
         $aPlan = $this->getParam('aPlan');
         $oDD = $this->getParam('oDD');
         $sPlanCurrencyId = $aPlan['price_currency_id'];
-
+        $sActivatePrice = $aPlan['price'];
 
         unset($aPlan['allowed_count_pictures']);
         unset($aPlan['life_time']);
@@ -25,7 +25,7 @@ class ManageOptions extends \Phpfox_Component
         $aPaidOptions = [];
 
         foreach($aExtraOption as $sOption) {
-            if ($aPlan[$sOption . '_allowed']) {
+            if (isset($aPlan[$sOption . '_allowed']) && $aPlan[$sOption . '_allowed']) {
                 if ($oDD[$sOption]) {
                     $aAlreadyActivatedOptions[$sOption] = _p($sOption . ' option');
                 }elseif ($aPlan[$sOption] > 0) {
@@ -44,6 +44,8 @@ class ManageOptions extends \Phpfox_Component
             'aActivatedOptions' => $aAlreadyActivatedOptions,
             'aFreeOptions' => $aFreeOptions,
             'aPaidOptions' => $aPaidOptions,
+            'oDD' => $oDD,
+            'sActivatePrice' => $sActivatePrice,
         ]);
 
         return 'block';

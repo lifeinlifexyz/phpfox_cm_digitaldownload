@@ -2,7 +2,7 @@
 define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
     . 'PF.Site/Apps/CM_DigitalDownload/assets/');
-
+//todo:: user group plans
 //todo:: активация филда. чекбок ведет себе не корректно
 //todo:: после пагинации ползунок цен не работает
 
@@ -50,6 +50,7 @@ if (setting('cm_dd_enabled')) {
     ])->addComponentNames('controller', [
         'digitaldownload.index' => '\Apps\CM_DigitalDownload\Controller\IndexController',
         'digitaldownload.add' => '\Apps\CM_DigitalDownload\Controller\AddController',
+        'digitaldownload.apply-options'    => '\Apps\CM_DigitalDownload\Controller\ApplyOptionsController',
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',

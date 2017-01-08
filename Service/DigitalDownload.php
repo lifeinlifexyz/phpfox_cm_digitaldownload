@@ -218,6 +218,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         }
 
         $this->updateById($iId, $aVal);
+        $oDD['is_active'] = true;
     }
 
 }
