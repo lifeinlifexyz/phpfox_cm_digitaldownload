@@ -21,11 +21,11 @@ class ApplyOptionsController extends Phpfox_Component
         Phpfox::isUser(true);
         $aOptions = $this->getParam('aOptions');
         $oDD = $this->getParam('oDD');
+        $aPlan = $this->getParam('aPlan');
 
         $aFreeOptions = isset($aOptions['free']) ? $aOptions['free'] : [];
-        $aPaidOptions = isset($aOptions['paid']) ? $aOptions['free'] : [];
+        $aPaidOptions = isset($aOptions['paid']) ? $aOptions['paid'] : [];
         $extraOptions = Phpfox::getService('digitaldownload.plan')->getExtraOptions();
-
 
         if (count($aFreeOptions) > 0) {
             //apply free options
@@ -42,13 +42,45 @@ class ApplyOptionsController extends Phpfox_Component
             $this->url()->send('digitaldownload.add',['dd_id' => $oDD['id']], _p('Free options successfully applied'));
         }
 
+        $bInvoice = ($this->request()->get('invoice') ? true : false);
+        $iTotalPrice = 0;
+        $aPaidOptionsInfo = [];
+        if (isset($aPaidOptions['activate'])) {
+            $aPaidOptionsInfo['activate'] = [
+                'caption' => _p('Activation'),
+                'price' => $aPlan['price'],
+            ];
+            $iTotalPrice += $aPlan['price'];
+        }
 
-        $this->template()->setTitle(_p('Select Plan'))
+        foreach($extraOptions as $sOption) {
+            if (isset($aPlan[$sOption . '_allowed']) && $aPlan[$sOption . '_allowed'] && key_exists($sOption, $aPaidOptions)) {
+                $aPaidOptionsInfo[$sOption] = [
+                    'caption' => _p($sOption),
+                    'price' => $aPlan[$sOption],
+                ];
+                $iTotalPrice += $aPlan[$sOption];
+            }
+        }
+
+        if ($this->request()->get('process'))
+        {
+            if (($iInvoice = Phpfox::getService('digitaldownload.invoice')->add($oDD['id'], $aPlan['price_currency_id'], $iTotalPrice, 'options', $aPaidOptionsInfo)))
+            {
+                $this->url()->send('digitaldownload.purchase', array('invoice' => $iInvoice));
+            }
+        }
+
+        $this->template()->setTitle(_p('Review and Confirm Purchase'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
-            ->setBreadCrumb(_p('Add digital download'), $this->url()->makeUrl('digitaldownload.add'))
+            ->setBreadCrumb(_p('Edit digital download'), $this->url()->makeUrl('digitaldownload.add', ['dd_id' => $oDD['id']]))
+            ->setBreadCrumb(_p('Review and Confirm Purchase'), null,  true)
             ->assign([
-                    'aPlans' => Phpfox::getService('digitaldownload.plan')->collection(),
-                    'sUrl' => $this->getParam('url'),
+                    'aOptions' => $aPaidOptionsInfo,
+                    'bInvoice' => $bInvoice,
+                    'iTotalPrice' => $iTotalPrice,
+                    'sPlanCurrencyId' => $aPlan['price_currency_id'],
+                    'oDD' => $oDD,
                 ]
             );
     }
@@ -59,6 +91,6 @@ class ApplyOptionsController extends Phpfox_Component
      */
     public function clean()
     {
-        (($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_select_category_clean')) ? eval($sPlugin) : false);
+        (($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_apply_options_clean')) ? eval($sPlugin) : false);
     }
 }

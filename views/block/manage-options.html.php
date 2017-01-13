@@ -3,7 +3,7 @@
     <div class="dd-options">
         {if !$oDD.is_active}
             <h4>{_p('Digital Download Activation')} {$sPlanCurrencyId|currency_symbol}{$sActivatePrice}</h4>
-            <input type="hidden" name="options[activate]" value="1">
+            <input type="hidden" name="options[paid][activate]" value="1">
         {/if}
         {if count($aActivatedOptions)}
             <div class="dd-activated-options">

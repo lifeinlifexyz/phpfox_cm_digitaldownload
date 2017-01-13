@@ -33,7 +33,7 @@ defined('PHPFOX') or exit('NO DICE!');
 				{phrase var=$aItem.name}
 			</td>
 			<td>
-				{$aItem.price_currency_id|currency_symbol}{$aItem.price|number_format:2}
+				{$aItem.price_currency_id|currency_symbol}{$aItem.price}
 			</td>
 			<td>{$aItem.allowed_count_pictures}</td>
 			<td>{$aItem.life_time}</td>
