@@ -236,4 +236,10 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $oDD['is_active'] = true;
     }
 
+    public function delete($iId)
+    {
+        //todo :: delete dd
+        return $this;
+    }
+
 }

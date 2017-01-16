@@ -22,6 +22,10 @@ defined('PHPFOX') or exit('NO DICE!');
  */
 class Callback extends Phpfox_Service
 {
+	public function __construct()
+	{
+		$this->_sTable = Phpfox::getT('digital_download');
+	}
 
 	public function getAjaxCommentVar()
 	{
@@ -30,14 +34,85 @@ class Callback extends Phpfox_Service
 
 	public function getCommentItem($iId)
 	{
-		$aListing = $this->database()->select('id AS comment_item_id, user_id AS comment_user_id')
-			->from(\Phpfox::getT('digital_download'))
-			->where('id = ' . (int) $iId)
+		$aDD = $this->database()->select('`id` AS comment_item_id, user_id AS comment_user_id')
+			->from($this->_sTable)
+			->where('`id` = ' . (int) $iId)
 			->get();
 
-		$aListing['comment_view_id'] = 1;
+		$aDD['comment_view_id'] = 1;
 
-		return $aListing;
+		return $aDD;
+	}
+
+	public function addComment($aVals, $iUserId = null, $sUserName = null)
+	{
+		$oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer((int) $aVals['item_id']);
+
+		if (!isset($oDD['id']))
+		{
+			return Phpfox_Error::trigger(_p('Invalid callback on digital download'));
+		}
+
+		(Phpfox::isModule('feed') ? Phpfox::getService('feed.process')->add($aVals['type'] . '_comment', $aVals['comment_id']) : null);
+
+		// Update the post counter if its not a comment put under moderation or if the person posting the comment is the owner of the item.
+		if (empty($aVals['parent_id']))
+		{
+			$this->database()->updateCounter('digital_download', 'total_comment', 'id', $aVals['item_id']);
+		}
+
+		// Send the user an email
+//		$sLink = Phpfox::permalink('digitaldownload', $oDD['id']);
+//
+//		Phpfox::getService('comment.process')->notify(array(
+//				'user_id' => $oDD['user_id'],
+//				'item_id' => $oDD['id'],
+//				'owner_subject' => _p('Full name commented on your digital download {{ title }}', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => $oDD['title']]),
+//				'owner_message' =>'test owner_message',//_p('Full name commented on your digital download  a href link title a to see the comment thread follow the link below a href link link_a',array('full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => $oDD['title'])),
+//				'owner_notification' => 'comment.add_new_comment',
+//				'notify_id' => 'comment_digitaldownload',
+//				'mass_id' => 'digitaldownload',
+//				'mass_subject' => (Phpfox::getUserId() == $oDD['user_id'] ?
+//					Phpfox::getPhrase('marketplace.full_name_commented_on_gender_listing',array('full_name' => Phpfox::getUserBy('full_name'), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1)))
+//					:
+//					Phpfox::getPhrase('marketplace.full_name_commented_on_other_full_name_s_listing',
+//						array(
+//							'full_name' => Phpfox::getUserBy('full_name'),
+//							'other_full_name' => $oDD['full_name']
+//						))),
+//				'mass_message' => (Phpfox::getUserId() == $oDD['user_id'] ?
+//					Phpfox::getPhrase('marketplace.full_name_commented_on_gender_listing_a_href_link_title_a_to_see_the_comment_thread_follow_the_link_below_a_href_link_link_a',array('full_name' => Phpfox::getUserBy('full_name'), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1), 'title' => $oDD['title'], 'link' => $sLink))
+//
+//					:
+//					Phpfox::getPhrase('marketplace.full_name_commented_on_other_full_name',array('full_name' => Phpfox::getUserBy('full_name'), 'other_full_name' => $oDD['full_name'], 'link' => $sLink, 'title' => $oDD['title']))
+//
+//
+//				))
+//		);
+	}
+
+	public function deleteComment($iId)
+	{
+		$this->database()->updateCounter('digital_download', 'total_comment', 'id', $iId, true);
+	}
+
+	/**
+	 * Action to take when user cancelled their account
+	 * @param int $iUser
+	 */
+	public function onDeleteUser($iUser)
+	{
+		$aDDs = $this->database()
+			->select('id')
+			->from($this->_sTable)
+			->where('user_id = ' . (int)$iUser)
+			->execute('getSlaveRows');
+
+		foreach ($aDDs as &$aDD)
+		{
+			Phpfox::getService('digitaldownload.dd')->delete($aDD['id']);
+		}
+
 	}
 
 	public function paymentApiCallback($aParams)
