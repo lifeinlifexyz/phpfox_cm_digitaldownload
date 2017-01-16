@@ -54,6 +54,7 @@ if (setting('cm_dd_enabled')) {
         'digitaldownload.add' => '\Apps\CM_DigitalDownload\Controller\AddController',
         'digitaldownload.apply-options'    => '\Apps\CM_DigitalDownload\Controller\ApplyOptionsController',
         'digitaldownload.purchase'    => '\Apps\CM_DigitalDownload\Controller\PurchaseController',
+        'digitaldownload.view'    => '\Apps\CM_DigitalDownload\Controller\ViewController',
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
@@ -135,6 +136,7 @@ group('/digitaldownload/', function (){
         route('add', 'digitaldownload.add');
         route('add/:id', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
         route('add/:id/*', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
+        route(':id', 'digitaldownload.view')->where([':id' => '([0-9]+)']);
         route('purchase', 'digitaldownload.purchase');
     }
 });

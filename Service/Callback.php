@@ -23,6 +23,23 @@ defined('PHPFOX') or exit('NO DICE!');
 class Callback extends Phpfox_Service
 {
 
+	public function getAjaxCommentVar()
+	{
+		return null;//'can_post_comment_on_dd';
+	}
+
+	public function getCommentItem($iId)
+	{
+		$aListing = $this->database()->select('id AS comment_item_id, user_id AS comment_user_id')
+			->from(\Phpfox::getT('digital_download'))
+			->where('id = ' . (int) $iId)
+			->get();
+
+		$aListing['comment_view_id'] = 1;
+
+		return $aListing;
+	}
+
 	public function paymentApiCallback($aParams)
 	{
 		Phpfox::log('Module callback recieved: ' . var_export($aParams, true));	

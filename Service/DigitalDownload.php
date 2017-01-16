@@ -6,6 +6,8 @@ use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 use Core\Event;
+use Phpfox;
+use Phpfox_Plugin;
 
 class DigitalDownload  extends \Phpfox_Service implements IFormly
 {
@@ -166,9 +168,22 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             $oDisplay = new Display($this);
 
             if (is_null($this->aRow)) {
+
+                (($sPlugin = Phpfox_Plugin::get('digitaldownload.service_digitaldownload_getdisplayer')) ? eval($sPlugin) : false);
+
+                if (Phpfox::isModule('like')) {
+                    $this->database()->select('lik.like_id AS is_liked, ')
+                        ->leftJoin(Phpfox::getT('like'), 'lik', 'lik.type_id = \'digitaldownload\' AND lik.item_id = d.id AND lik.user_id = ' . Phpfox::getUserId());
+                }
+
+                $this->database()->select('f.friend_id AS is_friend, ')->leftJoin(Phpfox::getT('friend'), 'f', "f.user_id = d.user_id AND f.friend_user_id = " . Phpfox::getUserId());
+
                 $this->aRow =  $this->database()
-                    ->select('d.*')
-                    ->from(\Phpfox::getT($this->_sTable), 'd')
+                    ->select(Phpfox::getUserField() . ', d.*, u.*, uf.total_score, uf.total_rating, ua.activity_points')
+                    ->from(Phpfox::getT($this->_sTable), 'd')
+                    ->join(Phpfox::getT('user'), 'u', 'u.user_id = d.user_id')
+                    ->join(Phpfox::getT('user_field'), 'uf', 'uf.user_id = d.user_id')
+                    ->join(Phpfox::getT('user_activity'), 'ua', 'ua.user_id = d.user_id')
                     ->where('id = ' . $iId)
                     ->get();
             }

@@ -44,6 +44,36 @@
         "yes": "Yes",
         "no": "No"
       }
+    },
+    "can_view_dd": {
+      "info": "Can view digital download?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "can_post_comment_on_dd": {
+      "info": "Can post comment?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
     }
   },
   "component" : {

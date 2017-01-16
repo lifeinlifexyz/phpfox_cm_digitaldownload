@@ -57,6 +57,8 @@ function installv1_0_0()
       `plan_id` INT NOT NULL,
       `expire_timestamp` INT( 10 ) NOT NULL,
       `featured` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `total_comment` INT NOT NULL DEFAULT  '0',
+      `total_like` INT( 10 ) NOT NULL DEFAULT  '0',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
