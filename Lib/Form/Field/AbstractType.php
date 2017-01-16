@@ -5,9 +5,10 @@ namespace Apps\CM_DigitalDownload\Lib\Form\Field;
 use Apps\CM_DigitalDownload\Lib\Form\Exception\RequiredArgumentException;
 use Apps\CM_DigitalDownload\Lib\Form\Field\IType;
 use Apps\CM_DigitalDownload\Lib\Form\Validator\IValidator;
+use ArrayAccess;
 use Core\View;
 
-abstract class AbstractType implements IType, \JsonSerializable
+abstract class AbstractType implements IType, \JsonSerializable, ArrayAccess
 {
     protected $aRules = [];
     protected $aInfo = [
@@ -270,5 +271,76 @@ abstract class AbstractType implements IType, \JsonSerializable
     public function setTemplate($sTpl)
     {
         $this->aInfo['template'] = $sTpl;
+    }
+
+    /**
+     * Whether a offset exists
+     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
+     * @param mixed $offset <p>
+     * An offset to check for.
+     * </p>
+     * @return boolean true on success or false on failure.
+     * </p>
+     * <p>
+     * The return value will be casted to boolean if non-boolean was returned.
+     * @since 5.0.0
+     */
+    public function offsetExists($offset)
+    {
+        return in_array($offset, ['value', 'caption']);
+    }
+
+    /**
+     * Offset to retrieve
+     * @link http://php.net/manual/en/arrayaccess.offsetget.php
+     * @param mixed $offset <p>
+     * The offset to retrieve.
+     * </p>
+     * @return mixed Can return all value types.
+     * @since 5.0.0
+     */
+    public function offsetGet($offset)
+    {
+        switch($offset) {
+            case 'value':
+                return $this->getDisplay();
+            break;
+            case  'caption':
+                return $this->aInfo['title'];
+            break;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Offset to set
+     * @link http://php.net/manual/en/arrayaccess.offsetset.php
+     * @param mixed $offset <p>
+     * The offset to assign the value to.
+     * </p>
+     * @param mixed $value <p>
+     * The value to set.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetSet($offset, $value)
+    {
+
+    }
+
+    /**
+     * Offset to unset
+     * @link http://php.net/manual/en/arrayaccess.offsetunset.php
+     * @param mixed $offset <p>
+     * The offset to unset.
+     * </p>
+     * @return void
+     * @since 5.0.0
+     */
+    public function offsetUnset($offset)
+    {
+
     }
 }

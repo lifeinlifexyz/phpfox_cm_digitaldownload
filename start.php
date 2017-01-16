@@ -58,6 +58,7 @@ if (setting('cm_dd_enabled')) {
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
+        'digitaldownload.info'    => '\Apps\CM_DigitalDownload\Block\Info',
         'digitaldownload.manage-photos'    => '\Apps\CM_DigitalDownload\Block\ManagePhotos',
         'digitaldownload.manage-options'    => '\Apps\CM_DigitalDownload\Block\ManageOptions',
     ]);

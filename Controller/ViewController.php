@@ -39,7 +39,7 @@ class ViewController extends Phpfox_Component
 			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download you are looking for either does not exist or has been removed')));
 		}			
 		
-		$this->setParam('dDD', $oDD);
+		$this->setParam('oDD', $oDD);
 		
 //		if (Phpfox::isUser() && $oDD['invite_id'] && !$oDD['visited_id'] && $oDD['user_id'] != Phpfox::getUserId())
 //		{
@@ -100,10 +100,10 @@ class ViewController extends Phpfox_Component
 //			}
 //		}
 		$aMainImage = $oDD['main_image'];
-		$this->template()->setTitle($oDD['title'])
+		$this->template()->setTitle((string)$oDD)
 			->setBreadCrumb(_p('Digitaldownload'), $this->url()->makeUrl('digitaldownload'))
-//			->setMeta('description', $oDD['description'])
-//			->setMeta('keywords', $this->template()->getKeywords($oDD['title'] . $oDD['description']))
+			->setMeta('description', $oDD['seo_description'])
+			->setMeta('keywords', $this->template()->getKeywords($oDD['seo_keyword']))
 			->setMeta('og:image', Phpfox::getLib('image.helper')->display(
 				[
 					'server_id' => $aMainImage['server_id'],
@@ -114,8 +114,8 @@ class ViewController extends Phpfox_Component
 				]
 				)
 			)			
-			->setBreadCrumb($oDD['title'], true)
-			->setHeader('cache', array(
+			->setBreadCrumb((string)$oDD, true)
+			->setHeader('cache', [
 					'jquery/plugin/star/jquery.rating.js' => 'static_script',
 					'jquery/plugin/jquery.highlightFade.js' => 'static_script',
 					'jquery/plugin/jquery.scrollTo.js' => 'static_script',
@@ -125,33 +125,38 @@ class ViewController extends Phpfox_Component
 					'view.js' => 'module_marketplace',
 					'view.css' => 'module_marketplace',
 					'masterslider.css' => 'module_core',
-				)
+				]
 			)			
 			
-			->setEditor(array(
+			->setEditor([
 					'load' => 'simple'
-				)
+				]
 			)
-			->assign(array(
+			->assign([
 					'core_path'=>Phpfox::getParam('core.path'),
 					'oDD' => $oDD,
-				)
+					'aFieldNames' => $oDD->getFields([
+						'download_limit' => true,
+						'price' => true,
+						'privacy'=> true
+					]),
+				]
 			);
 		if (Phpfox::isModule('rate'))
 		{
 			$this->template()
-				->setPhrase(array(
+				->setPhrase([
 					'rate.thanks_for_rating'
-					)
+					]
 				)
-				->setHeader(array(
+				->setHeader([
 					'rate.js' => 'module_rate',
 					'<script type="text/javascript">$Behavior.rateDigitaldownloadUser = function() { $Core.rate.init({display: false}); }</script>',
-				)		
+					]
 			);
 		}
 
-		$aFilterMenu = array();
+		$aFilterMenu = [];
 //		if (!defined('PHPFOX_IS_USER_PROFILE'))
 //		{
 //			$sInviteTotal = '';

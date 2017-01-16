@@ -2,7 +2,7 @@
     <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
 </div>
 <div class="table_right">
-    <textarea class="form-control" id="{{ name }}_field" rows="6" cols="50">{{ value }}</textarea>
+    <textarea class="form-control" name="{{ name }}" id="{{ name }}_field" rows="6" cols="50">{{ value }}</textarea>
 </div>
 {% if hasError %}
 <span class="help-block">

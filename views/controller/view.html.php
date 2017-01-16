@@ -29,7 +29,7 @@ defined('PHPFOX') or exit('NO DICE!');
 		{if $oDD.user_id != Phpfox::getUserId()}
 		<div class="listing_purchase">
 			<div>
-			<a href="#" class="btn btn-info digitaldownload_contact_seller" onclick="$Core.composeMessage({l}user_id: {$oDD.user_id}, listing_id: {$oDD.d}{r}); return false;">
+			<a href="#" class="btn btn-info digitaldownload_contact_seller" onclick="$Core.composeMessage({l}user_id: {$oDD.user_id}, dd_id: {$oDD.id}{r}); return false;">
 				<i class="fa fa-comment"></i>
 				<span>{_p('Contact seller')}</span>
 			</a>
@@ -54,13 +54,13 @@ defined('PHPFOX') or exit('NO DICE!');
 	}
 	<div class="item_bar" style="margin-top: -4px">
 		<div class="item_bar_action_holder">
-			{if (Phpfox::getUserParam('digitaldownload.can_approve') && $oDD.view_id == '1')}
+			{if (Phpfox::getUserParam('digitaldownload.can_approve'))}
 				<a href="#" class="item_bar_approve item_bar_approve_image" onclick="return false;" style="display:none;" id="js_item_bar_approve_image">{img theme='ajax/add.gif'}</a>
 				<a href="#" class="item_bar_approve" onclick="$(this).hide(); $('#js_item_bar_approve_image').show(); $.ajaxCall('digitaldownload.approve', 'inline=true&amp;listing_id={$oDD.listing_id}'); return false;">{phrase var='digitaldownload.approve'}</a>
 			{/if}
 			<a role="button" data-toggle="dropdown" class="item_bar_action"><span>{_p('Actions')}</span></a>
 			<ul class="dropdown-menu">
-				{*template file='digitaldownload.block.menu'*}
+				{template file='digitaldownload.block.menu'}
 			</ul>
 		</div>
 	</div>
@@ -83,7 +83,7 @@ defined('PHPFOX') or exit('NO DICE!');
 	</div>
 	{/if}
 
-	{*module name='digitaldownload.info'*}
+	{module name='digitaldownload.info'}
 
 	{plugin call='digitaldownload.template_default_controller_view_extra_info'}
 

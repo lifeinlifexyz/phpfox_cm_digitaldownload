@@ -29,6 +29,15 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
         return $this;
     }
 
+    public function getFields(array $aExclude = [])
+    {
+        $aFields = $this->oForm->getFields();
+        if (count($aExclude) > 0) {
+            $aFields = array_diff_key($aFields, $aExclude);
+        }
+        return $aFields;
+    }
+
     public function getRow()
     {
         return $this->aRow;
