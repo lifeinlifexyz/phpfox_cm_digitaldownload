@@ -138,6 +138,7 @@ class ViewController extends Phpfox_Component
 					'aFieldNames' => $oDD->getFields([
 						'download_limit' => true,
 						'price' => true,
+						'desciption' => true,
 						'privacy'=> true
 					]),
 				]

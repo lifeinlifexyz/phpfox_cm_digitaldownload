@@ -36,7 +36,9 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
         if (is_null($this->mKey)) {
             $iId = $this->oDatabase->insert($this->sTable, $aValues);
         } else {
-            $iId = $this->oDatabase->update($this->sTable, $aValues, $this->sKeyName . ' = ' . $this->mKey);
+            $iId = ($this->oDatabase->update($this->sTable, $aValues, $this->sKeyName . ' = ' . $this->mKey))
+                ? $this->mKey
+                : null;
         }
 
         if (!$iId) {

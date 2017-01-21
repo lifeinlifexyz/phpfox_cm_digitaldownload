@@ -51,7 +51,7 @@ class AddController extends Phpfox_Component
 
             $aOptions = $this->request()->getArray('options');
 
-            if (count($aOptions) > 0) {
+            if ($this->request()->get('options_apply') && count($aOptions) > 0) {
                 $this->setParam('aOptions', $aOptions);
                 return Phpfox::getLib('module')->setController('digitaldownload.apply-options');
             }
@@ -104,11 +104,14 @@ class AddController extends Phpfox_Component
                 'name' => 'user_id',
                 'value' => Phpfox::getUserId(),
             ]);
+            
+            if (!$bEdit) {
+                $oForm->addField('hidden', [
+                    'name' => 'time_stamp',
+                    'value' => PHPFOX_TIME,
+                ]);
+            }
 
-            $oForm->addField('hidden', [
-                'name' => 'time_stamp',
-                'value' => PHPFOX_TIME,
-            ]);
             unset($oForm['plan_id']);
             db()->beginTransaction();
 

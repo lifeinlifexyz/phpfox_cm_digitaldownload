@@ -1,0 +1,13 @@
+{% if can_download %}
+    <a href="">{{ _p('Download') }}</a>
+{% else %}
+    <form method="post" action="{{ url('digitaldownload.purchase') }}">
+        <input type="hidden" name="id" value="{{ id }}" />
+        <input type="hidden" name="dd_name" value="{{ dd_name }}" />
+        <button type="submit" value="{{ _p('Buy it now') }}" class="btn btn-success">
+            <i class="fa fa-cart-plus"></i>
+            <span>{{ _p('Buy it now') }}</span>&nbsp;
+            (<span itemprop="price">{{ price }}</span>)
+        </button>
+    </form>
+{% endif %}

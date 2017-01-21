@@ -109,19 +109,11 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             'value' => $this->iCategoryId,
         ];
 
-        $aFields['price'] = [
-            'type' => 'price',
-            'name' => 'price',
-            'title' => _p('Price'),
-        ];
-
-        $aFields['digital_download'] = [
-            'type' => 'file',
-            'name' => 'digital_download',
-            'title' => _p('Digital download'),
-            'dir' => PHPFOX_DIR_FILE . 'digital_download' . PHPFOX_DS,
-//            'rules' => 'required',
-        ];
+//        $aFields['price'] = [
+//            'type' => 'price',
+//            'name' => 'price',
+//            'title' => _p('Price'),
+//        ];
 
         $aFields['privacy'] = [
             'type' => 'privacy',

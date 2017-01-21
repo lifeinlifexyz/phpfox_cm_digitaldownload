@@ -94,6 +94,7 @@ class Field extends \Phpfox_Service implements IFormly
             'string' => _p('String'),
             'select' => _p('Select'),
             'text' => _p('Text'),
+            'dd' => _p('Digital Download'),
         ];
     }
 
@@ -111,9 +112,9 @@ class Field extends \Phpfox_Service implements IFormly
         foreach($aColumnsDefs as &$aColumnsDef) {
             $aColumnsDef['table'] = $sTable;
             $aColumnsDef['field'] = isset($aColumnsDef['field'])
-                ? $aColumnsDef['field'] . '_' . $sName
+                ? $sName . '_' .$aColumnsDef['field']
                 : $sName;
-            if (!$this->database()->isField($sTable, $sName)) {
+            if (!$this->database()->isField($sTable, $aColumnsDef['field'])) {
                 $this->database()->addField($aColumnsDef);
             }
         }

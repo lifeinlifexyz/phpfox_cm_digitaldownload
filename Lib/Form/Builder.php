@@ -68,11 +68,12 @@ class Builder
         ? (new Form($this->oView, $aFormData))
         : (new  BindedForm($this->oView, null, $aFormData));
         $oForm->setValidator($this->oValidator);
-        $sPluginName = isset($aFormData['form_id'])
-            ? 'digitaldownload.form_created_' . $aFormData['form_id']
-            : 'digitaldownload.form_created';
 
-        (($sPlugin = \Phpfox_Plugin::get($sPluginName)) ? eval($sPlugin) : false);
+        if (isset($aFormData['form_id'])) {
+            (($sPlugin = \Phpfox_Plugin::get('digitaldownload.form_created_' . $aFormData['form_id'])) ? eval($sPlugin) : false);
+        }
+
+        (($sPlugin = \Phpfox_Plugin::get('digitaldownload.form_created')) ? eval($sPlugin) : false);
 
         foreach ($aFields as $aField) {
             $sType = $aField['type'];

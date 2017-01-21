@@ -5,6 +5,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
 //todo:: активация филда. чекбок ведет себе не корректно
 //todo:: после пагинации ползунок цен не работает
 //todo:: send message complete invoice
+//todo:: check user id and activated in view page
 
 \Phpfox_Module::instance()
     ->addServiceNames([
