@@ -4,6 +4,7 @@ namespace Apps\CM_DigitalDownload\Controller;
 
 use Phpfox;
 use Phpfox_Component;
+use Phpfox_Error;
 use Phpfox_Module;
 use Phpfox_Plugin;
 use Phpfox_Request;
@@ -28,9 +29,16 @@ class AddController extends Phpfox_Component
         $oDigitalDownload = \Phpfox::getService('digitaldownload.dd');
 
         if (($bEdit = $this->request()->get('dd_id'))) {
+
+            $aDD = $oDigitalDownload->getForEdit((int)$bEdit);
+
+            if (empty($aDD)) {
+                return Phpfox_Error::display(_p('Unable to find the item you are editing for'));
+            }
+
             $oDigitalDownload->setKey((int)$bEdit);
             $oDD = $oDigitalDownload
-                ->setRow($oDigitalDownload->getForEdit((int)$bEdit))
+                ->setRow($aDD)
                 ->getDisplayer($bEdit);
 
             if ((!Phpfox::isAdmin()) && ($oDD['user_id'] != Phpfox::getUserId())) {

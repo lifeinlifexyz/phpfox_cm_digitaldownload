@@ -34,6 +34,11 @@ class DigitalDownload extends AbstractType
             'null' => 'NULL',
         ],
         [
+            'field' => 'limit',
+            'type' => '	int(11)',
+            'null' => 'NULL',
+        ],
+        [
             'type' => 'decimal(14,2)',
             'null' => 'NULL',
             'field' => 'price',
@@ -95,6 +100,9 @@ class DigitalDownload extends AbstractType
             $this->aInfo['name'] . '_currency_id' => isset($this->aInfo['value']['currency_id'])
                 ? $this->aInfo['value']['currency_id']
                 : $this->aInfo['row_value'][$this->aInfo['name'] . '_currency_id'],
+            $this->aInfo['name'] . '_limit' => isset($this->aInfo['value']['limit'])
+                ? $this->aInfo['value']['limit']
+                : $this->aInfo['row_value'][$this->aInfo['name'] . '_limit'],
         ];
     }
 
@@ -108,6 +116,9 @@ class DigitalDownload extends AbstractType
             ? $this->aInfo['value']['price']
             : (isset($this->aInfo['row_value'][$this->aInfo['name'] . '_price']) ? $this->aInfo['row_value'][$this->aInfo['name'] . '_price']: null);
 
+        $this->aInfo['value_limit'] = isset($this->aInfo['value']['limit'])
+            ? $this->aInfo['value']['limit']
+            : (isset($this->aInfo['row_value'][$this->aInfo['name'] . '_limit']) ? $this->aInfo['row_value'][$this->aInfo['name'] . '_limit']: null);
 
         $this->aInfo['value'] = isset($this->aInfo['value']) ? $this->aInfo['value'] : 0;
 

@@ -27,6 +27,12 @@
         <input type="hidden" name="{{ name }}[file]" value="{{ value }}">
         <input class="form-control" type="file" name="{{ name }}_file" id="{{ name }}_field" />
     </div>
+    <div class="table_left">
+        <label for="{{ name }}_limit">{{ title }} {{ _p('limit') }}</label>
+    </div>
+    <div class="table_right">
+        <input class="form-control" min="0" type="number" id="{{ name }}_limit" name="{{ name }}[limit]" value="{{ value_limit }}">
+    </div>
 </fieldset>
 
 {% if hasError %}
