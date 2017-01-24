@@ -106,6 +106,17 @@ function installv1_0_0()
       KEY `dd_id` (`dd_id`,`plan_in`)
     );');
 
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_download') . '` (
+        `download_id` int(11) NOT NULL AUTO_INCREMENT,
+        `dd_id` int(11) NOT NULL,
+        `user_id` int(11) NOT NULL,
+        `field` varchar(255) NOT NULL,
+        `limit` int(11) NOT NULL DEFAULT \'0\',
+        PRIMARY KEY (`download_id`),
+        KEY `dd_id` (`dd_id`,`user_id`)
+    );');
+
+
     if (!is_dir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/')) {
         mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
     }

@@ -29,7 +29,7 @@ class Callback extends Phpfox_Service
 
 	public function getAjaxCommentVar()
 	{
-		return null;//'can_post_comment_on_dd';
+		return null;//'can_post_comment_on_dd'; todo:: uncomment
 	}
 
 	public function getCommentItem($iId)
@@ -133,7 +133,7 @@ class Callback extends Phpfox_Service
 		
 		if ($oDD === false)
 		{
-			Phpfox::log('Not a valid listing.');
+			Phpfox::log('Not a valid digital download.');
 			
 			return false;
 		}
@@ -166,17 +166,28 @@ class Callback extends Phpfox_Service
 				'status' => $aParams['status'],
 				'time_stamp_paid' => PHPFOX_TIME
 			), 'invoice_id = ' . $aInvoice['invoice_id']
-		);		
+		);
 
-
-		if ($aInvoice['type'] == 'options')
-		{
-			$aOptions = json_decode($aInvoice['data']);
-			$aVal = [];
-			foreach ($aOptions as $sOptionName => $aOption) {
-				$aVal[$sOptionName] = true;
-			}
-			Phpfox::getService('digitaldownload.dd')->updateById($oDD['id'], $aVal);
+		$aData = json_decode($aInvoice['data'], true);
+		switch ($aInvoice['type']) {
+			case 'options':
+				$aVal = [];
+				foreach ($aData as $sOptionName => $aOption) {
+					$aVal[$sOptionName] = true;
+				}
+				Phpfox::getService('digitaldownload.dd')->updateById($oDD['id'], $aVal);
+				break;
+			case 'dd':
+				Phpfox::getService('digitaldownload.downloads')->add([
+					'dd_id' => $aInvoice['dd_id'],
+					'user_id' => $aInvoice['user_id'],
+					'field' => $aData['field'],
+					'limit' => ((((int)$aData['limit']) == 0) ? 9999999999: $aData['limit']),
+				]);
+				//todo:: notification after purchase
+				break;
+			default:
+				Phpfox::log('Invalid type of purchase');
 		}
 		
 //		Phpfox::getLib('mail')->to($oDD['user_id'])

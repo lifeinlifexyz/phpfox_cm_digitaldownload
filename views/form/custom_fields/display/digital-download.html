@@ -1,5 +1,8 @@
 {% if can_download %}
-    <a href="">{{ _p('Download') }}</a>
+    <a class="no_ajax btn btn-success" href="{{ url('digitaldownload.download') }}{{ id }}/{{ dd_name }}">
+        <i class="fa fa-download"></i>&nbsp;
+        {{ _p('Download') }}
+    </a>
 {% else %}
     <form method="post" action="{{ url('digitaldownload.purchase') }}">
         <input type="hidden" name="id" value="{{ id }}" />

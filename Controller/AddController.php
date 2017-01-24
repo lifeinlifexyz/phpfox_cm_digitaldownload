@@ -36,14 +36,15 @@ class AddController extends Phpfox_Component
                 return Phpfox_Error::display(_p('Unable to find the item you are editing for'));
             }
 
+            if ((!Phpfox::isAdmin()) && ($aDD['user_id'] != Phpfox::getUserId())) {
+                return Phpfox::getLib('module')->setController('error.404');
+            }
+
             $oDigitalDownload->setKey((int)$bEdit);
             $oDD = $oDigitalDownload
                 ->setRow($aDD)
                 ->getDisplayer($bEdit);
 
-            if ((!Phpfox::isAdmin()) && ($oDD['user_id'] != Phpfox::getUserId())) {
-                return Phpfox::getLib('module')->setController('error.404');
-            }
             $aPlan = json_decode($oDD['plan_info'], true);
 
             if (!$oDD['is_active'] && $aPlan['price'] == 0) {

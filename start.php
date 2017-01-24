@@ -6,6 +6,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
 //todo:: после пагинации ползунок цен не работает
 //todo:: send message complete invoice
 //todo:: check user id and activated in view page
+//todo:: close the download dir for read
 
 \Phpfox_Module::instance()
     ->addServiceNames([
@@ -14,6 +15,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.plan' => '\Apps\CM_DigitalDownload\Service\Plan',
         'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
         'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\DigitalDownload',
+        'digitaldownload.download' => '\Apps\CM_DigitalDownload\Service\Download',
         'digitaldownload.browse' => '\Apps\CM_DigitalDownload\Service\Browse',
         'digitaldownload.images' => '\Apps\CM_DigitalDownload\Service\Images',
         'digitaldownload.invoice' => '\Apps\CM_DigitalDownload\Service\Invoice',
@@ -56,6 +58,7 @@ if (setting('cm_dd_enabled')) {
         'digitaldownload.apply-options'    => '\Apps\CM_DigitalDownload\Controller\ApplyOptionsController',
         'digitaldownload.purchase'    => '\Apps\CM_DigitalDownload\Controller\PurchaseController',
         'digitaldownload.view'    => '\Apps\CM_DigitalDownload\Controller\ViewController',
+        'digitaldownload.download'    => '\Apps\CM_DigitalDownload\Controller\DownloadController',
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
@@ -140,5 +143,6 @@ group('/digitaldownload/', function (){
         route('add/:id/*', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
         route(':id', 'digitaldownload.view')->where([':id' => '([0-9]+)']);
         route('purchase', 'digitaldownload.purchase');
+        route('download/:id/:field', 'digitaldownload.download')->where([':id' => '([0-9]+)']);
     }
 });

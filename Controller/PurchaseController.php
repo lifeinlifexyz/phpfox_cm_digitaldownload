@@ -77,24 +77,41 @@ class PurchaseController extends Phpfox_Component
             }
         }
 
-//        if (!($aListing = Phpfox::getService('digitaldownload')->getForEdit($iId, true)))
-//        {
-//            return Phpfox_Error::display(_p('Unable to find the item you are looking for'));
-//        }
+        if ($iId && ($sDDName = $this->request()->get('dd_name'))) {
 
-//        if ($this->request()->get('process'))
-//        {
-//            if (($iInvoice = Phpfox::getService('digitaldownload.process')->addInvoice($aListing['listing_id'], $aListing['currency_id'], $aListing['price'])))
-//            {
-//                $this->url()->send('digitaldownload.purchase', array('invoice' => $iInvoice));
-//            }
-//        }
+            if (!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iId))) {
+                return Phpfox_Error::display(_p('Unable to find the item you are looking for'));
+            }
+            $aDDField = $oDD->getFields();
+            $aDDField = $aDDField[$sDDName];
+
+            if ($this->request()->get('process'))
+            {
+                if (($iInvoice = Phpfox::getService('digitaldownload.invoice')
+                    ->add($oDD['id'], $oDD[$sDDName . '_currency_id'], $oDD[$sDDName . '_price'], 'dd',
+                        [
+                            'field' => $sDDName,
+                            'limit' => $oDD[$sDDName . '_limit']
+                        ])))
+                {
+                    $this->url()->send('digitaldownload.purchase', array('invoice' => $iInvoice));
+                }
+            }
+
+
+            $this->template()->assign([
+               'oDD' => $oDD,
+               'sDDName' => $sDDName,
+               'aItemField' => $aDDField,
+               'sPrice' => $aDDField->getPrice(),
+            ]);
+
+        }
 
         $this->template()->setTitle(_p('Review and Confirm Purchase'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
             ->setBreadCrumb(_p('Review and Confirm Purchase'), null, true)
             ->assign([
-//                    'aListing' => $aListing,
                     'bInvoice' => $bInvoice
                 ]
             );
@@ -103,24 +120,18 @@ class PurchaseController extends Phpfox_Component
 
     protected function getPurchaseDetails($aInvoice)
     {
-        $aPurchaseDetails = [
+        return [
             'item_number' => 'digitaldownload|' . $aInvoice['invoice_id'],
             'currency_code' => $aInvoice['currency_id'],
             'amount' => $aInvoice['price'],
-            'item_name' => 'test',
             'return' => $this->url()->makeUrl('digitaldownload.invoice', ['payment' => 'done']),
+            'item_name' => Phpfox::getBaseUrl() . ': '
+                . _p('For Digital Download {{ id }}', ['id' => $aInvoice['dd_id']]),
             'recurring' => '',
             'recurring_cost' => '',
             'alternative_cost' => '',
             'alternative_recurring_cost' => ''
         ];
-        switch ($aInvoice['type']) {
-            case 'options':
-                $aPurchaseDetails['item_name'] = Phpfox::getBaseUrl() . ': '
-                    . _p('For Digital Download {{ id }}', ['id' => $aInvoice['dd_id']]);
-                break;
-        }
-        return $aPurchaseDetails;
     }
 
     /**

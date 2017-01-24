@@ -197,4 +197,19 @@ class Field extends \Phpfox_Service implements IFormly
         return $aList;
     }
 
+    public function getFieldsByType($sType)
+    {
+        $aFields = $this->database()
+            ->select('`name`')
+            ->from(\Phpfox::getT($this->_sTable))
+            ->where('`type` = \'' . $sType . '\'')
+            ->all();
+
+        $aRes =  [];
+        foreach($aFields as $aField) {
+            $aRes[] = $aField['name'];
+        }
+        return $aRes;
+    }
+
 }

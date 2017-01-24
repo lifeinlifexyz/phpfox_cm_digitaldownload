@@ -156,9 +156,28 @@ class DigitalDownload extends AbstractType
         return $this->aInfo['row_value'][$this->aInfo['name'] . '_price'] == '0.00';
     }
 
-    private function canDownload()
+    public function canDownload()
     {
-        return $this->isFree();
+        return $this->isFree()
+        || Phpfox::isAdmin()
+        || $this->aInfo['row_value']['user_id'] == Phpfox::getUserId()
+        || Phpfox::getService('digitaldownload.download')
+            ->canDownload(Phpfox::getUserId(),  $this->aInfo['row_value']['id'], $this->aInfo['name']);
+    }
+
+    public function download($sName)
+    {
+        $sFile = $this->sDir . $this->aInfo['value'];
+        $sExt = pathinfo($sFile, PATHINFO_EXTENSION);
+        \Phpfox_File::instance()->forceDownload($sFile, $sName . '.' . $sExt);
+    }
+
+    public function getPrice()
+    {
+        $sPrice = $this->aInfo['row_value'][$this->aInfo['name'] . '_price'];
+
+        return Phpfox::getService('core.currency')->getCurrency(number_format($sPrice, 2),
+            $this->aInfo['row_value'][$this->aInfo['name'] . '_currency_id']);
     }
 
     public function getDisplay()
@@ -166,10 +185,7 @@ class DigitalDownload extends AbstractType
         $aVars = $this->aInfo['row_value'];
         $aVars['is_free'] = $this->isFree();
         $aVars['can_download'] = $this->canDownload();
-        $sPrice = $this->aInfo['row_value'][$this->aInfo['name'] . '_price'];
-
-        $aVars['price'] = Phpfox::getService('core.currency')->getCurrency(number_format($sPrice, 2),
-            $this->aInfo['row_value'][$this->aInfo['name'] . '_currency_id']);
+        $aVars['price'] = $this->getPrice();
         $aVars['dd_name'] = $this->aInfo['name'];
 
         return $this->oView->view($this->aInfo['display_template'], $aVars);

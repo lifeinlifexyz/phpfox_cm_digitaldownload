@@ -76,6 +76,21 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
         }
     }
 
+    public function getField($sField)
+    {
+        if (isset($this->oForm[$sField])) {
+            $oField = $this->oForm->getField($sField);
+            if (method_exists($oField, 'setMValue')) {
+                $oField->setMValue($this->aRow);
+            } else {
+                $oField->setValue($this->aRow[$sField]);
+            }
+            return $oField;
+        } else  {
+            throw new \Exception('Unknone field "' . $sField . '"');
+        }
+    }
+
     public function __toString()
     {
         return $this->parseVars($this->sTitleSettings);

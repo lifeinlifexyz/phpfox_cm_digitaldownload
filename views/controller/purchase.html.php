@@ -14,35 +14,36 @@ defined('PHPFOX') or exit('NO DICE!');
 <div class="main_break"></div>
 {if $bInvoice}
 
-<h3>{phrase var='marketplace.payment_methods'}</h3>
+<h3>{_p('Payment methods')}</h3>
 	{module name='api.gateway.form'}
 {else}
 <div class="info">
 	<div class="info_left">
-		{phrase var='marketplace.item_you_re_buying'}:
+		{_p('Item you`re buying')}:
 	</div>
 	<div class="info_right">
-		{$aListing.title|clean}
+		{$oDD|clean}|{$aItemField.caption}
 	</div>		
 </div>
 <div class="info">
 	<div class="info_left">
-		{phrase var='marketplace.price'}:
+		{_p('Price')}:
 	</div>
 	<div class="info_right">
-		{$aListing.price|clean}
+		{$sPrice}
 	</div>		
 </div>
 	
 <div class="separate"></div>
 
 <div class="p_4">
-	{phrase var='marketplace.by_clicking_on_the_button_below_you_commit_to_buy_this_item_from_the_seller'}
+	{_p('By clicking on the button below, you commit to buy this item from the seller.')}
 	<div class="p_4">
-		<form method="post" action="{url link='marketplace.purchase'}">
-			<div><input type="hidden" name="id" value="{$aListing.listing_id}" /></div>
-			<div><input type="hidden" name="process" value="1" /></div>			
-			<input type="submit" value="{phrase var='marketplace.commit_to_buy'}" class="button btn-primary" />
+		<form method="post" action="{url link='digitaldownload.purchase'}">
+			<input type="hidden" name="id" value="{$oDD.id}" />
+			<input type="hidden" name="process" value="1" />
+			<input type="hidden" name="dd_name" value="{$sDDName}" />
+			<input type="submit" value="{_p('Commit to buy')}" class="button btn-primary" />
 		</form>
 	</div>
 </div>
