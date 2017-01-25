@@ -25,27 +25,17 @@ defined('PHPFOX') or exit('NO DICE!');
 	</div>
 
 	<div class="item_info_more clearfix">
-		<span class="listing_view_price" itemprop="price">{$oDD.price}</span>
 		{if $oDD.user_id != Phpfox::getUserId()}
-		<div class="listing_purchase">
+		<div class="pull-right">
 			<div>
-			<a href="#" class="btn btn-info digitaldownload_contact_seller" onclick="$Core.composeMessage({l}user_id: {$oDD.user_id}, dd_id: {$oDD.id}{r}); return false;">
-				<i class="fa fa-comment"></i>
-				<span>{_p('Contact seller')}</span>
-			</a>
+				<a href="#" class="btn btn-info digitaldownload_contact_seller" onclick="$Core.composeMessage({l}user_id: {$oDD.user_id}, dd_id: {$oDD.id}{r}); return false;">
+					<i class="fa fa-comment"></i>
+					<span>{_p('Contact seller')}</span>
+				</a>
 			</div>
-			{*if ($oDD.is_sell && $oDD.view_id != '2' && $oDD.price != '0.00')}
-			<div class="digitaldownload_price_holder_button">
-				<form method="post" action="{url link='digitaldownload.purchase'}">
-					<div><input type="hidden" name="id" value="{$oDD.listing_id}" /></div>
-					<button type="submit" value="{phrase var='digitaldownload.buy_it_now'}" class="btn btn-success">
-						<i class="fa fa-cart-plus"></i>
-						<span>{phrase var='digitaldownload.buy_it_now'}</span>
-					</button>
-				</form>
-			</div>
-			{/if*}
 		</div>
+		<div class="clearfix"></div>
+		<br>
 		{/if}
 	</div>
 

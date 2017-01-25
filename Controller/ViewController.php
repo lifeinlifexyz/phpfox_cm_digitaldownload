@@ -136,7 +136,7 @@ class ViewController extends Phpfox_Component
 					'core_path'=>Phpfox::getParam('core.path'),
 					'oDD' => $oDD,
 					'aFieldNames' => $oDD->getFields([
-						'desciption' => true,
+						'description' => true,
 						'privacy'=> true
 					]),
 				]

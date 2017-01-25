@@ -19,7 +19,7 @@ class CategoryController extends Phpfox_Component
     {
 
         Phpfox::isUser(true);
-        user('cm_dd_add', null, null, true);
+        user('digitaldownload.cm_dd_add', null, null, true);
 
         $this->template()->setTitle(_p('Select Category'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))

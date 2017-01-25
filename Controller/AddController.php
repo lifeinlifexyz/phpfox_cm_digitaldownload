@@ -20,14 +20,13 @@ class AddController extends Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
+//        Phpfox::getUserParam('digitaldownload.cm_dd_add');
+        user('digitaldownload.cm_dd_add', null, null, true);
 
         (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
 
-        user('cm_dd_add', null, null, true);
-
         $sAction = $this->request()->get('req4');
         $oDigitalDownload = \Phpfox::getService('digitaldownload.dd');
-
         if (($bEdit = $this->request()->get('dd_id'))) {
 
             $aDD = $oDigitalDownload->getForEdit((int)$bEdit);
@@ -75,6 +74,7 @@ class AddController extends Phpfox_Component
                 return Phpfox::getLib('module')->setController('digitaldownload.category');
             }
 
+
             $oDigitalDownload->setCategoryId($iCategory);
 
             $iPlan = $this->request()->getInt('plan_id');
@@ -92,14 +92,6 @@ class AddController extends Phpfox_Component
 
         if ($sAction == 'upload') {
             $this->upload($oDD);
-        }
-
-        if (isset($iPlan)) {
-            //assign plan to dd
-            $oForm->addField('hidden', [
-                'name' => 'plan_id',
-                'value' => $iPlan,
-            ]);
         }
 
         if ($_POST && $oForm->isValid()) {
@@ -121,7 +113,6 @@ class AddController extends Phpfox_Component
                 ]);
             }
 
-            unset($oForm['plan_id']);
             db()->beginTransaction();
 
             $iId = $oForm->save();

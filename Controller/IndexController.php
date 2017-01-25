@@ -20,7 +20,7 @@ class IndexController extends Phpfox_Component
 	{
 
 		//add button to add new Digital Download
-		if (user('cm_dd_add' , '0') == '1') {
+		if (user('digitaldownload.cm_dd_add' , '0') == '1') {
 			sectionMenu(_p('Add'), url('/digitaldownload/add'));
 		}
 

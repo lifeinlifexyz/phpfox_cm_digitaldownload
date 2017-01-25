@@ -12,8 +12,8 @@ defined('PHPFOX') or exit('NO DICE!');
 
 ?>
 <div class="info_holder">
-	{if $oDD.desciption}
-	<p>{$oDD.desciption}</p>
+	{if $oDD.description}
+	<p>{$oDD.description}</p>
 	{/if}
 	{foreach from=$aFieldNames key=iKey item=oField}
 		<div class="info">

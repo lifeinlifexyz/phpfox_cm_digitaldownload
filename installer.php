@@ -46,25 +46,20 @@ function installv1_0_0()
     db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download') . "` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `category_id` int(11) NOT NULL,
-      `digital_download` VARCHAR( 255 ) NOT NULL,
       `privacy` TINYINT( 1 ) NOT NULL DEFAULT  '0',
-      `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  '0.00',
-      `price_currency_id` CHAR( 3 ) NOT NULL,
-      `images` TEXT NOT NULL DEFAULT  '';
-      `user_id` INT( 11 ) NOT NULL DEFAULT  '0',
+      `images` TEXT NULL,
+      `user_id` int( 11 ) NOT NULL DEFAULT  '0',
       `is_active` TINYINT( 1 ) NOT NULL DEFAULT  '0',
-      `time_stamp` INT( 10 ) NOT NULL,
-      `plan_id` INT NOT NULL,
-      `expire_timestamp` INT( 10 ) NOT NULL,
+      `time_stamp` int( 10 ) NOT NULL,
+      `expire_timestamp` int( 10 ) NULL,
       `featured` TINYINT( 1 ) NOT NULL DEFAULT  '0',
-      `total_comment` INT NOT NULL DEFAULT  '0',
-      `total_like` INT( 10 ) NOT NULL DEFAULT  '0',
+      `total_comment` int(10) NOT NULL DEFAULT  '0',
+      `total_like` int( 10 ) NOT NULL DEFAULT  '0',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
       KEY `user_id` (`user_id`),
-      KEY `featured` (`featured`),
-      );");
+      KEY `featured` (`featured`));");
 
     db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_plans') . '` (
       `plan_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -73,7 +68,7 @@ function installv1_0_0()
       `life_time` int(3) NOT NULL,
       `price` DECIMAL( 14, 2 ) NOT NULL DEFAULT  \'0.00\',
       `price_currency_id` CHAR( 3 ) NOT NULL,
-      `featured` DECIMAL( 14, 2 ) NOT NULL \'0.00\',
+      `featured` DECIMAL( 14, 2 ) NOT NULL DEFAULT \'0.00\',
       `featured_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
       `user_groups` VARCHAR( 255 ) NULL,
        PRIMARY KEY (`plan_id`)
@@ -88,7 +83,7 @@ function installv1_0_0()
       `status` varchar(20) DEFAULT NULL,
       `time_stamp` int(10) unsigned NOT NULL,
       `time_stamp_paid` int(10) unsigned NOT NULL DEFAULT \'0\',
-      `data` TEXT NOT NULL DEFAULT \'[]\',
+      `data` TEXT NOT NULL,
       `type` VARCHAR( 15 ) NOT NULL DEFAULT  \'options\',
       PRIMARY KEY (`invoice_id`),
       KEY `dd_id` (`dd_id`),
@@ -103,7 +98,7 @@ function installv1_0_0()
       `plan_id` int(11) NOT NULL,
       `info` text NOT NULL,
       PRIMARY KEY (`dd_plan_id`),
-      KEY `dd_id` (`dd_id`,`plan_in`)
+      KEY `dd_id` (`dd_id`,`plan_id`)
     );');
 
     db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_download') . '` (
