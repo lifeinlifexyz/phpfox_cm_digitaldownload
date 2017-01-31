@@ -17,7 +17,6 @@ defined('PHPFOX') or exit('NO DICE!');
        </h2>
 
        <div class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-		<span itemprop="price">{$aEntry.price}</span>
        </div>
 
        <ul class="listing_info">

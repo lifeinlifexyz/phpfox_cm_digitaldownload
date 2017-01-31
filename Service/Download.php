@@ -18,10 +18,10 @@ class Download extends \Phpfox_Service
     {
         $oParseInput = Phpfox::getLib('parse.input');
         return $this->database()->insert(Phpfox::getT($this->_sTable), [
-            'dd_id' => (int) $aVals['dd_id'],
-            'user_id' => (int) $aVals['user_id'],
-            'field' => $oParseInput->clean($aVals['field'], 255),
-            'limit' => (int) $aVals['v'],
+            '`dd_id`' => (int) $aVals['dd_id'],
+            '`user_id`' => (int) $aVals['user_id'],
+            '`field`' => $oParseInput->clean($aVals['field'], 255),
+            '`limit`' => (int) $aVals['limit'],
         ]);
     }
 

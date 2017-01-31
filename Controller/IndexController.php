@@ -19,11 +19,6 @@ class IndexController extends Phpfox_Component
 	public function process()
 	{
 
-		//add button to add new Digital Download
-		if (user('digitaldownload.cm_dd_add' , '0') == '1') {
-			sectionMenu(_p('Add'), url('/digitaldownload/add'));
-		}
-
 		$aPages = [21, 31, 41, 51];
 		$aDisplays = array();
 		foreach ($aPages as $iPageCnt)
@@ -33,6 +28,8 @@ class IndexController extends Phpfox_Component
 
 		$aSectionMenu = [
 			_p('All') => '',
+			_p('My') => 'digitaldownload.my',
+			_p('Invoices') => 'digitaldownload.invoice',
 		];
 
 		$aSort = [
@@ -58,16 +55,14 @@ class IndexController extends Phpfox_Component
 				]
 			]
 		];
+
 		$oSearch = \Phpfox::getLib('search')->set($aSearchParams);
 		$oFormFilter = \Phpfox::getService('digitaldownload.dd')->getFilterForm();
 		$oSearch = $oFormFilter->setSearch($oSearch)->defineConditions();
 
-		if (Phpfox::isUser()) {
-			$aSectionMenu[_p('My')] = 'digitaldownload.my';
-		}
-
 		switch($this->request()->get('req2')) {
 			case 'my':
+				Phpfox::isUser(true);
 				$oSearch->setCondition('AND `d`.`user_id` = ' . \Phpfox::getUserId());
 				break;
 			default:

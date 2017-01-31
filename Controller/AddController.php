@@ -20,7 +20,6 @@ class AddController extends Phpfox_Component
     public function process()
     {
         Phpfox::isUser(true);
-//        Phpfox::getUserParam('digitaldownload.cm_dd_add');
         user('digitaldownload.cm_dd_add', null, null, true);
 
         (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
@@ -59,7 +58,7 @@ class AddController extends Phpfox_Component
 
             $aOptions = $this->request()->getArray('options');
 
-            if ($this->request()->get('options_apply') && count($aOptions) > 0) {
+            if (($this->request()->get('options_apply') && count($aOptions) > 0) || $this->request()->get('confirm_pay')) {
                 $this->setParam('aOptions', $aOptions);
                 return Phpfox::getLib('module')->setController('digitaldownload.apply-options');
             }

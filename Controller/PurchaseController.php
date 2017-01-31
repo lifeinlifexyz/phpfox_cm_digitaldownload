@@ -31,9 +31,20 @@ class PurchaseController extends Phpfox_Component
                 {
                     return Phpfox_Error::display(_p('Unable to purchase this item'));
                 }
-
                 $iId = $aInvoice['dd_id'];
-                $aUserGateways = Phpfox::getService('api.gateway')->getUserGateways($aInvoice['user_id']);
+
+                $aUserGateways =  [];
+                if ($aInvoice['type'] == 'options') { //if buy options, then pay for admin, else for owner
+                    $aAdminGateways = Phpfox::getService('api.gateway')->getForAdmin();
+
+                    foreach ($aAdminGateways as &$aAdminGateway) {
+                        $aUserGateways[$aAdminGateway['gateway_id']]['gateway'] = unserialize($aAdminGateway['setting']);
+                    }
+
+                } else {
+                    $aUserGateways = Phpfox::getService('api.gateway')->getUserGateways($aInvoice['dd_user_id']);
+                }
+
                 $aActiveGateways = Phpfox::getService('api.gateway')->getActive();
                 $aPurchaseDetails = $this->getPurchaseDetails($aInvoice);
 
@@ -72,7 +83,6 @@ class PurchaseController extends Phpfox_Component
                         }
                     }
                 }
-
                 $this->setParam('gateway_data', $aPurchaseDetails);
             }
         }
@@ -130,7 +140,7 @@ class PurchaseController extends Phpfox_Component
             'recurring' => '',
             'recurring_cost' => '',
             'alternative_cost' => '',
-            'alternative_recurring_cost' => ''
+            'alternative_recurring_cost' => '',
         ];
     }
 

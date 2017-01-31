@@ -9,6 +9,7 @@ use Phpfox;
 use Phpfox_Error;
 use Phpfox_Plugin;
 use Phpfox_Service;
+use Phpfox_Url;
 
 defined('PHPFOX') or exit('NO DICE!');
 
@@ -62,38 +63,62 @@ class Callback extends Phpfox_Service
 		}
 
 		// Send the user an email
-//		$sLink = Phpfox::permalink('digitaldownload', $oDD['id']);
-//
-//		Phpfox::getService('comment.process')->notify(array(
-//				'user_id' => $oDD['user_id'],
-//				'item_id' => $oDD['id'],
-//				'owner_subject' => _p('Full name commented on your digital download {{ title }}', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => $oDD['title']]),
-//				'owner_message' =>'test owner_message',//_p('Full name commented on your digital download  a href link title a to see the comment thread follow the link below a href link link_a',array('full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => $oDD['title'])),
-//				'owner_notification' => 'comment.add_new_comment',
-//				'notify_id' => 'comment_digitaldownload',
-//				'mass_id' => 'digitaldownload',
-//				'mass_subject' => (Phpfox::getUserId() == $oDD['user_id'] ?
-//					Phpfox::getPhrase('marketplace.full_name_commented_on_gender_listing',array('full_name' => Phpfox::getUserBy('full_name'), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1)))
-//					:
-//					Phpfox::getPhrase('marketplace.full_name_commented_on_other_full_name_s_listing',
-//						array(
-//							'full_name' => Phpfox::getUserBy('full_name'),
-//							'other_full_name' => $oDD['full_name']
-//						))),
-//				'mass_message' => (Phpfox::getUserId() == $oDD['user_id'] ?
-//					Phpfox::getPhrase('marketplace.full_name_commented_on_gender_listing_a_href_link_title_a_to_see_the_comment_thread_follow_the_link_below_a_href_link_link_a',array('full_name' => Phpfox::getUserBy('full_name'), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1), 'title' => $oDD['title'], 'link' => $sLink))
-//
-//					:
-//					Phpfox::getPhrase('marketplace.full_name_commented_on_other_full_name',array('full_name' => Phpfox::getUserBy('full_name'), 'other_full_name' => $oDD['full_name'], 'link' => $sLink, 'title' => $oDD['title']))
-//
-//
-//				))
-//		);
+		$sLink = Phpfox::permalink('digitaldownload', $oDD['id']);
+		$sMassMessage = Phpfox::getUserId() == $oDD['user_id']
+			? _p('{full_name} commented on {gender} digital download "<a href="{link}">{title}</a>". To see the comment thread, follow the link below: <a href="{link}">{link}</a>',
+				[
+					'full_name' => Phpfox::getUserBy('full_name'),
+					'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1),
+					'title' => (string)$oDD,
+					'link' => $sLink])
+			: _p('{full_name} commented on {other_full_name}\'s listing "<a href="{link}">{title}</a>". To see the comment thread, follow the link below: <a href="{link}">{link}</a>', [
+				'full_name' => Phpfox::getUserBy('full_name'),
+				'other_full_name' => $oDD['full_name'],
+				'link' => $sLink, 'title' => (string)$oDD]);
+		$aMassSubject = Phpfox::getUserId() == $oDD['user_id']
+			? _p('{full_name} commented on {gender} listing.', [
+				'full_name' => Phpfox::getUserBy('full_name'),
+				'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1)
+			])
+			:
+			_p('{full_name} commented on {other_full_name}\'s listing.', [
+				'full_name' => Phpfox::getUserBy('full_name'),
+				'other_full_name' => $oDD['full_name']
+			]);
+
+		Phpfox::getService('comment.process')->notify([
+				'user_id' => $oDD['user_id'],
+				'item_id' => $oDD['id'],
+				'owner_subject' => _p('{full_name} commented on your digital download {{ title }}', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => (string)$oDD]),
+				'owner_message' =>_p('{full_name} commented on your digital download  a href link title a to see the comment thread follow the link below a href link link_a', ['full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => (string)$oDD]),
+				'owner_notification' => 'comment.add_new_comment',
+				'notify_id' => 'comment_digitaldownload',
+				'mass_id' => 'digitaldownload',
+				'mass_subject' => $aMassSubject,
+				'mass_message' => $sMassMessage]
+		);
 	}
 
 	public function deleteComment($iId)
 	{
 		$this->database()->updateCounter('digital_download', 'total_comment', 'id', $iId, true);
+	}
+
+	public function getFeedRedirect($iId, $iChild = null)
+	{
+		(($sPlugin = Phpfox_Plugin::get('digitaldownload.service_callback_getfeedredirect')) ? eval($sPlugin) : false);
+
+		return Phpfox::permalink('digitaldownload', $iId);
+	}
+
+	public function getReportRedirect($iId)
+	{
+		return $this->getFeedRedirect($iId);
+	}
+
+	public function getRedirectComment($iId)
+	{
+		return $this->getFeedRedirect($iId);
 	}
 
 	/**
@@ -117,95 +142,125 @@ class Callback extends Phpfox_Service
 
 	public function paymentApiCallback($aParams)
 	{
-		Phpfox::log('Module callback recieved: ' . var_export($aParams, true));	
-		Phpfox::log('Attempting to retrieve purchase from the database');		
-		
-		$aInvoice = Phpfox::getService('digitaldownload.invoice')->get($aParams['item_number']);
-		
-		if ($aInvoice === false)
-		{
-			Phpfox::log('Not a valid invoice');
-			
-			return false;
-		}
-		
-		$oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($aInvoice['dd_id']);
-		
-		if ($oDD === false)
-		{
-			Phpfox::log('Not a valid digital download.');
-			
-			return false;
-		}
-		
-		Phpfox::log('Purchase is valid: ' . var_export($aInvoice, true));
-		
-		if ($aParams['status'] == 'completed')
-		{
-			if ($aParams['total_paid'] == $aInvoice['price'])
+		try {
+			Phpfox::log('Module callback recieved: ' . var_export($aParams, true));
+			Phpfox::log('Attempting to retrieve purchase from the database');
+
+			$aInvoice = Phpfox::getService('digitaldownload.invoice')->get($aParams['item_number']);
+
+			if ($aInvoice === false)
 			{
-				Phpfox::log('Paid correct price');
-			}
-			else 
-			{
-				Phpfox::log('Paid incorrect price');
-				
+				Phpfox::log('Not a valid invoice');
+
 				return false;
 			}
-		}
-		else 
-		{
-			Phpfox::log('Payment is not marked as "completed".');
-			
-			return false;
-		}
-		
-		Phpfox::log('Handling purchase');
-		
-		$this->database()->update(Phpfox::getT('digital_download_invoice'), array(
+
+			$aDD = Phpfox::getService('digitaldownload.dd')->getForEdit($aInvoice['dd_id']);
+
+			if ($aDD === false)
+			{
+				Phpfox::log('Not a valid digital download.');
+
+				return false;
+			}
+
+			Phpfox::log('Purchase is valid: ' . var_export($aInvoice, true));
+
+			if ($aParams['status'] == 'completed')
+			{
+				if ($aParams['total_paid'] == $aInvoice['price'])
+				{
+					Phpfox::log('Paid correct price');
+				}
+				else
+				{
+					Phpfox::log('Paid incorrect price');
+
+					return false;
+				}
+			}
+			else
+			{
+				Phpfox::log('Payment is not marked as "completed".');
+
+				return false;
+			}
+
+			Phpfox::log('Handling purchase');
+
+			$this->database()->update(Phpfox::getT('digital_download_invoice'), array(
 				'status' => $aParams['status'],
 				'time_stamp_paid' => PHPFOX_TIME
 			), 'invoice_id = ' . $aInvoice['invoice_id']
-		);
+			);
 
-		$aData = json_decode($aInvoice['data'], true);
-		switch ($aInvoice['type']) {
-			case 'options':
-				$aVal = [];
-				foreach ($aData as $sOptionName => $aOption) {
-					$aVal[$sOptionName] = true;
-				}
-				Phpfox::getService('digitaldownload.dd')->updateById($oDD['id'], $aVal);
-				break;
-			case 'dd':
-				Phpfox::getService('digitaldownload.downloads')->add([
-					'dd_id' => $aInvoice['dd_id'],
-					'user_id' => $aInvoice['user_id'],
-					'field' => $aData['field'],
-					'limit' => ((((int)$aData['limit']) == 0) ? 9999999999: $aData['limit']),
-				]);
-				//todo:: notification after purchase
-				break;
-			default:
-				Phpfox::log('Invalid type of purchase');
+			$aData = json_decode($aInvoice['data'], true);
+			switch ($aInvoice['type']) {
+				case 'options':
+
+					$aVal = [];
+
+					foreach ($aData as $sOptionName => $aOption) {
+						$aVal[$sOptionName] = true;
+					}
+
+					$bActivate = isset($aVal['activate']);
+
+					if ($bActivate) { //activate and set expire time
+
+						$aVal['is_active'] = true;
+						unset($aVal['activate']);
+						Phpfox::log('Activate DD');
+						$aPlan = Phpfox::getService('digitaldownload.dd')->getPlan($aInvoice['dd_id']);
+						$iLifeDays = (!isset($aPlan['life_time']) || empty($aPlan['life_time']))
+							? 365 * 10
+							: (int)$aPlan['life_time'];
+						$aVal['expire_timestamp'] = PHPFOX_TIME + (60 * 60 * 24 * $iLifeDays);
+					}
+
+					($bActivate && ($sPlugin = Phpfox_Plugin::get('digitaldownload.before_activate_digitaldownload')) ? eval($sPlugin) : false);
+					Phpfox::log('Update with data:' . var_export($aVal, true));
+					Phpfox::getService('digitaldownload.dd')->updateById($aInvoice['dd_id'], $aVal);
+					Phpfox::log('Updated DD');
+					($bActivate && ($sPlugin = Phpfox_Plugin::get('digitaldownload.after_activate_digitaldownload')) ? eval($sPlugin) : false);
+					break;
+				case 'dd':
+					Phpfox::getService('digitaldownload.download')->add([
+						'dd_id' => $aInvoice['dd_id'],
+						'user_id' => $aInvoice['user_id'],
+						'field' => $aData['field'],
+						'limit' => ((((int)$aData['limit']) == 0) ? 9999999999: $aData['limit']),
+					]);
+					(($sPlugin = Phpfox_Plugin::get('digitaldownload.after_paid_for_digitaldownload')) ? eval($sPlugin) : false);
+					//todo:: notification after purchase
+					break;
+				default:
+					Phpfox::log('Invalid type of purchase');
+			}
+
+		$oDD = 	Phpfox::getService('digitaldownload.dd')->setRow($aDD)
+			->getDisplayer($aDD['id']);
+
+		Phpfox::getLib('mail')->to($aDD['user_id'])
+			->subject(['digitaldownload_item_sold_title', ['title' => Phpfox::getLib('parse.input')->clean((string)$oDD, 255)]])
+			->fromName($aInvoice['full_name'])
+			->message(['digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name', [
+						'full_name' => $aInvoice['full_name'],
+						'site_name' => Phpfox::getParam('core.site_title'),
+						'title' => $aDD['title'],
+						'link' => Phpfox_Url::instance()->makeUrl('digitaldownload.view', $aDD['id']),
+						'user_link' => Phpfox_Url::instance()->makeUrl($aInvoice['user_name']),
+						'price' => Phpfox::getService('core.currency')->getCurrency($aInvoice['price'], $aInvoice['currency_id'])
+				]
+				]
+			)
+			->send();
+
+			Phpfox::log('Handling complete');
+			return false;
+		} catch (\Exception $e) {
+			Phpfox::log("Error: " . $e->getMessage() . "; File: " . $e->getFile() . "; Line" .  $e->getFile());
 		}
-		
-//		Phpfox::getLib('mail')->to($oDD['user_id'])
-//			->subject(array('marketplace.item_sold_title', array('title' => Phpfox::getLib('parse.input')->clean($oDD['title'], 255))))
-//			->fromName($aInvoice['full_name'])
-//			->message(array('marketplace.full_name_has_purchased_an_item_of_yours_on_site_name', array(
-//						'full_name' => $aInvoice['full_name'],
-//						'site_name' => Phpfox::getParam('core.site_title'),
-//						'title' => $oDD['title'],
-//						'link' => Phpfox_Url::instance()->makeUrl('marketplace.view', $oDD['title_url']),
-//						'user_link' => Phpfox_Url::instance()->makeUrl($aInvoice['user_name']),
-//						'price' => Phpfox::getService('core.currency')->getCurrency($aInvoice['price'], $aInvoice['currency_id'])
-//					)
-//				)
-//			)
-//			->send();
-		
-		Phpfox::log('Handling complete');		
 	}
 	
 	/**

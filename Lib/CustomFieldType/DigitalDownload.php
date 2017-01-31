@@ -82,7 +82,7 @@ class DigitalDownload extends AbstractType
 
     public function setMValue($aRow)
     {
-        $this->sCurrency = $aRow['price_currency_id'];
+        $this->sCurrency = $aRow[$this->aInfo['name'] . '_currency_id'];
         $this->aInfo['value'] = $aRow[$this->aInfo['name']];
     }
 

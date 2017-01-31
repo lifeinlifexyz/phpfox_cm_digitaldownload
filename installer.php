@@ -116,6 +116,17 @@ function installv1_0_0()
         mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
     }
 
+    $aPhrase  = [
+        'digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name' => '{full_name} has purchased one of your items on {site_name}.
+
+Item Name: {title}
+Item Link: <a href="{link}">{link}</a>
+Users Name: {full_name}
+Users Profile: <a href="{user_link}">{user_link}</a>
+Price: {price}',
+        'digitaldownload_item_sold_title' => 'Item Sold: {title}'
+    ];
+
 }
 
 installv1_0_0();

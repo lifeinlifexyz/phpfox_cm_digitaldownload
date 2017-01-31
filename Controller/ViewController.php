@@ -34,9 +34,8 @@ class ViewController extends Phpfox_Component
 		}
 
 		
-		if (!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDId)))
-		{
-			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download you are looking for either does not exist or has been removed')));
+		if (!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDId))) {
+			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download which you are looking for not exist or has been removed')));
 		}			
 		
 		$this->setParam('oDD', $oDD);
@@ -56,16 +55,18 @@ class ViewController extends Phpfox_Component
 //		{
 //			Phpfox::getService('notification.process')->delete('marketplace_approved', $oDD['listing_id'], Phpfox::getUserId());
 //		}
+
+		if (!$oDD['is_active'] && !Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getUserId()) {
+			return Phpfox_Error::display(Phpfox::getPhrase(_p('The file which you are looking for not activated')));
+		}
 		
-//		Phpfox::getService('core.redirect')->check($oDD['title']);
-		if (Phpfox::isModule('privacy'))
-		{
+		if (Phpfox::isModule('privacy')) {
 			Privacy_Service_Privacy::instance()->check('digitaldownload', $oDD['id'], $oDD['user_id'], $oDD['privacy']);
 		}
 
 		$this->setParam('aRatingCallback', array(
 				'type' => 'user',
-//				'default_rating' => $oDD['total_score'],
+				'default_rating' => $oDD['total_score'],
 				'item_id' => $oDD['user_id'],
 				'stars' => range(1, 10)
 			)
@@ -91,14 +92,7 @@ class ViewController extends Phpfox_Component
 			]
 		);
 
-//		$sExchangeRate = '';
-//		if ($oDD['currency_id'] != Phpfox::getService('core.currency')->getDefault())
-//		{
-//			if (($sAmount = Phpfox::getService('core.currency')->getXrate($oDD['currency_id'], $oDD['price'])))
-//			{
-//				$sExchangeRate .= ' (' . Phpfox::getService('core.currency')->getCurrency($sAmount) . ')';
-//			}
-//		}
+
 		$aMainImage = $oDD['main_image'];
 		$this->template()->setTitle((string)$oDD)
 			->setBreadCrumb(_p('Digitaldownload'), $this->url()->makeUrl('digitaldownload'))
@@ -156,20 +150,19 @@ class ViewController extends Phpfox_Component
 		}
 
 		$aFilterMenu = [];
-//		if (!defined('PHPFOX_IS_USER_PROFILE'))
-//		{
+		if (!defined('PHPFOX_IS_USER_PROFILE'))
+		{
 //			$sInviteTotal = '';
 //			if (Phpfox::isUser() && ($iTotalInvites = Phpfox::getService('marketplace')->getTotalInvites()))
 //			{
 //				$sInviteTotal = '<span class="invited">' . $iTotalInvites . '</span>';
 //			}
 //
-//			$aFilterMenu = array(
-//					Phpfox::getPhrase('marketplace.all_listings') => '',
-//					Phpfox::getPhrase('marketplace.my_listings') => 'my',
-//					Phpfox::getPhrase('marketplace.listing_invites') . $sInviteTotal => 'invites',
-//					Phpfox::getPhrase('marketplace.invoices') => 'marketplace.invoice'
-//			);
+			$aFilterMenu = [
+				_p('All') => '',
+				_p('My') => 'digitaldownload.my',
+				_p('Invoices') => 'digitaldownload.invoice',
+			];
 //
 //			if (Phpfox::getUserParam('marketplace.can_view_expired'))
 //			{
@@ -189,7 +182,8 @@ class ViewController extends Phpfox_Component
 //					$aFilterMenu[Phpfox::getPhrase('marketplace.pending_listings') . '<span class="pending">' . $iPendingTotal . '</span>'] = 'pending';
 //				}
 //			}
-//		}
+		}
+
 		$this->template()->buildSectionMenu('digitaldownload', $aFilterMenu);
 		
 		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_view_process_end')) ? eval($sPlugin) : false);

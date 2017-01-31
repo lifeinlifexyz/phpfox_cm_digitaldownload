@@ -8,6 +8,7 @@ defined('PHPFOX') or exit('NO DICE!');
     <h3>{_p('Options you\'re buying')}</h3>
     <form method="post">
         <input type="hidden" name="dd_id" value="{$oDD.id}">
+        <input type="hidden" name="confirm_pay" value="1">
         <input type="hidden" name="process" value="1">
         <article class="cm-dd-search-item">
             <div class="cm-dd-search-item-img">

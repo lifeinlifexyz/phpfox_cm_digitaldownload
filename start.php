@@ -2,11 +2,10 @@
 define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
     . 'PF.Site/Apps/CM_DigitalDownload/assets/');
-//todo:: активация филда. чекбок ведет себе не корректно
 //todo:: после пагинации ползунок цен не работает
 //todo:: send message complete invoice
-//todo:: check user id and activated in view page
 //todo:: close the download dir for read
+//todo:: fix notifacation after comment add
 
 \Phpfox_Module::instance()
     ->addServiceNames([
@@ -59,6 +58,7 @@ if (setting('cm_dd_enabled')) {
         'digitaldownload.purchase'    => '\Apps\CM_DigitalDownload\Controller\PurchaseController',
         'digitaldownload.view'    => '\Apps\CM_DigitalDownload\Controller\ViewController',
         'digitaldownload.download'    => '\Apps\CM_DigitalDownload\Controller\DownloadController',
+        'digitaldownload.invoice'    => '\Apps\CM_DigitalDownload\Controller\InvoiceController',
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
@@ -136,6 +136,10 @@ group('/digitaldownload/', function (){
     });
 
     if (setting('cm_dd_enabled')) {
+        //add button to add new Digital Download
+        if (user('digitaldownload.cm_dd_add' , '0') == '1') {
+            sectionMenu(_p('Add'), url('/digitaldownload/add'));
+        }
         route('/', 'digitaldownload.index');
         route('my', 'digitaldownload.index');
         route('add', 'digitaldownload.add');
@@ -143,6 +147,7 @@ group('/digitaldownload/', function (){
         route('add/:id/*', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
         route(':id', 'digitaldownload.view')->where([':id' => '([0-9]+)']);
         route('purchase', 'digitaldownload.purchase');
+        route('invoice', 'digitaldownload.invoice');
         route('download/:id/:field', 'digitaldownload.download')->where([':id' => '([0-9]+)']);
     }
 });

@@ -221,7 +221,10 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         ];
 
         if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
-            $aVal['expire_timestamp'] = PHPFOX_TIME + 60 * 60 * 24 * $aPlan['life_time'];
+            $iLifeDays = (!isset($aPlan['life_time']) || $aPlan['life_time'] == 0)
+                ? 999999999
+                : $aPlan['life_time'];
+            $aVal['expire_timestamp'] = PHPFOX_TIME + 60 * 60 * 24 * $iLifeDays;
         }
 
         $this->updateById($iId, $aVal);
@@ -232,6 +235,16 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     {
         //todo :: delete dd
         return $this;
+    }
+
+    public function getPlan($iId) {
+        $aPlan = $this->database()
+            ->select('*')
+            ->from(Phpfox::getT(Plan::DD_PLAN_TABLE))
+            ->where('`dd_id` = ' . (int) $iId)
+            ->get();
+        $aPlan = json_decode($aPlan['info'], true);
+        return $aPlan;
     }
 
 }
