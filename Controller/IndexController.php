@@ -18,7 +18,10 @@ class IndexController extends Phpfox_Component
 {
 	public function process()
 	{
-
+		//add button to add new Digital Download
+		if (user('digitaldownload.cm_dd_add' , '0') == '1') {
+			sectionMenu(_p('Add'), url('/digitaldownload/add'));
+		}
 		$aPages = [21, 31, 41, 51];
 		$aDisplays = array();
 		foreach ($aPages as $iPageCnt)
@@ -35,7 +38,8 @@ class IndexController extends Phpfox_Component
 		$aSort = [
 			'latest' => ['d.id', _p('Latest added')],
 			'most-viewed' => ['d.total_view', _p('Most viewed')],
-			'most-talked' => ['d.total_comment',  _p('Most discused')]
+			'most-talked' => ['d.total_comment',  _p('Most discused')],
+			'most-downloaded' => ['d.total_download',  _p('Most Downloaded')],
 		];
 		/**
 		 * @var $oFormFilter FilterForm

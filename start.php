@@ -136,10 +136,6 @@ group('/digitaldownload/', function (){
     });
 
     if (setting('cm_dd_enabled')) {
-        //add button to add new Digital Download
-        if (user('digitaldownload.cm_dd_add' , '0') == '1') {
-            sectionMenu(_p('Add'), url('/digitaldownload/add'));
-        }
         route('/', 'digitaldownload.index');
         route('my', 'digitaldownload.index');
         route('add', 'digitaldownload.add');

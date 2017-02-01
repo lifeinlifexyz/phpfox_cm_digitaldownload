@@ -55,6 +55,8 @@ function installv1_0_0()
       `featured` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `total_comment` int(10) NOT NULL DEFAULT  '0',
       `total_like` int( 10 ) NOT NULL DEFAULT  '0',
+      `total_view` INT( 11 ) NULL,
+      `total_download` INT NULL,
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),

@@ -20,6 +20,11 @@ class PurchaseController extends Phpfox_Component
     {
 
         Phpfox::isUser(true);
+        //add button to add new Digital Download
+        if (user('digitaldownload.cm_dd_add' , '0') == '1') {
+            sectionMenu(_p('Add'), url('/digitaldownload/add'));
+        }
+
         $bInvoice = ($this->request()->get('invoice') ? true : false);
         $iId = $this->request()->get('id');
 

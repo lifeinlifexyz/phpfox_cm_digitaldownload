@@ -231,6 +231,7 @@ class Callback extends Phpfox_Service
 						'field' => $aData['field'],
 						'limit' => ((((int)$aData['limit']) == 0) ? 9999999999: $aData['limit']),
 					]);
+					db()->updateCounter('digital_download', 'total_download', 'id', $aInvoice['dd_id']);
 					(($sPlugin = Phpfox_Plugin::get('digitaldownload.after_paid_for_digitaldownload')) ? eval($sPlugin) : false);
 					//todo:: notification after purchase
 					break;

@@ -50,6 +50,7 @@ class Browse  extends \Phpfox_Service
             ->from(\Phpfox::getT($this->_sTable), 'd')
             ->leftJoin(\Phpfox::getT('user'), 'u', 'u.user_id= d.user_id')
             ->where($this->_aConditions)
+            ->order($this->_sSort)
             ->limit($this->_iPage, $this->_iLimit, $this->_iCnt)
             ->all();
 

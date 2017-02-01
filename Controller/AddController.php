@@ -21,7 +21,6 @@ class AddController extends Phpfox_Component
     {
         Phpfox::isUser(true);
         user('digitaldownload.cm_dd_add', null, null, true);
-
         (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_add_digitaldownload')) ? eval($sPlugin) : false);
 
         $sAction = $this->request()->get('req4');

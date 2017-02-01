@@ -29,6 +29,10 @@ class InvoiceController extends Phpfox_Component
 	public function process()
 	{
 		Phpfox::isUser(true);
+		//add button to add new Digital Download
+		if (user('digitaldownload.cm_dd_add' , '0') == '1') {
+			sectionMenu(_p('Add'), url('/digitaldownload/add'));
+		}
 		$aCond = [];
 		
 		$aCond[] = 'AND di.user_id = ' . Phpfox::getUserId();

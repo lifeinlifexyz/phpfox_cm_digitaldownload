@@ -27,9 +27,13 @@ class ViewController extends Phpfox_Component
 	 */
 	public function process()
 	{
-//		Phpfox::getUserParam('digitaldownload.can_view_dd', true);
+		Phpfox::getUserParam('digitaldownload.can_view_dd', true);
+		//add button to add new Digital Download
+		if (user('digitaldownload.cm_dd_add' , '0') == '1') {
+			sectionMenu(_p('Add'), url('/digitaldownload/add'));
+		}
 
-		if (!($iDDId = $this->request()->get('req2'))) {
+		if (!($iDDId = $this->request()->getInt('req2'))) {
 			$this->url()->send('digitaldownload');
 		}
 
@@ -40,10 +44,10 @@ class ViewController extends Phpfox_Component
 		
 		$this->setParam('oDD', $oDD);
 		
-//		if (Phpfox::isUser() && $oDD['invite_id'] && !$oDD['visited_id'] && $oDD['user_id'] != Phpfox::getUserId())
-//		{
-//			Phpfox::getService('marketplace.process')->setVisit($oDD['listing_id'], Phpfox::getUserId());
-//		}
+		if (Phpfox::isUser() && $oDD['user_id'] != Phpfox::getUserId())
+		{
+			db()->updateCounter('digital_download', 'total_view', 'id', $iDDId);
+		}
 		
 //		if (Phpfox::isUser() && Phpfox::isModule('notification'))
 //		{
