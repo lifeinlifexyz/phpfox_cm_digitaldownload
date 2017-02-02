@@ -13,8 +13,8 @@
             </div>
         </div>
         <div class="data">
-            <input type="hidden" value="{{ min }}" class="min-value" name="{{ name }}[min]">
-            <input type="hidden" value="{{ max }}" class="max-value" name="{{ name }}[max]">
+            <input type="hidden" value="{% if value %}{{ value.min }}{% else %}{{ min }}{% endif %}" class="min-value" name="{{ name }}[min]">
+            <input type="hidden" value="{% if value %}{{ value.max }}{% else %}{{ max }}{% endif %}" class="max-value" name="{{ name }}[max]">
         </div>
     </div>
 </div>

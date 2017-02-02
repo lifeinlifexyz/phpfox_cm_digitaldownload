@@ -91,6 +91,12 @@ class Builder
     public function buildFilterForm(array $aFields, array $aFormData = [])
     {
         $oForm = new  FilterForm($this->oView, $aFormData);
+        if (isset($aFormData['form_id'])) {
+            (($sPlugin = \Phpfox_Plugin::get('digitaldownload.form_created_' . $aFormData['form_id'])) ? eval($sPlugin) : false);
+        }
+
+        (($sPlugin = \Phpfox_Plugin::get('digitaldownload.form_created')) ? eval($sPlugin) : false);
+
         $aSearch = $this->oRequest->getArray('search');
         foreach ($aFields as $aField) {
             $sType = $aField['type'];

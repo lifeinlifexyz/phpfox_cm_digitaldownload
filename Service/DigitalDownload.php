@@ -46,18 +46,44 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         foreach($aRawFields as &$aRawField) {
             $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
         }
-        event('before_get_min_max_price', function($aCond) use ($aCategoryIds) {
-           return $aCond[]  = 'AND `price` in (' . implode(', ', $aCategoryIds) . ')';
-        });
-        $aFields['price'] = [
-            'type' => 'price',
-            'is_search' => true,
-            'name' => 'price',
-            'title' => _p('Price'),
-            'table_alias' => 'd',
-            'template' => '@CM_DigitalDownload/filter/fields/slider.html',
-            'table' => \Phpfox::getT($this->_sTable),
-        ];
+
+        $aDDFields = \Phpfox::getService('digitaldownload.field')->getFieldsByType('dd');
+        $sMinMaxSelect  = '';
+        foreach($aDDFields as &$sDDField) {
+            $sMinMaxSelect .= 'MIN(`d`.`' . $sDDField . '_price`) as `' . $sDDField .'_min`, MAX(`d`.`' . $sDDField . '_price`) as `' . $sDDField .'_max`,';
+        }
+        $sMinMaxSelect  = rtrim($sMinMaxSelect, ',');
+        $aMinMax = $this->database()
+            ->select($sMinMaxSelect)
+            ->from(Phpfox::getT($this->_sTable), 'd')
+            ->where('`category_id` in (' . implode(', ', $aCategoryIds) . ')')
+            ->get();
+        $iMin = 0;
+        $iMax = 0;
+        foreach($aMinMax as $sKey => $fValue) {
+            if (strpos($sKey, '_min') && $fValue < $iMin) {
+                $iMin = $fValue;
+            } elseif (strpos($sKey, '_max') && $fValue > $iMax) {
+                $iMax = $fValue;
+            }
+        }
+        $iMin = round($iMin);
+        $iMax = round($iMax);
+        if ($iMax > 0 && $iMin != $iMax) {
+            $aFields['price'] = [
+                'type' => 'dd_price',
+                'is_search' => true,
+                'name' => 'price',
+                'title' => _p('Price'),
+                'table_alias' => 'd',
+                'template' => '@CM_DigitalDownload/filter/fields/slider.html',
+                'table' => \Phpfox::getT($this->_sTable),
+                'min' => $iMin,
+                'max' => $iMax,
+                'columns' => $aDDFields,
+                'column' => 'price',
+            ];
+        }
 
         return $aFields;
     }
@@ -108,12 +134,6 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             'title' => '',
             'value' => $this->iCategoryId,
         ];
-
-//        $aFields['price'] = [
-//            'type' => 'price',
-//            'name' => 'price',
-//            'title' => _p('Price'),
-//        ];
 
         $aFields['privacy'] = [
             'type' => 'privacy',

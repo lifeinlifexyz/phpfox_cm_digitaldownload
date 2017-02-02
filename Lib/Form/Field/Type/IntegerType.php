@@ -30,9 +30,9 @@ class IntegerType extends AbstractType
             if (!isset($this->aInfo['max'])) {
                 $sColName = $this->aInfo['column'];
                 $aCond = [];
-                if (is_array($aExtCond = Event::trigger('before_get_min_max_' . $sColName, $aCond))) {
-                    $aCond = $aExtCond;
-                }
+
+                (($sPlugin = \Phpfox_Plugin::get('before_get_min_max_' . $sColName)) ? eval($sPlugin) : false);
+
                 $aRes  = db()->select('MIN(`' . $sColName . '`) as `min`, MAX(`' . $sColName . '`) as `max`')
                     ->from($this->aInfo['table'])
                     ->where($aCond)
