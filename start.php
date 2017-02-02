@@ -6,6 +6,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
 //todo:: send message complete invoice
 //todo:: close the download dir for read
 //todo:: fix notifacation after comment add
+//todo:: fix prase You can add up to {{ iMax }} to your digital download in edit page.
 
 \Phpfox_Module::instance()
     ->addServiceNames([

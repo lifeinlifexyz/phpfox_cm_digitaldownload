@@ -187,7 +187,7 @@ class Callback extends Phpfox_Service
 			}
 
 			Phpfox::log('Handling purchase');
-
+			db()->beginTransaction();
 			$this->database()->update(Phpfox::getT('digital_download_invoice'), array(
 				'status' => $aParams['status'],
 				'time_stamp_paid' => PHPFOX_TIME
@@ -199,9 +199,10 @@ class Callback extends Phpfox_Service
 				case 'options':
 
 					$aVal = [];
-
-					foreach ($aData as $sOptionName => $aOption) {
+					$aOptionCaptions = [];
+					foreach ($aData as $sOptionName => &$aOption) {
 						$aVal[$sOptionName] = true;
+						$aOptionCaptions[]  = $aOption['caption'];
 					}
 
 					$bActivate = isset($aVal['activate']);
@@ -222,6 +223,18 @@ class Callback extends Phpfox_Service
 					Phpfox::log('Update with data:' . var_export($aVal, true));
 					Phpfox::getService('digitaldownload.dd')->updateById($aInvoice['dd_id'], $aVal);
 					Phpfox::log('Updated DD');
+
+
+					//send email to admins
+					$oDD = 	Phpfox::getService('digitaldownload.dd')->setRow($aDD)
+						->getDisplayer($aDD['id']);
+					$sTitle = (string)$oDD;
+					$aEmail = [
+						'user_id' => db()->select('*')->from(Phpfox::getT('user'))->where('user_group_id = 1')->all(),
+						'title' => _p('Options: ') . implode(', ', $aOptionCaptions),
+						'subject_title' => $sTitle,
+					];
+
 					($bActivate && ($sPlugin = Phpfox_Plugin::get('digitaldownload.after_activate_digitaldownload')) ? eval($sPlugin) : false);
 					break;
 				case 'dd':
@@ -233,33 +246,46 @@ class Callback extends Phpfox_Service
 					]);
 					db()->updateCounter('digital_download', 'total_download', 'id', $aInvoice['dd_id']);
 					(($sPlugin = Phpfox_Plugin::get('digitaldownload.after_paid_for_digitaldownload')) ? eval($sPlugin) : false);
+
+
 					//todo:: notification after purchase
+					$oDD = 	Phpfox::getService('digitaldownload.dd')->setRow($aDD)
+						->getDisplayer($aDD['id']);
+					$sTitle = (string)$oDD;
+					$aEmail = [
+						'user_id' => $aDD['user_id'],
+						'title' => $sTitle,
+						'subject_title' => $sTitle,
+					];
 					break;
 				default:
-					Phpfox::log('Invalid type of purchase');
+					if ($sPlugin = Phpfox_Plugin::get('digitaldownload.invoice_extra_type_payment_callback')) {
+						eval($sPlugin);
+					} else {
+						Phpfox::log('Invalid type of purchase');
+					}
 			}
 
-		$oDD = 	Phpfox::getService('digitaldownload.dd')->setRow($aDD)
-			->getDisplayer($aDD['id']);
 
-		Phpfox::getLib('mail')->to($aDD['user_id'])
-			->subject(['digitaldownload_item_sold_title', ['title' => Phpfox::getLib('parse.input')->clean((string)$oDD, 255)]])
-			->fromName($aInvoice['full_name'])
-			->message(['digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name', [
+			Phpfox::getLib('mail')->to($aEmail['user_id'])
+				->subject(['digitaldownload_item_sold_title', ['title' => Phpfox::getLib('parse.input')->clean($aEmail['subject_title'], 255)]])
+				->fromName($aInvoice['full_name'])
+				->message(['digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name', [
 						'full_name' => $aInvoice['full_name'],
 						'site_name' => Phpfox::getParam('core.site_title'),
-						'title' => $aDD['title'],
+						'title' => $aEmail['title'],
 						'link' => Phpfox_Url::instance()->makeUrl('digitaldownload.view', $aDD['id']),
 						'user_link' => Phpfox_Url::instance()->makeUrl($aInvoice['user_name']),
 						'price' => Phpfox::getService('core.currency')->getCurrency($aInvoice['price'], $aInvoice['currency_id'])
-				]
-				]
-			)
-			->send();
+					]
+					]
+				)
+				->send();
 
 			Phpfox::log('Handling complete');
-			return false;
+			db()->commit();
 		} catch (\Exception $e) {
+			db()->rollback();
 			Phpfox::log("Error: " . $e->getMessage() . "; File: " . $e->getFile() . "; Line" .  $e->getFile());
 		}
 	}

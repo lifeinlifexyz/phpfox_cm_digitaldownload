@@ -37,7 +37,9 @@ class Download extends \Phpfox_Service
                 'AND `dd_id` = ' . (int) $iDDId,
                 'AND `field` = \'' . $oParseInput->clean($sField, 255) . '\'',
                 'AND `limit` > 0'
-            ])->get();
+            ])
+            ->order('`download_id` DESC')
+            ->get();
 
         return !empty($aDownload);
     }
@@ -53,7 +55,9 @@ class Download extends \Phpfox_Service
                 '`user_id` = ' . (int) $iUserId,
                 'AND `dd_id` = ' . (int) $iDDId,
                 'AND `field` = \'' . $oParseInput->clean($sField, 255) . '\'',
-            ])->execute('getSlaveField');
+            ])
+            ->order('`download_id` DESC')
+            ->execute('getSlaveField');
 
         if ($iCount <= 0) {
             \Phpfox_Url::instance()->send('digitaldownload.' . $iDDId, [], _p('You have reached download limit'));
