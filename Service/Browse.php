@@ -61,6 +61,7 @@ class Browse  extends \Phpfox_Service
     {
         list(, $aRows) = $this->get();
         $oDisplay = new Display(\Phpfox::getService('digitaldownload.dd'));
+        $oDisplay->setDDFieldNames(\Phpfox::getService('digitaldownload.field')->getFieldsByType('dd'));
         $oCollection = new Collection($aRows, $oDisplay);
         return $oCollection;
     }

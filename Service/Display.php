@@ -7,6 +7,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 {
     private $oDD;
     protected $sTitleSettings = '$title';
+    protected $aDDFieldNames = [];
 
     public function __construct(DigitalDownload $oDD)
     {
@@ -71,6 +72,23 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
             case 'category':
                 return $this->oForm['category_id']->getDisplay();
                 break;
+            case 'aDDPrice':
+                $aDDPrice = [];
+
+                foreach($this->aDDFieldNames  as $aDDFieldName) {
+                    if (!isset($this->oForm[$aDDFieldName])) {
+                        continue;
+                    }
+                    $aDDPrice[] = [
+                          'caption' => $this->oForm[$aDDFieldName]['caption'],
+                          'price' => $this->aRow[$aDDFieldName . '_price'],
+                          'currency_id' => $this->aRow[$aDDFieldName . '_currency_id'],
+                          'limit' => $this->aRow[$aDDFieldName . '_limit'],
+                    ];
+                }
+
+                return $aDDPrice;
+                break;
             default:
                 return parent::offsetGet($offset);
         }
@@ -94,5 +112,11 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
     public function __toString()
     {
         return $this->parseVars($this->sTitleSettings);
+    }
+
+    public function setDDFieldNames($aDDFieldNames)
+    {
+        $this->aDDFieldNames = $aDDFieldNames;
+        return $this;
     }
 }

@@ -25,6 +25,27 @@ defined('PHPFOX') or exit('NO DICE!');
            <li>{$aEntry|user:'':'':30}</li>
            {/if}
        </ul>
+       <ul>
+           {assign var='aDDPrice' value=$aEntry.aDDPrice}
+           {if empty($aDDPrice)}
+            <li>{_p('Free')}</li>
+           {else}
+                {foreach from=$aDDPrice item=aPrice}
+                    <li>
+                        <span class="price-title">
+                            {$aPrice.caption}
+                        </span>
+                        <span itemprop="price">
+                            {if $aPrice.price == '0.00'}
+                                {_p('Free')}
+                            {else}
+                                {$aPrice.currency_id|currency_symbol}{$aPrice.price|number_format:2}
+                            {/if}
+                        </span>
+                    </li>
+                {/foreach}
+           {/if}
+       </ul>
 
        {if $aEntry.user_id == Phpfox::getUserId()}
        <a href="{url link='digitaldownload.add' dd_id=$aEntry.id}">{_p('Edit')}</a>
