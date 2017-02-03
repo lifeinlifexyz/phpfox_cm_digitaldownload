@@ -99,6 +99,8 @@ class Callback extends Phpfox_Service
 		);
 	}
 
+
+
 	public function deleteComment($iId)
 	{
 		$this->database()->updateCounter('digital_download', 'total_comment', 'id', $iId, true);
@@ -187,7 +189,7 @@ class Callback extends Phpfox_Service
 			}
 
 			Phpfox::log('Handling purchase');
-			db()->beginTransaction();
+			$this->database()->beginTransaction();
 			$this->database()->update(Phpfox::getT('digital_download_invoice'), array(
 				'status' => $aParams['status'],
 				'time_stamp_paid' => PHPFOX_TIME
@@ -230,7 +232,7 @@ class Callback extends Phpfox_Service
 						->getDisplayer($aDD['id']);
 					$sTitle = (string)$oDD;
 					$aEmail = [
-						'user_id' => db()->select('*')->from(Phpfox::getT('user'))->where('user_group_id = 1')->all(),
+						'user_id' => $this->database()->select('*')->from(Phpfox::getT('user'))->where('user_group_id = 1')->all(),
 						'title' => _p('Options: ') . implode(', ', $aOptionCaptions),
 						'subject_title' => $sTitle,
 					];
@@ -244,11 +246,12 @@ class Callback extends Phpfox_Service
 						'field' => $aData['field'],
 						'limit' => ((((int)$aData['limit']) == 0) ? 9999999999: $aData['limit']),
 					]);
-					db()->updateCounter('digital_download', 'total_download', 'id', $aInvoice['dd_id']);
+					$this->database()->updateCounter('digital_download', 'total_download', 'id', $aInvoice['dd_id']);
 					(($sPlugin = Phpfox_Plugin::get('digitaldownload.after_paid_for_digitaldownload')) ? eval($sPlugin) : false);
 
+					Phpfox::getService('notification.process')
+						->add('digitaldownload', $aInvoice['invoice_id'],  $aInvoice['user_id'], $aDD['user_id']);
 
-					//todo:: notification after purchase
 					$oDD = 	Phpfox::getService('digitaldownload.dd')->setRow($aDD)
 						->getDisplayer($aDD['id']);
 					$sTitle = (string)$oDD;
@@ -283,13 +286,41 @@ class Callback extends Phpfox_Service
 				->send();
 
 			Phpfox::log('Handling complete');
-			db()->commit();
+			$this->database()->commit();
 		} catch (\Exception $e) {
-			db()->rollback();
+			$this->database()->rollback();
 			Phpfox::log("Error: " . $e->getMessage() . "; File: " . $e->getFile() . "; Line" .  $e->getFile());
 		}
 	}
-	
+
+	//notify user about access dd to download
+	public function getNotification($aNotification)
+	{
+		$aDD = $this->database()
+			->select('d.*, i.*')
+			->from(Phpfox::getT('digital_download_invoice'), 'i')
+			->join(Phpfox::getT('digital_download'), 'd', 'd.id = i.dd_id')
+			->where('i.invoice_id = ' . $aNotification['item_id'])
+			->get();
+
+		if (!isset($aDD['id'])) {
+			return false;
+		}
+
+		$oDD = 	Phpfox::getService('digitaldownload.dd')->setRow($aDD)
+			->getDisplayer($aDD['id']);
+
+		$sTitle = (string) $oDD;
+
+		$sMessage = _p('You are available for download {dd}', ['dd' => $sTitle]);
+
+		return [
+			'link'    =>  $oDD['url'],
+			'message' => $sMessage,
+			'icon'    => '',
+		];
+
+	}
 	/**
 	 * If a call is made to an unknown method attempt to connect
 	 * it to a specific plug-in with the same name thus allowing 
