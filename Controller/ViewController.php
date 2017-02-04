@@ -40,7 +40,11 @@ class ViewController extends Phpfox_Component
 		
 		if (!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDId))) {
 			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download which you are looking for not exist or has been removed')));
-		}			
+		}
+
+		if (\Phpfox::isModule('privacy')) {
+			\Privacy_Service_Privacy::instance()->check('digitaldownload', $oDD['id'], $oDD['user_id'], $oDD['privacy']);
+		}
 		
 		$this->setParam('oDD', $oDD);
 		
@@ -49,11 +53,11 @@ class ViewController extends Phpfox_Component
 			db()->updateCounter('digital_download', 'total_view', 'id', $iDDId);
 		}
 		
-//		if (Phpfox::isUser() && Phpfox::isModule('notification'))
-//		{
-//			Phpfox::getService('notification.process')->delete('comment_marketplace', $this->request()->getInt('req2'), Phpfox::getUserId());
-//			Phpfox::getService('notification.process')->delete('marketplace_like', $this->request()->getInt('req2'), Phpfox::getUserId());
-//		}
+		if (Phpfox::isUser() && Phpfox::isModule('notification'))
+		{
+			Phpfox::getService('notification.process')->delete('digitaldownload', $iDDId, Phpfox::getUserId());
+			Phpfox::getService('notification.process')->delete('comment_digitaldownload', $iDDId, Phpfox::getUserId());
+		}
 		
 //		if (Phpfox::isModule('notification') && $oDD['user_id'] == Phpfox::getUserId())
 //		{

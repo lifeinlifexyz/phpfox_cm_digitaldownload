@@ -27,15 +27,11 @@ class PrivacyType extends StringType
     {
         if (\Phpfox::isModule('privacy')) {
             $aVal = request()->get('val');
-            return isset($aVal[$this->aInfo['name']]) ? $aVal[$this->aInfo['name']] : 0;
+            return isset($aVal[$this->aInfo['name']]) ? $aVal[$this->aInfo['name']]
+                : (isset($this->aInfo['value']) ? $this->aInfo['value']: 0);
         } else {
             return 0;
         }
     }
 
-    public function getFilter($sTableAlias)
-    {
-        $aInfo = $this->aInfo;
-        return null;
-    }
 }

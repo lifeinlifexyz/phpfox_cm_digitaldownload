@@ -8,6 +8,7 @@ use Apps\CM_DigitalDownload\Lib\Form\Field\Factory;
 use Apps\CM_DigitalDownload\Lib\Form\Validator\IValidator;
 use Core\View;
 use JsonSerializable;
+use Phpfox_Template;
 
 class Form implements \ArrayAccess, JsonSerializable
 {
@@ -41,6 +42,22 @@ class Form implements \ArrayAccess, JsonSerializable
         $this->oView = $oView;
         $this->aData = array_merge($this->aDefaultFormData, $aData);
         $this->oFactory = new Factory();
+
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('isModule', function($sModule){
+            return \Phpfox::isModule($sModule);
+        }));
+
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('privacy_field', function($sName, $sInfo, $iValue){
+            Phpfox_Template::instance()->assign('aForms', [
+                $sName => $iValue
+            ]);
+            \Phpfox::getBlock('privacy.form', [
+                'privacy_name' => $sName,
+                'privacy_info' => $sInfo,
+            ]);
+            return '';
+        }));
+
     }
 
 
