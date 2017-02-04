@@ -226,6 +226,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
     public function activate($iId, array $aPlan = [])
     {
+        $iId = (int) $iId;
         if (!(count($aPlan) > 0)) {
             $aPlan = json_decode($this->database()
                 ->select('`info`')
@@ -242,12 +243,14 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
         if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
             $iLifeDays = (!isset($aPlan['life_time']) || $aPlan['life_time'] == 0)
-                ? 999999999
+                ? 365 * 10
                 : $aPlan['life_time'];
             $aVal['expire_timestamp'] = PHPFOX_TIME + 60 * 60 * 24 * $iLifeDays;
         }
 
         $this->updateById($iId, $aVal);
+        // insert new feed
+        \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
         $oDD['is_active'] = true;
     }
 

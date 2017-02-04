@@ -2,6 +2,7 @@
 
 defined('PHPFOX') or exit('NO DICE!');
 ?>
+
 <article itemscope itemtype="http://schema.org/Product" class="cm-dd-search-item">
    <div class="cm-dd-search-item-img">
        <a href="{$aEntry.url}">
@@ -18,13 +19,14 @@ defined('PHPFOX') or exit('NO DICE!');
 
        <div class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
        </div>
-
-       <ul class="listing_info">
-           <li itemprop="releaseDate">{$aEntry.time_stamp|convert_time}</li>
-           {if isset($aEntry.user_name)}
-           <li>{$aEntry|user:'':'':30}</li>
-           {/if}
-       </ul>
+        {if !isset($bIsInFeed)}
+           <ul class="listing_info">
+               <li itemprop="releaseDate">{$aEntry.time_stamp|convert_time}</li>
+               {if isset($aEntry.user_name)}
+               <li>{$aEntry|user:'':'':30}</li>
+               {/if}
+           </ul>
+       {/if}
        <ul>
            {assign var='aDDPrice' value=$aEntry.aDDPrice}
            {if empty($aDDPrice)}

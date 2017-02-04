@@ -126,7 +126,19 @@ Item Link: <a href="{link}">{link}</a>
 Users Name: {full_name}
 Users Profile: <a href="{user_link}">{user_link}</a>
 Price: {price}',
-        'digitaldownload_item_sold_title' => 'Item Sold: {title}'
+        'digitaldownload_item_sold_title' => 'Item Sold: {title}',
+        'digitaldownload_full_name_liked_your_listing_title' => '{full_name} liked your item "{title}"',
+        'digitaldownload_full_name_liked_your_listing_message' => '{full_name} liked item "<a href="{link}">{title}</a>"
+To view this listing follow the link below:
+<a href="{link}">{link}</a>',
+
+        'digitaldownload_user_name_liked_gender_own_listing_title' => '{user_name} liked {gender} own item "{title}"',
+        'digitaldownload_user_names_liked_your_listing_title' => '{user_names} liked your item "{title}"',
+        'digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_listing_title' => '{user_names} liked <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
+
+        'digitaldownload_user_names_commented_on_gender_listing_title' => '{user_names} commented on {gender} item "{title}"',
+        'digitaldownload_user_names_commented_on_your_listing_title' => '{user_names} commented on your item "{title}"',
+        'digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_listing_title' => '{user_names} commented on <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
     ];
 
 }
