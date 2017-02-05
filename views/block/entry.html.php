@@ -63,7 +63,7 @@ defined('PHPFOX') or exit('NO DICE!');
             </ul>
             {/if}
             <div class="category">
-                {$aEntry.category|clean}
+                {$aEntry.category}
             </div>
         </div>
     </article>

@@ -23,7 +23,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
     {
         $this->aRow = $aRow;
         $this->oForm = $this->oDD->setCategoryId($aRow['category_id'])->getForm();
-        $this->oForm->addField('tree', $this->oDD->getCategoryFieldData());
+        $this->oForm->addField('category', $this->oDD->getCategoryFieldData());
         $this->oForm['category_id']->setValue($aRow['category_id']);
         $aCatInfo = $this->oForm['category_id']->getValueArray();
         $this->sTitleSettings = $aCatInfo['title'];
