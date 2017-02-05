@@ -8,6 +8,7 @@ use Apps\CM_DigitalDownload\Lib\Form\Validator\IValidator;
 use Core\Request;
 use Core\View;
 use \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form as BindedForm;
+use Phpfox_Template;
 
 class Builder
 {
@@ -35,8 +36,10 @@ class Builder
             return \Phpfox::isModule($sModule);
         }));
 
-        $this->oView->env()->addFunction(new \Twig_SimpleFunction('privacy_field', function($sName, $sInfo){
-
+        $this->oView->env()->addFunction(new \Twig_SimpleFunction('privacy_field', function($sName, $sInfo, $iValue){
+            Phpfox_Template::instance()->assign('aForms', [
+                $sName => $iValue
+            ]);
             \Phpfox::getBlock('privacy.form', [
                 'privacy_name' => $sName,
                 'privacy_info' => $sInfo,

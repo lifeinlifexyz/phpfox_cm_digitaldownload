@@ -27,6 +27,12 @@
       "type": "input:radio",
       "value": 1,
       "js_variable": true
+    },
+    "cm_dd_feature_limit": {
+      "info": "Featured count in block",
+      "type": "input:text",
+      "value": 4,
+      "js_variable": true
     }
   },
   "user_group_settings": {
@@ -151,9 +157,17 @@
       "type_id" : "0",
       "m_connection" : "digitaldownload.index",
       "component" : "filter",
+      "location" : "1",
+      "is_active" : "1",
+      "ordering" : "3"
+    },
+    "Feautured" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.index",
+      "component" : "featured",
       "location" : "3",
       "is_active" : "1",
       "ordering" : "3"
-    }
+    },
   }
 }

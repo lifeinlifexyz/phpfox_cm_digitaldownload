@@ -39,7 +39,8 @@ class IndexController extends Phpfox_Component
 			'latest' => ['d.id', _p('Latest added')],
 			'most-viewed' => ['d.total_view', _p('Most viewed')],
 			'most-talked' => ['d.total_comment',  _p('Most discused')],
-			'most-downloaded' => ['d.total_download',  _p('Most Downloaded')],
+			'most-liked' => ['d.total_like',  _p('Most liked')],
+			'most-downloaded' => ['d.total_download',  _p('Most downloaded')],
 		];
 		/**
 		 * @var $oFormFilter FilterForm

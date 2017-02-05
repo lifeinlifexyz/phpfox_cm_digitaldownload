@@ -333,3 +333,100 @@ rules input
 .dd-multi-list {
     margin-left: 20px;
 }
+
+/***/
+.dd-box-product-outer {
+    margin-bottom: 5px;
+    padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 0;
+}
+
+.dd-box-product .dd-img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.dd-box-product .dd-img-wrapper > a > img {
+    width: 100%;
+}
+
+.dd-box-product .dd-img-wrapper .dd-tags {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: table;
+    overflow: visible;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    vertical-align: inherit;
+    border-width: 0;
+    background-color: transparent;
+    direction: rtl;
+}
+
+.dd-box-product .dd-img-wrapper .dd-tags > .dd-label-tags {
+    display: table;
+    margin: 0 -1px 1px 0;
+    text-align: left;
+    opacity: .80;
+    filter: alpha(opacity=80);
+    direction: ltr;
+}
+
+.dd-label {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.25;
+    display: inline-block;
+    height: 20px;
+    border-radius: 0;
+}
+
+.dd-label.dd-arrowed {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    height: 20px;
+    margin-left: 5px;
+}
+
+.dd-label-default.dd-arrowed:before {
+    border-right-color: #777 !important;
+}
+
+.dd-label.dd-arrowed:before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: -10px;
+    display: inline-block;
+    content: '';
+    border: 1px solid transparent;
+    border-width: 10px 5px;
+}
+.dd-label-default {
+    background-color: #777;
+    color: #fff;
+}
+.price {
+    margin-bottom: 5px;
+    color: #ef5350;
+}
+
+.dd-box-product h6 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.dd-box-product h6 a {
+    font-size: 13px;
+    line-height: 1.4;
+    display: block;
+}
+
+.dd-box-product-outer:hover {
+    border: 1px solid #009688;
+}
