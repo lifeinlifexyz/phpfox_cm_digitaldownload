@@ -38,6 +38,46 @@ var cm_loadAssets = function()
         delete  window.cm_dd_assets; //clear lazy load assets stack
     }
 };
+var init_owl_carousel = function(target){
+    var owl = $(target);
+
+    //if(!owl.hasClass('owl-loaded')) {
+        owl.owlCarousel({
+            loop:false,
+            margin:10,
+            nav:true,
+            dots: false,
+            navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+            responsive:{
+                0:{
+                    items:$(target).data('def')
+                },
+                600:{
+                    items:$(target).data('small')
+                },
+                1000:{
+                    items:$(target).data('large')
+                }
+            }
+        });
+    //} else {
+    //    owl.trigger('refresh.owl.carousel');
+    //}
+};
+
+var isImagesLoaded = function(target) {
+    var images = $(target).find('img');
+    var loaded = false;
+    images.each(function(){
+       if ($(this).hasClass('built')) {
+           loaded = true;
+       } else {
+           loaded = false;
+       }
+    });
+    return loaded;
+};
+
 
 $Ready(function () {
 
@@ -47,26 +87,15 @@ $Ready(function () {
 
     $('.owl-carousel').each(function(){
        var that = this;
-        if (!$(that).hasClass('owl-loaded')) {
-            $(that).owlCarousel({
-                loop:true,
-                margin:10,
-                nav:true,
-                dots: false,
-                navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
-                responsive:{
-                    0:{
-                        items:$(that).data('def')
-                    },
-                    600:{
-                        items:$(that).data('small')
-                    },
-                    1000:{
-                        items:$(that).data('large')
-                    }
-                }
-            });
-        }
+       function checkCondition(){
+           if(!isImagesLoaded(that)){
+               window.setTimeout(checkCondition, 1500);
+           }
+           else {
+               init_owl_carousel(that);
+           }
+       }
+       window.setTimeout(checkCondition, 1500);
     });
 
     $('#manage-categories').nestable();

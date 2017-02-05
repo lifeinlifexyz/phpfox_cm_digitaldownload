@@ -124,8 +124,6 @@ class ViewController extends Phpfox_Component
 					'masterslider.min.js'=>'module_core',
 					'switch_legend.js' => 'static_script',
 					'switch_menu.js' => 'static_script',
-					'view.js' => 'module_marketplace',
-					'view.css' => 'module_marketplace',
 					'masterslider.css' => 'module_core',
 				]
 			)			

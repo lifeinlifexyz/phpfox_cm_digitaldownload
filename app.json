@@ -58,6 +58,12 @@
       "value": 4,
       "js_variable": true
     },
+    "cm_dd_similar_limit": {
+      "info": "Similar products in block",
+      "type": "input:text",
+      "value": 10,
+      "js_variable": true
+    },
     "cm_dd_highlighted_color": {
       "info": "Highlighted color",
       "type": "input:text",
@@ -179,6 +185,7 @@
       "most-talked" : "",
       "most-liked" : "",
       "most-downloaded" : "",
+      "similar" : "",
       "featured" : ""
     },
     "controller" : {
@@ -227,6 +234,14 @@
       "location" : "1",
       "is_active" : "1",
       "ordering" : "3"
+    },
+    "Similar products" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.view",
+      "component" : "similar",
+      "location" : "2",
+      "is_active" : "1",
+      "ordering" : "1"
     },
     "Most downloaded" : {
       "type_id" : "0",

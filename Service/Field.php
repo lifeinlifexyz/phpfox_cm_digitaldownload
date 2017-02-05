@@ -193,7 +193,6 @@ class Field extends \Phpfox_Service implements IFormly
         foreach($aFields as $aField) {
             $aList[$aField['name']] = $aField['name'];
         }
-        $aList['price'] = 'price';
         return $aList;
     }
 

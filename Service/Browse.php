@@ -5,6 +5,7 @@ use Apps\CM_DigitalDownload\Lib\Collection\Collection;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 use Core\Event;
+use Phpfox;
 use Phpfox_Plugin;
 
 class Browse  extends \Phpfox_Service
@@ -41,20 +42,28 @@ class Browse  extends \Phpfox_Service
         return $this;
     }
 
+    public function similar($sTitle)
+    {
+        $sQuery = $this->database()->searchKeywords(Phpfox::getService('digitaldownload.field')->getFilterableFieldsName(), $sTitle);
+        $this->_aConditions[] = ' AND (' . $sQuery . ')';
+        return $this;
+    }
+
     public function get($bOrderWithSponsored = true)
     {
         (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_browse_get')) ? eval($sPlugin) : false);
+
         $this->_iCnt = $this->database()->select('count(*)')->from(\Phpfox::getT($this->_sTable), 'd')->where($this->_aConditions)->count();
+
         if ($bOrderWithSponsored) {
-            $this->database()->order('`d`.`sponsored` DESC, ' . $this->_sSort);
-        } else {
-            $this->database()->order($this->_sSort);
+            $this->_sSort = '`d`.`sponsored` DESC' . (!empty($this->_sSort) ? ', ' . $this->_sSort : '');
         }
         $aDD = $this->database()
             ->select('`d`.*, u.*')
             ->from(\Phpfox::getT($this->_sTable), 'd')
             ->leftJoin(\Phpfox::getT('user'), 'u', 'u.user_id= d.user_id')
             ->where($this->_aConditions)
+            ->order($this->_sSort)
             ->limit($this->_iPage, $this->_iLimit, $this->_iCnt)
             ->all();
 

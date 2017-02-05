@@ -67,6 +67,7 @@ if (setting('cm_dd_enabled')) {
         'digitaldownload.most-talked'    => '\Apps\CM_DigitalDownload\Block\MostTalked',
         'digitaldownload.most-liked'    => '\Apps\CM_DigitalDownload\Block\MostLiked',
         'digitaldownload.most-downloaded'    => '\Apps\CM_DigitalDownload\Block\MostDownloaded',
+        'digitaldownload.similar'    => '\Apps\CM_DigitalDownload\Block\Similar',
         'digitaldownload.info'    => '\Apps\CM_DigitalDownload\Block\Info',
         'digitaldownload.manage-photos'    => '\Apps\CM_DigitalDownload\Block\ManagePhotos',
         'digitaldownload.manage-options'    => '\Apps\CM_DigitalDownload\Block\ManageOptions',
