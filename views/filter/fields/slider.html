@@ -5,20 +5,21 @@
 </div>
 <div>
     <div class="cm-range-slider">
-        <input type="text" class="integer-slider form-control" value=""
-               data-slider-min="{{ min }}" data-slider-max="{{ max }}" data-slider-step="1"
-               data-slider-value="[{% if value %}{{ value.min }},{{ value.max }}{% else %}{{ min }},{{ max }}{% endif %}]"/>
         <div class="row">
             <div class="col-xs-6">
-                {{ _p('min') }}: {{ min }}
+                <label for="{{ name }}-min">
+                    <small>{{ _p('From') }}</small>
+                </label>
+                <input id="{{ name }}-min" type="number" value="{% if value %}{{ value.min }}{% else %}{{ min }}{% endif %}"
+                       class="form-control" name="{{ name }}[min]" min="{{ min }}" max="{{ max }}"/>
             </div>
-            <div class="col-xs-6 text-right">
-                {{ _p('max') }}: {{ max }}
+            <div class="col-xs-6">
+                <label for="{{ name }}-max">
+                   <small>{{ _p('To') }}</small>
+                </label>
+                <input id="{{ name }}-max" type="number" value="{% if value %}{{ value.max }}{% else %}{{ max }}{% endif %}"
+                       class="form-control" name="{{ name }}[max]"  min="{{ min }}" max="{{ max }}"/>
             </div>
-        </div>
-        <div class="data">
-            <input type="hidden" value="{% if value %}{{ value.min }}{% else %}{{ min }}{% endif %}" class="min-value" name="{{ name }}[min]">
-            <input type="hidden" value="{% if value %}{{ value.max }}{% else %}{{ max }}{% endif %}" class="max-value" name="{{ name }}[max]">
         </div>
     </div>
 </div>
