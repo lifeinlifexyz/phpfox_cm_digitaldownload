@@ -2,4 +2,6 @@
 
 defined('PHPFOX') or exit('NO DICE!');
 ?>
-{$oFilterForm}
+<div class="filter-block">
+    {$oFilterForm}
+</div>

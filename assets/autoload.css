@@ -291,12 +291,6 @@ rules input
     margin-left: 130px;
 }
 
-.cm-dd-search-item {
-    background: #ffffff;
-    border-bottom: 1px #e6e6e6 solid;
-    padding: 20px 0;
-}
-
 .dd-plan-item {
     border: 1px solid #dddddd;
     padding: 0 20px;
@@ -393,9 +387,7 @@ rules input
     margin-left: 5px;
 }
 
-.dd-label-default.dd-arrowed:before {
-    border-right-color: #777 !important;
-}
+
 
 .dd-label.dd-arrowed:before {
     position: absolute;
@@ -407,9 +399,18 @@ rules input
     border: 1px solid transparent;
     border-width: 10px 5px;
 }
+.dd-label-default.dd-arrowed:before {
+    border-right-color: #777 !important;
+}
 .dd-label-default {
     background-color: #777;
     color: #fff;
+}
+.dd-label-primary {
+    background-color: #337ab7;
+}
+.dd-label-primary.dd-arrowed:before {
+    border-right-color: #337ab7 !important;
 }
 .price {
     margin-bottom: 5px;
@@ -429,4 +430,23 @@ rules input
 
 .dd-box-product-outer:hover {
     border: 1px solid #009688;
+}
+.dd-filter-sidebar {
+    margin-bottom: 25px;
+}
+
+.filter-title {
+    border-bottom: 3px solid #80cbc4;
+    font-size: 18px;
+    line-height: 1;
+    margin: 0 0 10px;
+    padding: 0;
+}
+
+.filter-title span {
+    border-bottom: 3px solid #00897b;
+    display: inline-block;
+    margin-bottom: -3px;
+    padding-bottom: 10px;
+    color: #666;
 }

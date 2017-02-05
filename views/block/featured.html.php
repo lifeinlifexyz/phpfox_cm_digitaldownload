@@ -18,6 +18,13 @@ defined('PHPFOX') or exit('NO DICE!');
                                         {_p('Featured')}
                                     </span>
                                 </span>
+                                {if $aEntry.sponsored}
+                                     <span class="dd-label-tags">
+                                        <span class="dd-label label dd-label-primary dd-arrowed">
+                                            {_p('Sponsored')}
+                                        </span>
+                                     </span>
+                                {/if}
                             </div>
                         </div>
                         <h6 class="dd-title" itemprop="name">
@@ -31,10 +38,7 @@ defined('PHPFOX') or exit('NO DICE!');
                                 {else}
                                 {foreach from=$aDDPrice item=aPrice}
                                 <li>
-                                    <span class="price-title">
-                                        {$aPrice.caption}
-                                    </span>
-                                    <span itemprop="price">
+                                    <span itemprop="price" title="{$aPrice.caption}" data-toggle="tooltip" data-placement="top">
                                         <strong>
                                             {if $aPrice.price == '0.00'}
                                             {_p('Free')}

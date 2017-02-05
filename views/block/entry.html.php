@@ -2,28 +2,37 @@
 
 defined('PHPFOX') or exit('NO DICE!');
 ?>
-<div class="dd-box-product-outer">
+<div class="dd-box-product-outer" {if $aEntry.highlighted}
+     style="background-color: <?=Phpfox::getParam('cm_dd_highlighted_color', '#FFF0D1');?>"
+     {/if}>
     <article itemscope itemtype="http://schema.org/Product" class="cm-dd-search-item dd-box-product">
         <div class="cm-dd-search-item-img dd-img-wrapper">
             <a href="{$aEntry.url}">
                 {img path='core.url_pic' file='digitaldownload/'.$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_120_square' itemprop='image'}
             </a>
             <div class="dd-tags">
-            <span class="dd-label-tags">
                 {if $aEntry.featured}
-                <span class="dd-label label dd-label-default dd-arrowed">
-                    {_p('Featured')}
-                </span>
+                     <span class="dd-label-tags">
+                        <span class="dd-label label dd-label-default dd-arrowed">
+                            {_p('Featured')}
+                        </span>
+                     </span>
                 {/if}
-            </span>
+                {if $aEntry.sponsored}
+                     <span class="dd-label-tags">
+                        <span class="dd-label label dd-label-primary dd-arrowed">
+                            {_p('Sponsored')}
+                        </span>
+                     </span>
+                {/if}
             </div>
         </div>
         <div class="cm-dd-search-item-content">
             <div class="category">
-                {$aEntry.category}
+                {$aEntry.category|clean}
             </div>
             <h2 itemprop="name">
-                <a itemprop="url" href="{$aEntry.url}" title="{$aEntry|clean}">{$aEntry}</a>
+                <a itemprop="url" href="{$aEntry.url}" title="{$aEntry|clean}">{$aEntry|clean}</a>
             </h2>
 
             <div class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
@@ -34,18 +43,15 @@ defined('PHPFOX') or exit('NO DICE!');
                     {else}
                     {foreach from=$aDDPrice item=aPrice}
                     <li>
-                    <span class="price-title">
-                        {$aPrice.caption}
-                    </span>
-                    <span itemprop="price">
-                        <strong>
-                            {if $aPrice.price == '0.00'}
-                            {_p('Free')}
-                            {else}
-                            {$aPrice.currency_id|currency_symbol}{$aPrice.price|number_format:2}
-                            {/if}
-                        </strong>
-                    </span>
+                        <span itemprop="price" title="{$aPrice.caption}" data-toggle="tooltip" data-placement="right">
+                            <strong>
+                                {if $aPrice.price == '0.00'}
+                                {_p('Free')}
+                                {else}
+                                {$aPrice.currency_id|currency_symbol}{$aPrice.price|number_format:2}
+                                {/if}
+                            </strong>
+                        </span>
                     </li>
                     {/foreach}
                     {/if}
@@ -59,13 +65,7 @@ defined('PHPFOX') or exit('NO DICE!');
                 {/if}
             </ul>
             {/if}
-
-            {if $aEntry.user_id == Phpfox::getUserId()}
-            <a href="{url link='digitaldownload.add' dd_id=$aEntry.id}">{_p('Edit')}</a>
-            <a href="{url link='digitaldownload.delete'}{$aEntry.id}">{_p('Delete')}</a>
-            {/if}
         </div>
-        <div class="clearfix"></div>
     </article>
 </div>
 

@@ -5,6 +5,7 @@ use Apps\CM_DigitalDownload\Lib\Collection\Collection;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 use Core\Event;
+use Phpfox_Plugin;
 
 class Browse  extends \Phpfox_Service
 {
@@ -42,7 +43,7 @@ class Browse  extends \Phpfox_Service
 
     public function get()
     {
-        Event::trigger('before_browse_get', $this->_aConditions);
+        (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_browse_get')) ? eval($sPlugin) : false);
         $this->_iCnt = $this->database()->select('count(*)')->from(\Phpfox::getT($this->_sTable), 'd')->where($this->_aConditions)->count();
 
         $aDD = $this->database()
@@ -50,7 +51,7 @@ class Browse  extends \Phpfox_Service
             ->from(\Phpfox::getT($this->_sTable), 'd')
             ->leftJoin(\Phpfox::getT('user'), 'u', 'u.user_id= d.user_id')
             ->where($this->_aConditions)
-            ->order($this->_sSort)
+            ->order('`d`.`sponsored` DESC, ' . $this->_sSort)
             ->limit($this->_iPage, $this->_iLimit, $this->_iCnt)
             ->all();
 

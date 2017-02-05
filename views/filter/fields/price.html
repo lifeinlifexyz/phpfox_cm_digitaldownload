@@ -1,5 +1,9 @@
-<div class="table_left">{{ title }}</div>
-<div class="table_right">
+<div class="filter-title">
+    <span>
+        {{ title }}
+    </span>
+</div>
+<div>
     <div class="">
         <select class="form-control" name="{{ name }}_currency_id">
             {% for sCurrency, aCurrency in aCurrencies %}

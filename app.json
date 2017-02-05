@@ -33,6 +33,12 @@
       "type": "input:text",
       "value": 4,
       "js_variable": true
+    },
+    "cm_dd_highlighted_color": {
+      "info": "Highlighted color",
+      "type": "input:text",
+      "value": '#FFF0D1',
+      "js_variable": true
     }
   },
   "user_group_settings": {
@@ -168,6 +174,6 @@
       "location" : "3",
       "is_active" : "1",
       "ordering" : "3"
-    },
+    }
   }
 }

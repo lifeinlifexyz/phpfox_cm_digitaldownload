@@ -1,5 +1,9 @@
-<div class="table_left">{{ title }}</div>
-<div class="table_right">
+<div class="filter-title">
+    <span>
+        {{ title }}
+    </span>
+</div>
+<div>
     <label>
         <input type="radio" name="{{ name }}" value="1" class="v_middle checkbox" {% if value == 1 %} checked {% endif %}/>
         {{ _p('Yes')}}

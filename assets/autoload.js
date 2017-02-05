@@ -30,6 +30,8 @@ $Ready(function () {
         delete  window.cm_dd_assets; //clear lazy load assets stack
     }
 
+    $('[data-toggle="tooltip"]').tooltip();
+
     $('#manage-categories').nestable();
 
     $('#manage-categories').on('change', function(){

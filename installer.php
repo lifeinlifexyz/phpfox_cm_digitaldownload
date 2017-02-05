@@ -53,6 +53,8 @@ function installv1_0_0()
       `time_stamp` int( 10 ) NOT NULL,
       `expire_timestamp` int( 10 ) NULL,
       `featured` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `sponsored` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `highlighted` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `total_comment` int(10) NOT NULL DEFAULT  '0',
       `total_like` int( 10 ) NOT NULL DEFAULT  '0',
       `total_view` INT( 11 ) NULL,
@@ -72,6 +74,10 @@ function installv1_0_0()
       `price_currency_id` CHAR( 3 ) NOT NULL,
       `featured` DECIMAL( 14, 2 ) NOT NULL DEFAULT \'0.00\',
       `featured_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
+      `sponsored` DECIMAL( 14, 2 ) NOT NULL DEFAULT \'0.00\',
+      `sponsored_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
+      `highlighted` DECIMAL( 14, 2 ) NOT NULL DEFAULT \'0.00\',
+      `highlighted_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
       `user_groups` VARCHAR( 255 ) NULL,
        PRIMARY KEY (`plan_id`)
     )');
