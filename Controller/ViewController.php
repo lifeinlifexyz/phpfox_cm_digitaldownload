@@ -116,7 +116,7 @@ class ViewController extends Phpfox_Component
 				]
 				)
 			)			
-			->setBreadCrumb((string)$oDD, true)
+			->setBreadCrumb((string)$oDD)
 			->setHeader('cache', [
 					'jquery/plugin/star/jquery.rating.js' => 'static_script',
 					'jquery/plugin/jquery.highlightFade.js' => 'static_script',
