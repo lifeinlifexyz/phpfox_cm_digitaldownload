@@ -54,7 +54,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 $aImgs = $this->offsetGet('images');
                 $aImg =  array_shift($aImgs);
                 $aImg['server_id'] = isset($aImg['server_id']) ? $aImg['server_id'] : null;
-                $aImg['image_path'] = isset($aImg['image_path']) ? $aImg['image_path'] : null;
+                $aImg['image_path'] = isset($aImg['image_path']) ? 'digitaldownload/' . $aImg['image_path'] : null;
                 return $aImg;
                 break;
             case 'url':

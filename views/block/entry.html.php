@@ -8,7 +8,7 @@ defined('PHPFOX') or exit('NO DICE!');
     <article itemscope itemtype="http://schema.org/Product" class="cm-dd-search-item dd-box-product">
         <div class="cm-dd-search-item-img dd-img-wrapper">
             <a href="{$aEntry.url}">
-                {img path='core.url_pic' file='digitaldownload/'.$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_120_square' itemprop='image'}
+                {img path='core.url_pic' file=$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_120_square' itemprop='image'}
             </a>
             <div class="dd-tags">
                 {if $aEntry.featured}
@@ -28,12 +28,9 @@ defined('PHPFOX') or exit('NO DICE!');
             </div>
         </div>
         <div class="cm-dd-search-item-content">
-            <div class="category">
-                {$aEntry.category|clean}
-            </div>
-            <h2 itemprop="name">
+           <h6 itemprop="name" class="dd-title">
                 <a itemprop="url" href="{$aEntry.url}" title="{$aEntry|clean}">{$aEntry|clean}</a>
-            </h2>
+            </h6>
 
             <div class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
                 <ul>
@@ -65,6 +62,9 @@ defined('PHPFOX') or exit('NO DICE!');
                 {/if}
             </ul>
             {/if}
+            <div class="category">
+                {$aEntry.category|clean}
+            </div>
         </div>
     </article>
 </div>

@@ -2,7 +2,7 @@
     <article itemscope itemtype="http://schema.org/Product" class="dd-box-product">
         <div class="dd-img-wrapper">
             <a href="{$aEntry.url}">
-                {img path='core.url_pic' file='digitaldownload/'.$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_200_square' itemprop='image'}
+                {img path='core.url_pic' file= $aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_200_square' itemprop='image'}
             </a>
             <div class="dd-tags">
                 {if $aEntry.featured}
