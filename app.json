@@ -29,7 +29,31 @@
       "js_variable": true
     },
     "cm_dd_feature_limit": {
-      "info": "Featured count in block",
+      "info": "Featured in block",
+      "type": "input:text",
+      "value": 4,
+      "js_variable": true
+    },
+    "cm_dd_most_viewed_limit": {
+      "info": "Most viewed in block",
+      "type": "input:text",
+      "value": 4,
+      "js_variable": true
+    },
+    "cm_dd_most_talked_limit": {
+      "info": "Most talked in block",
+      "type": "input:text",
+      "value": 4,
+      "js_variable": true
+    },
+    "cm_dd_most_liked_limit": {
+      "info": "Most liked in block",
+      "type": "input:text",
+      "value": 4,
+      "js_variable": true
+    },
+    "cm_dd_most_downloaded_limit": {
+      "info": "Most downloaded in block",
       "type": "input:text",
       "value": 4,
       "js_variable": true
@@ -150,7 +174,12 @@
   },
   "component" : {
     "block" : {
-      "filter" : ""
+      "filter" : "",
+      "most-viewed" : "",
+      "most-talked" : "",
+      "most-liked" : "",
+      "most-downloaded" : "",
+      "featured" : ""
     },
     "controller" : {
       "index" : "digitaldownload.index",
@@ -167,6 +196,22 @@
       "is_active" : "1",
       "ordering" : "3"
     },
+    "Most Viewed" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.index",
+      "component" : "most-viewed",
+      "location" : "1",
+      "is_active" : "1",
+      "ordering" : "4"
+    },
+    "Most Talked" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.index",
+      "component" : "most-talked",
+      "location" : "1",
+      "is_active" : "1",
+      "ordering" : "5"
+    },
     "Feautured" : {
       "type_id" : "0",
       "m_connection" : "digitaldownload.index",
@@ -174,6 +219,22 @@
       "location" : "3",
       "is_active" : "1",
       "ordering" : "3"
+    },
+    "Most downloaded" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.index",
+      "component" : "most-downloaded",
+      "location" : "3",
+      "is_active" : "1",
+      "ordering" : "5"
+    },
+    "Most liked" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.index",
+      "component" : "most-liked",
+      "location" : "3",
+      "is_active" : "1",
+      "ordering" : "4"
     }
   }
 }

@@ -41,26 +41,29 @@ class Browse  extends \Phpfox_Service
         return $this;
     }
 
-    public function get()
+    public function get($bOrderWithSponsored = true)
     {
         (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_browse_get')) ? eval($sPlugin) : false);
         $this->_iCnt = $this->database()->select('count(*)')->from(\Phpfox::getT($this->_sTable), 'd')->where($this->_aConditions)->count();
-
+        if ($bOrderWithSponsored) {
+            $this->database()->order('`d`.`sponsored` DESC, ' . $this->_sSort);
+        } else {
+            $this->database()->order($this->_sSort);
+        }
         $aDD = $this->database()
             ->select('`d`.*, u.*')
             ->from(\Phpfox::getT($this->_sTable), 'd')
             ->leftJoin(\Phpfox::getT('user'), 'u', 'u.user_id= d.user_id')
             ->where($this->_aConditions)
-            ->order('`d`.`sponsored` DESC, ' . $this->_sSort)
             ->limit($this->_iPage, $this->_iLimit, $this->_iCnt)
             ->all();
 
         return [$this->_iCnt, $aDD];
     }
 
-    public function getCollection()
+    public function getCollection($bOrderWithSponsored = true)
     {
-        list(, $aRows) = $this->get();
+        list(, $aRows) = $this->get($bOrderWithSponsored);
         $oDisplay = new Display(\Phpfox::getService('digitaldownload.dd'));
         $oDisplay->setDDFieldNames(\Phpfox::getService('digitaldownload.field')->getFieldsByType('dd'));
         $oCollection = new Collection($aRows, $oDisplay);
