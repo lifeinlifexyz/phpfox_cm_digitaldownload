@@ -220,6 +220,14 @@
       "is_active" : "1",
       "ordering" : "3"
     },
+    "Feautured in view" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.view",
+      "component" : "featured",
+      "location" : "1",
+      "is_active" : "1",
+      "ordering" : "3"
+    },
     "Most downloaded" : {
       "type_id" : "0",
       "m_connection" : "digitaldownload.index",
