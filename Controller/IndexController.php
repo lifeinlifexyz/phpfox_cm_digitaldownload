@@ -30,8 +30,9 @@ class IndexController extends Phpfox_Component
 		}
 
 		$aSectionMenu = [
-			_p('All') => '',
-			_p('My') => 'digitaldownload.my',
+			_p('All Files') => '',
+			_p('My Files') => 'digitaldownload.my',
+			_p('Friends` Files') => 'digitaldownload.friends',
 			_p('Invoices') => 'digitaldownload.invoice',
 		];
 
@@ -72,6 +73,19 @@ class IndexController extends Phpfox_Component
 				break;
 			case 'user':
 				$oSearch->setCondition('AND `d`.`user_id` = ' . $this->request()->getInt('req3'));
+				$oSearch->setCondition('AND `d`.`is_active` = 1');
+				break;
+			case 'friends':
+				$aFriends = Phpfox::getService('friend')->getFromCache();
+				if (!empty($aFriends)) {
+					$aFriendsId = [];
+					foreach($aFriends as &$aFriend) {
+						$aFriendsId[]  = $aFriend['friend_id'];
+					}
+					$oSearch->setCondition('AND `d`.`user_id` IN (' . implode(',', $aFriendsId) . ')');
+				} else {
+					$oSearch->setCondition('AND `d`.`id` = 0'); //nothing dd. because his not friends
+				}
 				$oSearch->setCondition('AND `d`.`is_active` = 1');
 				break;
 			default:

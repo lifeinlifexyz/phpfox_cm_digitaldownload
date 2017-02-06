@@ -144,6 +144,7 @@ group('/digitaldownload/', function (){
     if (setting('cm_dd_enabled')) {
         route('/', 'digitaldownload.index');
         route('my', 'digitaldownload.index');
+        route('friends', 'digitaldownload.index');
         route('user/:id', 'digitaldownload.index')->where([':id' => '([0-9]+)']);
         route('add', 'digitaldownload.add');
         route('add/:id', 'digitaldownload.add')->where([':id' => '([0-9]+)']);

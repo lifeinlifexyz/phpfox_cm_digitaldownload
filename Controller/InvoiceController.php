@@ -43,9 +43,10 @@ class InvoiceController extends Phpfox_Component
 		if (!defined('PHPFOX_IS_USER_PROFILE'))
 		{
 			$aFilterMenu = [
-					_p('All') => '',
-					_p('My') => 'digitaldownload.my',
-					_p('Invoices') => 'digitaldownload.invoice',
+				_p('All Files') => '',
+				_p('My Files') => 'digitaldownload.my',
+				_p('Friends` Files') => 'digitaldownload.friends',
+				_p('Invoices') => 'digitaldownload.invoice',
 			];
 		}
 
