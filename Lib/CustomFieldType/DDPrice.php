@@ -27,7 +27,7 @@ class DDPrice extends PriceType
             $this->aInfo['value']['max'] =  $iMax;
 
             foreach($aColumns as &$sColumn) {
-                $oSearch->setCondition('OR (`'
+                $oSearch->setCondition('AND (`'
                     . $sTAlias . '`.`' . $sColumn . '_price` >= ' . $iMin
                     . ' AND `' . $sTAlias . '`.`' . $sColumn . '_price` <= ' . $iMax
                     . ')');

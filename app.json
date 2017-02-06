@@ -67,7 +67,7 @@
     "cm_dd_highlighted_color": {
       "info": "Highlighted color",
       "type": "input:text",
-      "value": '#FFF0D1',
+      "value": "#FFF0D1",
       "js_variable": true
     }
   },
