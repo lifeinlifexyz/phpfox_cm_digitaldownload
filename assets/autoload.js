@@ -41,7 +41,8 @@ var cm_loadAssets = function()
 var init_owl_carousel = function(target){
     var owl = $(target);
 
-    //if(!owl.hasClass('owl-loaded')) {
+    if(!owl.hasClass('owl-loaded')) {
+        owl.addClass('dont-unbind-children');
         owl.owlCarousel({
             loop:false,
             margin:10,
@@ -60,9 +61,8 @@ var init_owl_carousel = function(target){
                 }
             }
         });
-    //} else {
-    //    owl.trigger('refresh.owl.carousel');
-    //}
+        owl.find('.owl-nav').addClass('dont-unbind').find('*').addClass('dont-unbind');
+    }
 };
 
 var init_view_mode = function(id) {
@@ -112,7 +112,7 @@ $Ready(function () {
 
     cm_loadAssets();
 
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').addClass('dont-unbind').tooltip();
 
     $('.owl-carousel').each(function(){
        var that = this;
