@@ -238,7 +238,8 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $oDD = $this->getDisplayer($iId);
 
         $aVal = [
-            'is_active' => true
+            'is_active' => true,
+            'is_expired' => false,
         ];
 
         if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {

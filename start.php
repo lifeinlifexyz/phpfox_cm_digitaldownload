@@ -3,7 +3,6 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
     . 'PF.Site/Apps/CM_DigitalDownload/assets/');
 
-//todo:: после пагинации ползунок цен не работает
 //todo:: close the download dir for read
 //todo:: fix prase You can add up to {{ iMax }} to your digital download in edit page.
 
@@ -19,6 +18,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.images' => '\Apps\CM_DigitalDownload\Service\Images',
         'digitaldownload.invoice' => '\Apps\CM_DigitalDownload\Service\Invoice',
         'digitaldownload.callback' => '\Apps\CM_DigitalDownload\Service\Callback',
+        'digitaldownload.cron' => '\Apps\CM_DigitalDownload\Service\Cron',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',

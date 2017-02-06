@@ -3,7 +3,7 @@
 namespace Apps\CM_DigitalDownload\Service;
 
 use Apps\CM_DigitalDownload\Lib\Collection\Collection;
-use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display;
+use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display as BaseDisplay;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
@@ -88,7 +88,7 @@ class Plan extends \Phpfox_Service implements IFormly
     public function collection($bForUser = true)
     {
         $aRows = $bForUser ? $this->forCurUser() : $this->all();
-        $oDisplay = new Display($this->getForm([
+        $oDisplay = new BaseDisplay($this->getForm([
             'form_id' => 'dd-plan',
         ]));
         $oDisplay->setToStrCallback([$this, 'displayExtraOptions']);

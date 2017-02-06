@@ -59,10 +59,12 @@ function installv1_0_0()
       `total_like` int( 10 ) NOT NULL DEFAULT  '0',
       `total_view` INT( 11 ) NULL,
       `total_download` INT NULL,
+      `is_expired` TINYINT( 1 ) NOT NULL DEFAULT  '0'
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
       KEY `user_id` (`user_id`),
+      KEY `is_expired` (`is_expired`),
       KEY `featured` (`featured`));");
 
     db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_plans') . '` (
@@ -119,6 +121,19 @@ function installv1_0_0()
         KEY `dd_id` (`dd_id`,`user_id`)
     );');
 
+    $aCrons[] = [
+        'module_id' => 'digitaldownload',
+        'product_id' => 'phpfox',
+        'next_run' => 0,
+        'last_run' => 0,
+        'type_id' => 2,
+        'every' => 1,
+        'is_active' => 1,
+        'php_code' => '\Phpfox::getService(\'digitaldownload.cron\')->expireDD();'
+    ];
+    foreach($aCrons as &$aCron) {
+        db()->insert(Phpfox::getT('cron', $aCron));
+    }
 
     if (!is_dir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/')) {
         mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
@@ -145,6 +160,9 @@ To view this listing follow the link below:
         'digitaldownload_user_names_commented_on_gender_listing_title' => '{user_names} commented on {gender} item "{title}"',
         'digitaldownload_user_names_commented_on_your_listing_title' => '{user_names} commented on your item "{title}"',
         'digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_listing_title' => '{user_names} commented on <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
+
+        'digitaldownload_item_expired_subject' => 'Items expiration/extension report from {web_site}',
+        'digitaldownload_item_expired_message' => 'This email contains information regarding your items extension and expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
     ];
 
 }

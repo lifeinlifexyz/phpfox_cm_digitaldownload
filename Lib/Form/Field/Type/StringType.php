@@ -3,6 +3,7 @@
 namespace Apps\CM_DigitalDownload\Lib\Form\Field\Type;
 
 use Apps\CM_DigitalDownload\Lib\Form\Field\AbstractType;
+use Phpfox;
 
 class StringType extends AbstractType
 {
@@ -15,7 +16,9 @@ class StringType extends AbstractType
         $sKey = $this->aInfo['column'];
         $sTAlias = $this->aInfo['table_alias'];
         if (($sValue = $oSearch->get($sKey)) || (isset($aSearch[$sKey]) && $sValue = $aSearch[$sKey])) {
-            $oSearch->setCondition('AND `' . $sTAlias . '`.`' . $sKey . '` LIKE \'%' . $sValue . '%\'');
+            $oSearch->setCondition('AND `' . $sTAlias . '`.`' . $sKey . '` LIKE \'%'
+                . Phpfox::getLib('parse.input')->clean($sValue, 300)
+                . '%\'');
         }
     }
 }
