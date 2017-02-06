@@ -522,6 +522,9 @@ rules input
     margin-bottom: 15px;
 }
 
+.cd-dd-moderate {
+    padding-bottom: 10px;
+}
 
 @media (min-width: 992px) {
     .cm-dd-view-block.grid .dd-box-product-outer {

@@ -6,6 +6,17 @@ defined('PHPFOX') or exit('NO DICE!');
      style="background-color: <?=Phpfox::getParam('cm_dd_highlighted_color', '#FFF0D1');?>"
      {/if}>
     <article itemscope itemtype="http://schema.org/Product" class="cm-dd-search-item dd-box-product">
+        {if $aEntry.user_id == Phpfox::getUserId()}
+            {assign var="bShowModeration" value="1"}
+        {/if}
+
+        {if (Phpfox::isAdmin() || !empty($bShowModeration)) && empty($bIsNoModerate)}
+            <div class="cd-dd-moderate">
+                <div class="_moderator">
+                    <a href="#{$aEntry.id}" class="moderate_link built"><i class="fa"></i></a>
+                </div>
+            </div>
+        {/if}
         <div class="cm-dd-search-item-img dd-img-wrapper">
             <a href="{$aEntry.url}">
                 {img path='core.url_pic' file=$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_120_square' itemprop='image'}
@@ -55,12 +66,12 @@ defined('PHPFOX') or exit('NO DICE!');
                 </ul>
             </div>
             {if !isset($bIsInFeed)}
-            <ul class="listing_info">
-                <li itemprop="releaseDate">{$aEntry.time_stamp|convert_time}</li>
-                {if isset($aEntry.user_name)}
-                <li>{$aEntry|user:'':'':30}</li>
-                {/if}
-            </ul>
+                <ul class="listing_info">
+                    <li itemprop="releaseDate">{$aEntry.time_stamp|convert_time}</li>
+                    {if isset($aEntry.user_name)}
+                    <li>{$aEntry|user:'':'':30}</li>
+                    {/if}
+                </ul>
             {/if}
             <div class="category">
                 {$aEntry.category}

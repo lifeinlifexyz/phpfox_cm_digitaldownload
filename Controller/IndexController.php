@@ -86,6 +86,11 @@ class IndexController extends Phpfox_Component
 		$iCnt = $oSearch->getSearchTotal(Phpfox::getService('digitaldownload.browse')->count());
 		\Phpfox_Template::instance()->buildSectionMenu('digitaldownload', $aSectionMenu);
 
+		$this->setParam('global_moderation', [
+			'name' => 'digitaldownload',
+			'ajax' => 'digitaldownload.moderation',
+			'menu' => $this->getModerationMenu()
+		]);
 
 		$this->template()
 			->setTitle(_p('Digital download'))
@@ -95,6 +100,26 @@ class IndexController extends Phpfox_Component
 				'iCount' => $iCnt,
 				'oFilterForm' => $oFormFilter,
 			]);
+	}
+
+	private function getModerationMenu()
+	{
+		$aModerationMenu = [];
+		$isOwner = Phpfox::isAdmin() || $this->request()->get('req2') == 'my';
+
+		if($isOwner) {
+			$aModerationMenu[] = [
+				'phrase' => _p('core.delete'),
+				'action' => 'deleteDD'
+			];
+
+			$aModerationMenu[] = [
+				'phrase' => _p('Deactivate'),
+				'action' => 'deactivateDD'
+			];
+		}
+
+		return $aModerationMenu;
 	}
 
 	/**

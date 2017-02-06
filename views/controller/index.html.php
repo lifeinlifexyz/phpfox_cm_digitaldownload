@@ -28,7 +28,10 @@ defined('PHPFOX') or exit('NO DICE!');
         }
     </script>
     {/literal}
-{pager}
+    {pager}
+    {if (Phpfox::isAdmin() || !empty($bShowModeration)) && empty($bIsNoModerate)}
+        {moderation}
+    {/if}
 {elseif !PHPFOX_IS_AJAX}
 {_p('No digital download fond')}
 {/if}

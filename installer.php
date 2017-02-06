@@ -161,8 +161,8 @@ To view this listing follow the link below:
         'digitaldownload_user_names_commented_on_your_listing_title' => '{user_names} commented on your item "{title}"',
         'digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_listing_title' => '{user_names} commented on <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
 
-        'digitaldownload_item_expired_subject' => 'Items expiration/extension report from {web_site}',
-        'digitaldownload_item_expired_message' => 'This email contains information regarding your items extension and expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
+        'digitaldownload_item_expired_subject' => 'Items expiration report from {web_site}',
+        'digitaldownload_item_expired_message' => 'This email contains information regarding your items expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
     ];
 
 }
