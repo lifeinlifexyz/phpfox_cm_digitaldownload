@@ -26,16 +26,23 @@ defined('PHPFOX') or exit('NO DICE!');
 
 	<div class="item_info_more clearfix">
 		{if $oDD.user_id != Phpfox::getUserId()}
-		<div class="pull-right">
-			<div>
-				<a href="#" class="btn btn-info digitaldownload_contact_seller" onclick="$Core.composeMessage({l}user_id: {$oDD.user_id}, dd_id: {$oDD.id}{r}); return false;">
-					<i class="fa fa-comment"></i>
-					<span>{_p('Contact seller')}</span>
-				</a>
+			<div class="row">
+				<div class="col-sm-6">
+					<a href="{url link='digitaldownload.user'}{$oDD.user_id}" class="btn btn-link">
+						<i class="fa fa-user"></i>
+						<span>{_p('All ads by this user')}</span>
+					</a>
+				</div>
+				<div class="col-sm-6">
+					<div class="text-right">
+						<a href="#" class="btn btn-info digitaldownload_contact_seller" onclick="$Core.composeMessage({l}user_id: {$oDD.user_id}, dd_id: {$oDD.id}{r}); return false;">
+							<i class="fa fa-comment"></i>
+							<span>{_p('Contact seller')}</span>
+						</a>
+					</div>
+				</div>
 			</div>
-		</div>
-		<div class="clearfix"></div>
-		<br>
+			<br>
 		{/if}
 	</div>
 
