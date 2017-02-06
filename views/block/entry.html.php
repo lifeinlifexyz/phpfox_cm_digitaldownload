@@ -10,7 +10,7 @@ defined('PHPFOX') or exit('NO DICE!');
             {assign var="bShowModeration" value="1"}
         {/if}
 
-        {if (Phpfox::isAdmin() || !empty($bShowModeration)) && empty($bIsNoModerate)}
+        {if !isset($bIsInFeed) && (Phpfox::isAdmin() || (!empty($bShowModeration)) && empty($bIsNoModerate))}
             <div class="cd-dd-moderate">
                 <div class="_moderator">
                     <a href="#{$aEntry.id}" class="moderate_link built"><i class="fa"></i></a>

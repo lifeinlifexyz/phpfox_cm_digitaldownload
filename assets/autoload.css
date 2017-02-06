@@ -525,6 +525,9 @@ rules input
 .cd-dd-moderate {
     padding-bottom: 10px;
 }
+.cd-dd-moderate ._moderator{
+    background: transparent;
+}
 
 @media (min-width: 992px) {
     .cm-dd-view-block.grid .dd-box-product-outer {
