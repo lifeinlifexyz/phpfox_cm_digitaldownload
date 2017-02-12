@@ -59,7 +59,7 @@ function installv1_0_0()
       `total_like` int( 10 ) NOT NULL DEFAULT  '0',
       `total_view` INT( 11 ) NULL,
       `total_download` INT NULL,
-      `is_expired` TINYINT( 1 ) NOT NULL DEFAULT  '0'
+      `is_expired` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
@@ -121,17 +121,20 @@ function installv1_0_0()
         KEY `dd_id` (`dd_id`,`user_id`)
     );');
 
-    $aCrons[] = [
-        'module_id' => 'digitaldownload',
-        'product_id' => 'phpfox',
-        'next_run' => 0,
-        'last_run' => 0,
-        'type_id' => 2,
-        'every' => 1,
-        'is_active' => 1,
-        'php_code' => '\Phpfox::getService(\'digitaldownload.cron\')->expireDD();'
+    $aCrons = [
+        [
+            'module_id' => 'digitaldownload',
+            'product_id' => 'phpfox',
+            'next_run' => 0,
+            'last_run' => 0,
+            'type_id' => 2,
+            'every' => 1,
+            'is_active' => 1,
+            'php_code' => '\Phpfox::getService(\'digitaldownload.cron\')->expireDD();'
+        ],
     ];
-    foreach($aCrons as &$aCron) {
+
+    foreach($aCrons as $aCron) {
         db()->insert(Phpfox::getT('cron', $aCron));
     }
 
@@ -165,12 +168,18 @@ To view this listing follow the link below:
         'digitaldownload_item_expired_message' => 'This email contains information regarding your items expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
     ];
 
+    $aLanguages = \Language_Service_Language::instance()->getAll();
+
     foreach($aPhrase as $sVar => $sText ) {
+        $aText = [];
+        foreach ($aLanguages as $aLanguage) {
+            $aText[$aLanguage['language_id']] = $sText;
+        }
         $aVal = [
             'product_id' => 'phpfox',
             'module' => 'digitaldownload|digitaldownload',
             'var_name' => $sVar,
-            'text' => $sText
+            'text' => $aText
         ];
         \Language_Service_Phrase_Process::instance()->add($aVal);
     }
