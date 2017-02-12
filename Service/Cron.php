@@ -46,7 +46,7 @@ class Cron  extends \Phpfox_Service
         //expire
         $this->database()->update(\Phpfox::getT($this->_sTable), $aVal,
             '`id` IN (' . implode(',', $aExpireIDDs) . ')');
-
+        //delete assigned plan
         $this->database()->delete(Phpfox::getT('digital_download_dd_plan'),
             'dd_id IN (' . implode(',', $aExpireIDDs) . ')');
 

@@ -46,8 +46,8 @@ defined('PHPFOX') or exit('NO DICE!');
 		{/if}
 	</div>
 
-	{if ($oDD.user_id == Phpfox::getUserId() && Phpfox::getUserParam('digitaldownload.can_edit_own')) || Phpfox::getUserParam('digitaldownload.can_edit_other')
-	|| ($oDD.user_id == Phpfox::getUserId() && Phpfox::getUserParam('digitaldownload.can_delete_own')) || Phpfox::getUserParam('digitaldownload.can_delete_other')
+	{if ($oDD.user_id == Phpfox::getUserId()) || Phpfox::getUserParam('digitaldownload.can_edit_other')
+	|| ($oDD.user_id == Phpfox::getUserId()) || Phpfox::getUserParam('digitaldownload.can_delete_other')
 	}
 	<div class="item_bar" style="margin-top: -4px">
 		<div class="item_bar_action_holder">

@@ -8,6 +8,7 @@ use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 use Core\Event;
 use Phpfox;
 use Phpfox_File;
+use Phpfox_Plugin;
 use Phpfox_Request;
 
 class Images extends \Phpfox_Service
@@ -60,14 +61,25 @@ class Images extends \Phpfox_Service
         return $this;
     }
 
-    public function delete($iId)
+    public function deleteDDImages($iDDId)
     {
-        Event::trigger('cd_dd_before_image_delete', $iId);
-        $aImage = $this->database()->select('*')->from(Phpfox::getT($this->_sTable))->where('`image_id` = ' . $iId)->get();
-        $sFilePath = Phpfox::getParam('core.dir_pic') . 'digitaldownload/' . sprintf($aImage['image_path'], '');
-        Phpfox_File::instance()->unlink($sFilePath);
-        $this->database()->delete(\Phpfox::getT($this->_sTable),  '`image_id` = ' . $iId);
-        Event::trigger('cd_dd_after_image_delete', $iId);
+        (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_delete_dd_images')) ? eval($sPlugin) : false);
+        $aImages = $this->getImagesByDDId($iDDId);
+        $aSizes = ['', 50, 120, 200, 400];
+        $iFileSizes = 0;
+        foreach ($aImages as &$aImage)
+        {
+            foreach ($aSizes as $iSize)
+            {
+                $sImage = Phpfox::getParam('core.dir_pic') . sprintf($aImage['image_path'], (empty($iSize) ? '' : '_' ) . $iSize);
+                if (file_exists($sImage)) {
+                    $iFileSizes += filesize($sImage);
+
+                    Phpfox_File::instance()->unlink($sImage);
+                }
+            }
+        }
+        (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_delete_dd_images')) ? eval($sPlugin) : false);
         //todo:: clear cache,
     }
 

@@ -29,6 +29,12 @@ class AddController extends Phpfox_Component
 
             $aDD = $oDigitalDownload->getForEdit((int)$bEdit);
 
+            //activation after expired
+            if (empty($aDD['plan_info']) && ($iPlan = $this->request()->getInt('plan_id'))) {
+                Phpfox::getService('digitaldownload.plan')->assign($bEdit, $iPlan);
+                $aDD = $oDigitalDownload->getForEdit((int)$bEdit);
+            }
+
             if (empty($aDD)) {
                 return Phpfox_Error::display(_p('Unable to find the item you are editing for'));
             }
@@ -44,7 +50,7 @@ class AddController extends Phpfox_Component
 
             $aPlan = json_decode($oDD['plan_info'], true);
 
-            if (!$oDD['is_active'] && $aPlan['price'] == 0) {
+            if (!$oDD['is_active'] && $aPlan['price'] == '0.00') {
 
                 (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_activate_digitaldownload')) ? eval($sPlugin) : false);
                 $oDigitalDownload->activate($oDD['id'], $aPlan);
@@ -142,10 +148,10 @@ class AddController extends Phpfox_Component
 
             $this->template()->buildPageMenu('js_mp_block',
                 $aMenus,
-                array(
+                [
                     'link' => $this->url()->permalink('digitaldownload', $bEdit),
                     'phrase' => _p('View')
-                )
+                ]
             );
         }
 

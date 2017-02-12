@@ -1,7 +1,9 @@
 <?php
 
-namespace Apps\CM_DigitalDownload\Service;
+namespace Apps\CM_DigitalDownload\Service\Digitaldownload;
 
+
+use Apps\CM_DigitalDownload\Lib\Form\Exception\RequiredArgumentException;
 
 class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 {
@@ -105,7 +107,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
             }
             return $oField;
         } else  {
-            throw new \Exception('Unknone field "' . $sField . '"');
+            throw new RequiredArgumentException('Unknone field "' . $sField . '"');
         }
     }
 

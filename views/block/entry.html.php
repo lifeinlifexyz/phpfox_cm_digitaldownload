@@ -2,19 +2,66 @@
 
 defined('PHPFOX') or exit('NO DICE!');
 ?>
-<div class="dd-box-product-outer" {if $aEntry.highlighted}
+<div id="js_dd_item_holder_{$aEntry.id}" class="dd-box-product-outer" {if $aEntry.highlighted}
      style="background-color: <?=Phpfox::getParam('cm_dd_highlighted_color', '#FFF0D1');?>"
      {/if}>
     <article itemscope itemtype="http://schema.org/Product" class="cm-dd-search-item dd-box-product">
         {if $aEntry.user_id == Phpfox::getUserId()}
-            {assign var="bShowModeration" value="1"}
+            {assign var="bIsOwner" value=true}
+        {else}
+            {assign var="bIsOwner" value=false}
         {/if}
 
-        {if !isset($bIsInFeed) && (Phpfox::isAdmin() || (!empty($bShowModeration)) && empty($bIsNoModerate))}
+        {if !isset($bIsInFeed) && (isset($bShowModeration) && !empty($bShowModeration))}
             <div class="cd-dd-moderate">
-                <div class="_moderator">
-                    <a href="#{$aEntry.id}" class="moderate_link built"><i class="fa"></i></a>
+                <div class="pull-left">
+                    {if isset($bShowModeration) && !empty($bShowModeration)}
+                    <div class="_moderator">
+                        <a href="#{$aEntry.id}" class="moderate_link built"><i class="fa"></i></a>
+                    </div>
+                    {/if}
                 </div>
+                <div class="pull-right">
+                    <ul class="list-inline">
+                        {if  $bIsOwner || Phpfox::getUserParam('digitaldownload.can_activate_deactivate_other')}
+                            {if !$aEntry.is_active}
+                                <li>
+                                    <a href="{url link='digitaldownload.activate'}{$aEntry.id}" class="js_dd_activate color-success" title="{_p('Activate')}" data-toggle="tooltip">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                </li>
+                            {else}
+                                <li>
+                                    <a href="{url link='digitaldownload.deactivate'}{$aEntry.id}" class="sJsConfirm js_dd_deactivate color-warning" title="{_p('Deactivate')}" data-toggle="tooltip">
+                                        <i class="fa fa-eye-slash"></i>
+                                    </a>
+                                </li>
+                            {/if}
+                        {/if}
+
+                        {if $bIsOwner || Phpfox::getUserParam('digitaldownload.can_delete_other')}
+                            <li>
+                                <a href="{url link='digitaldownload.delete'}{$aEntry.id}" class="sJsConfirm color-error" title="{_p('Delete')}" data-toggle="tooltip">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </li>
+                        {/if}
+
+                        {if $bIsOwner ||  Phpfox::getUserParam('digitaldownload.can_edit_other')}
+                            <li>
+                                <a href="{url link='digitaldownload.add' dd_id=$aEntry.id}" class="color-primary" title="{_p('Edit')}" data-toggle="tooltip">
+                                    <i class="fa fa-pencil"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{url link='digitaldownload.add.options' dd_id=$aEntry.id}" class="color-default" title="{_p('Manage options')}" data-toggle="tooltip">
+                                    <i class="fa fa-cog"></i>
+                                </a>
+                            </li>
+                        {/if}
+                    </ul>
+                </div>
+                <div class="clearfix"></div>
             </div>
         {/if}
         <div class="cm-dd-search-item-img dd-img-wrapper">

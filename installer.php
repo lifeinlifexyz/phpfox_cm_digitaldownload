@@ -165,6 +165,15 @@ To view this listing follow the link below:
         'digitaldownload_item_expired_message' => 'This email contains information regarding your items expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
     ];
 
+    foreach($aPhrase as $sVar => $sText ) {
+        $aVal = [
+            'product_id' => 'phpfox',
+            'module' => 'digitaldownload|digitaldownload',
+            'var_name' => $sVar,
+            'text' => $sText
+        ];
+        \Language_Service_Phrase_Process::instance()->add($aVal);
+    }
 }
 
 installv1_0_0();

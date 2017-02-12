@@ -19,15 +19,26 @@ class PlanController extends Phpfox_Component
     {
 
         Phpfox::isUser(true);
+        $sUrl = $this->getParam('url');
+
+        if (is_null($sUrl)) {
+            $sUrl = \Phpfox_Url::instance()->makeUrl('digitaldownload.add.options', [
+                'dd_id' => $this->request()->getInt('dd_id'),
+            ]);
+        }
 
         $this->template()->setTitle(_p('Select Plan'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
-            ->setBreadCrumb(_p('Add digital download'), $this->url()->makeUrl('digitaldownload.add'))
+            ->setBreadCrumb(_p('Choose plan'))
             ->assign([
                     'aPlans' => Phpfox::getService('digitaldownload.plan')->collection(),
-                    'sUrl' => $this->getParam('url'),
+                    'sUrl' => $sUrl,
                 ]
             );
+
+        if ($this->request()->get('reg2') == 'choose') {
+            $this->template()->setTemplate('test');
+        }
     }
 
     /**

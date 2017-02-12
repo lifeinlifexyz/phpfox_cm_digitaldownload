@@ -117,21 +117,6 @@
         "no": "No"
       }
     },
-    "digitaldownload.can_edit_own": {
-      "info": "Can edit own?",
-      "type": "input:radio",
-      "value": {
-        "1" : "1",
-        "2" : "1",
-        "3" : "0",
-        "4" : "1",
-        "5" : "0"
-      },
-      "options": {
-        "yes": "Yes",
-        "no": "No"
-      }
-    },
     "digitaldownload.can_edit_other": {
       "info": "Can edit other?",
       "type": "input:radio",
@@ -147,8 +132,8 @@
         "no": "No"
       }
     },
-    "digitaldownload.can_delete_own": {
-      "info": "Can delete own?",
+    "digitaldownload.can_activate_deactivate_other": {
+      "info": "Can activate/deactivate other?",
       "type": "input:radio",
       "value": {
         "1" : "1",

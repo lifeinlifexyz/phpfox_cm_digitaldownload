@@ -5,6 +5,7 @@
 
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Exception\ServiceException;
 use Phpfox;
 use Phpfox_Error;
 use Phpfox_Plugin;
@@ -32,56 +33,67 @@ class Callback extends Phpfox_Service
     public function getActivityFeed($aRow, $aCallback = null, $isChild = false)
     {
 
-        $oDD = Phpfox::getService('digitaldownload.dd')
-            ->getDisplayer($aRow['item_id']);
+        try{
+            $aDD = Phpfox::getService('digitaldownload.dd')->getForFeed($aRow['item_id']);
 
+            if (empty($aDD)) {
+                return false;
+            }
 
-        Phpfox_Template::instance()->assign('aEntry', $oDD);
-        Phpfox_Template::instance()->assign('bIsInFeed', true);
-        $aFeed = [
-            'feed_title' => (string)$oDD,
-            'privacy' => $oDD['privacy'],
-            'feed_info' => _p('created a digital download.'),
-            'feed_link' => $oDD['url'],
-            'total_comment' => $oDD['total_comment'],
-            'feed_total_like' => $oDD['total_like'],
-            'feed_is_liked' => isset($oDD['is_liked']) ? $oDD['is_liked'] : false,
-            'feed_icon' => '',
-            'time_stamp' => $oDD['time_stamp'],
-            'enable_like' => true,
-            'comment_type_id' => 'digitaldownload',
-            'like_type_id' => 'digitaldownload',
-            'custom_data_cache' => $aRow,
-            'load_block' => 'digitaldownload.entry',
-        ];
+            $oDD = Phpfox::getService('digitaldownload.dd')
+                ->setRow($aDD)
+                ->getDisplayer($aRow['item_id']);
 
-        $aReturn = array_merge($aFeed, $aRow);
+            Phpfox_Template::instance()->assign('aEntry', $oDD);
+            Phpfox_Template::instance()->assign('bIsInFeed', true);
+            $sContent = Phpfox_Template::instance()->getTemplate('digitaldownload.block.entry', true);
 
-        return $aReturn;
+            $aFeed = [
+                'feed_title' => '',
+                'privacy' => $aDD['privacy'],
+                'feed_info' => _p('created a digital download.'),
+                'feed_link' => $oDD['url'],
+                'total_comment' => $oDD['total_comment'],
+                'feed_total_like' => $oDD['total_like'],
+                'feed_is_liked' => isset($aDD['is_liked']) ? $aDD['is_liked'] : false,
+                'feed_icon' => '',
+                'time_stamp' => $aDD['time_stamp'],
+                'enable_like' => true,
+                'comment_type_id' => 'digitaldownload',
+                'like_type_id' => 'digitaldownload',
+                'feed_custom_html' => $sContent,
+            ];
+
+            $aReturn = array_merge($aFeed, $aRow);
+
+            return $aReturn;
+        } catch (ServiceException $e) {
+            return false;
+        }
     }
 
     public function addLike($iItemId, $bDoNotSendEmail = false)
     {
-        $oDD = Phpfox::getService('digitaldownload.dd')
-            ->getDisplayer((int)$iItemId);
+        try {
+            $oDD = Phpfox::getService('digitaldownload.dd')
+                ->getDisplayer((int)$iItemId);
 
-        if (!isset($oDD['id'])) {
+            $this->database()->updateCount('like', 'type_id = \'digitaldownload\' AND item_id = ' . (int)$iItemId . '', 'total_like', 'digital_download', 'id = ' . (int)$iItemId);
+
+            if (!$bDoNotSendEmail) {
+
+                $sLink = $oDD['url'];
+
+                Phpfox::getLib('mail')->to($oDD['user_id'])
+                    ->subject(['digitaldownload_full_name_liked_your_listing_title', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => (string)$oDD]])
+                    ->message(['digitaldownload_full_name_liked_your_listing_message', ['full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => (string)$oDD]])
+                    ->notification('like.new_like')
+                    ->send();
+
+                Phpfox::getService('notification.process')->add('digitaldownload_like', $oDD['id'], $oDD['user_id']);
+            }
+        } catch (ServiceException $e) {
             return false;
-        }
-
-        $this->database()->updateCount('like', 'type_id = \'digitaldownload\' AND item_id = ' . (int)$iItemId . '', 'total_like', 'digital_download', 'id = ' . (int)$iItemId);
-
-        if (!$bDoNotSendEmail) {
-
-            $sLink = $oDD['url'];
-
-            Phpfox::getLib('mail')->to($oDD['user_id'])
-                ->subject(['digitaldownload_full_name_liked_your_listing_title', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => (string)$oDD]])
-                ->message(['digitaldownload_full_name_liked_your_listing_message', ['full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => (string)$oDD]])
-                ->notification('like.new_like')
-                ->send();
-
-            Phpfox::getService('notification.process')->add('digitaldownload_like', $oDD['id'], $oDD['user_id']);
         }
     }
 
@@ -92,63 +104,68 @@ class Callback extends Phpfox_Service
 
     public function getNotificationLike($aNotification)
     {
-        $oDD = Phpfox::getService('digitaldownload.dd')
-            ->getDisplayer((int)$aNotification['item_id']);
+        try {
+            $oDD = Phpfox::getService('digitaldownload.dd')
+                ->getDisplayer((int)$aNotification['item_id']);
 
-        if (!isset($oDD['id'])) {
+            $sTitle = (string)$oDD;
+
+            if ($aNotification['user_id'] == $oDD['user_id']) {
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_name_liked_gender_own_listing_title', ['user_name' => Phpfox::getService('notification')->getUsers($aNotification), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
+            } elseif ($oDD['user_id'] == Phpfox::getUserId()) {
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_your_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
+            } else {
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_listing_title', array('user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'full_name' => $aRow['full_name'], 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')));
+
+            }
+
+            return [
+                'link' => $oDD['url'],
+                'message' => $sPhrase,
+                'icon' => Phpfox_Template::instance()->getStyle('image', 'activity.png', 'blog')
+            ];
+        } catch (ServiceException $e) {
             return false;
         }
-
-        $sTitle = (string)$oDD;
-
-        if ($aNotification['user_id'] == $oDD['user_id']) {
-            $sPhrase = Phpfox::getPhrase('digitaldownload_user_name_liked_gender_own_listing_title', ['user_name' => Phpfox::getService('notification')->getUsers($aNotification), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
-        } elseif ($oDD['user_id'] == Phpfox::getUserId()) {
-            $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_your_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
-        } else {
-            $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_listing_title', array('user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'full_name' => $aRow['full_name'], 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')));
-
-        }
-
-        return [
-            'link' => $oDD['url'],
-            'message' => $sPhrase,
-            'icon' => Phpfox_Template::instance()->getStyle('image', 'activity.png', 'blog')
-        ];
     }
 
     public function getCommentNotification($aNotification)
     {
-        $oDD = Phpfox::getService('digitaldownload.dd')
-            ->getDisplayer((int)$aNotification['item_id']);
+        try {
+            $oDD = Phpfox::getService('digitaldownload.dd')
+                ->getDisplayer((int)$aNotification['item_id']);
 
-        $sTitle = (string) $oDD;
+            $sTitle = (string) $oDD;
 
-        if ($aNotification['user_id'] == $oDD['user_id'] && !isset($aNotification['extra_users']))
-        {
-            $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_commented_on_gender_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
-        }
-        elseif ($oDD['user_id'] == Phpfox::getUserId())
-        {
-            $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_commented_on_your_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
-        }
-        else
-        {
-            $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'full_name' => $oDD['full_name'], 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
+            if ($aNotification['user_id'] == $oDD['user_id'] && !isset($aNotification['extra_users']))
+            {
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_commented_on_gender_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
+            }
+            elseif ($oDD['user_id'] == Phpfox::getUserId())
+            {
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_commented_on_your_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
+            }
+            else
+            {
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'full_name' => $oDD['full_name'], 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
+            }
+
+            return [
+                'link' => $oDD['url'],
+                'message' => $sPhrase,
+                'icon' => Phpfox_Template::instance()->getStyle('image', 'activity.png', 'blog')
+            ];
+        } catch (ServiceException $e) {
+            return false;
         }
 
-        return array(
-            'link' => $oDD['url'],
-            'message' => $sPhrase,
-            'icon' => Phpfox_Template::instance()->getStyle('image', 'activity.png', 'blog')
-        );
     }
 
     public function canShareItemOnFeed(){}
 
     public function getAjaxCommentVar()
     {
-        return null;//'can_post_comment_on_dd'; todo:: uncomment
+        return 'digitaldownload.can_post_comment_on_dd';
     }
 
     public function getCommentItem($iId)
@@ -165,54 +182,59 @@ class Callback extends Phpfox_Service
 
     public function addComment($aVals, $iUserId = null, $sUserName = null)
     {
-        $oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer((int)$aVals['item_id']);
+        try {
+            $oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer((int)$aVals['item_id']);
 
-        if (!isset($oDD['id'])) {
-            return Phpfox_Error::trigger(_p('Invalid callback on digital download'));
-        }
+            if (!isset($oDD['id'])) {
+                return Phpfox_Error::trigger(_p('Invalid callback on digital download'));
+            }
 
-        (Phpfox::isModule('feed') ? Phpfox::getService('feed.process')->add($aVals['type'] . '_comment', $aVals['comment_id']) : null);
+            (Phpfox::isModule('feed') ? Phpfox::getService('feed.process')->add($aVals['type'] . '_comment', $aVals['comment_id']) : null);
 
-        // Update the post counter if its not a comment put under moderation or if the person posting the comment is the owner of the item.
-        if (empty($aVals['parent_id'])) {
-            $this->database()->updateCounter('digital_download', 'total_comment', 'id', $aVals['item_id']);
-        }
+            // Update the post counter if its not a comment put under moderation or if the person posting the comment is the owner of the item.
+            if (empty($aVals['parent_id'])) {
+                $this->database()->updateCounter('digital_download', 'total_comment', 'id', $aVals['item_id']);
+            }
 
-        // Send the user an email
-        $sLink = Phpfox::permalink('digitaldownload', $oDD['id']);
-        $sMassMessage = Phpfox::getUserId() == $oDD['user_id']
-            ? _p('{full_name} commented on {gender} digital download "<a href="{link}">{title}</a>". To see the comment thread, follow the link below: <a href="{link}">{link}</a>',
-                [
+            // Send the user an email
+            $sLink = Phpfox::permalink('digitaldownload', $oDD['id']);
+            $sMassMessage = Phpfox::getUserId() == $oDD['user_id']
+                ? _p('{full_name} commented on {gender} digital download "<a href="{link}">{title}</a>". To see the comment thread, follow the link below: <a href="{link}">{link}</a>',
+                    [
+                        'full_name' => Phpfox::getUserBy('full_name'),
+                        'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1),
+                        'title' => (string)$oDD,
+                        'link' => $sLink])
+                : _p('{full_name} commented on {other_full_name}\'s listing "<a href="{link}">{title}</a>". To see the comment thread, follow the link below: <a href="{link}">{link}</a>', [
                     'full_name' => Phpfox::getUserBy('full_name'),
-                    'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1),
-                    'title' => (string)$oDD,
-                    'link' => $sLink])
-            : _p('{full_name} commented on {other_full_name}\'s listing "<a href="{link}">{title}</a>". To see the comment thread, follow the link below: <a href="{link}">{link}</a>', [
-                'full_name' => Phpfox::getUserBy('full_name'),
-                'other_full_name' => $oDD['full_name'],
-                'link' => $sLink, 'title' => (string)$oDD]);
-        $aMassSubject = Phpfox::getUserId() == $oDD['user_id']
-            ? _p('{full_name} commented on {gender} listing.', [
-                'full_name' => Phpfox::getUserBy('full_name'),
-                'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1)
-            ])
-            :
-            _p('{full_name} commented on {other_full_name}\'s listing.', [
-                'full_name' => Phpfox::getUserBy('full_name'),
-                'other_full_name' => $oDD['full_name']
-            ]);
+                    'other_full_name' => $oDD['full_name'],
+                    'link' => $sLink, 'title' => (string)$oDD]);
+            $aMassSubject = Phpfox::getUserId() == $oDD['user_id']
+                ? _p('{full_name} commented on {gender} listing.', [
+                    'full_name' => Phpfox::getUserBy('full_name'),
+                    'gender' => Phpfox::getService('user')->gender($oDD['gender'], 1)
+                ])
+                :
+                _p('{full_name} commented on {other_full_name}\'s listing.', [
+                    'full_name' => Phpfox::getUserBy('full_name'),
+                    'other_full_name' => $oDD['full_name']
+                ]);
 
-        Phpfox::getService('comment.process')->notify([
-                'user_id' => $oDD['user_id'],
-                'item_id' => $oDD['id'],
-                'owner_subject' => _p('{full_name} commented on your digital download {{ title }}', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => (string)$oDD]),
-                'owner_message' => _p('{full_name} commented on your digital download  a href link title a to see the comment thread follow the link below a href link link_a', ['full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => (string)$oDD]),
-                'owner_notification' => 'comment.add_new_comment',
-                'notify_id' => 'comment_digitaldownload',
-                'mass_id' => 'digitaldownload',
-                'mass_subject' => $aMassSubject,
-                'mass_message' => $sMassMessage]
-        );
+            Phpfox::getService('comment.process')->notify([
+                    'user_id' => $oDD['user_id'],
+                    'item_id' => $oDD['id'],
+                    'owner_subject' => _p('{full_name} commented on your digital download {{ title }}', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => (string)$oDD]),
+                    'owner_message' => _p('{full_name} commented on your digital download  a href link title a to see the comment thread follow the link below a href link link_a', ['full_name' => Phpfox::getUserBy('full_name'), 'link' => $sLink, 'title' => (string)$oDD]),
+                    'owner_notification' => 'comment.add_new_comment',
+                    'notify_id' => 'comment_digitaldownload',
+                    'mass_id' => 'digitaldownload',
+                    'mass_subject' => $aMassSubject,
+                    'mass_message' => $sMassMessage]
+            );
+        } catch (ServiceException $e) {
+            return false;
+        }
+
     }
 
 
@@ -296,10 +318,10 @@ class Callback extends Phpfox_Service
 
             Phpfox::log('Handling purchase');
             $this->database()->beginTransaction();
-            $this->database()->update(Phpfox::getT('digital_download_invoice'), array(
+            $this->database()->update(Phpfox::getT('digital_download_invoice'), [
                 'status' => $aParams['status'],
-                'time_stamp_paid' => PHPFOX_TIME
-            ), 'invoice_id = ' . $aInvoice['invoice_id']
+                'time_stamp_paid' => time(),
+            ], 'invoice_id = ' . $aInvoice['invoice_id']
             );
 
             $aData = json_decode($aInvoice['data'], true);
@@ -309,7 +331,7 @@ class Callback extends Phpfox_Service
                     $aVal = [];
                     $aOptionCaptions = [];
                     foreach ($aData as $sOptionName => &$aOption) {
-                        $aVal[$sOptionName] = true;
+                        $aVal[$sOptionName] = '1';
                         $aOptionCaptions[] = $aOption['caption'];
                     }
 
@@ -329,8 +351,15 @@ class Callback extends Phpfox_Service
                     $oDD = Phpfox::getService('digitaldownload.dd')->setRow($aDD)
                         ->getDisplayer($aDD['id']);
                     $sTitle = (string)$oDD;
+                    $aAdmins = $this->database()->select('*')->from(Phpfox::getT('user'))->where('user_group_id = 1')->all();
+                    $aAdminIds = [];
+
+                    foreach($aAdmins as &$aAdmin) {
+                        $aAdminIds[] = $aAdmin['user_id'];
+                    }
+
                     $aEmail = [
-                        'user_id' => $this->database()->select('*')->from(Phpfox::getT('user'))->where('user_group_id = 1')->all(),
+                        'user_id' => $aAdminIds,
                         'title' => _p('Options: ') . implode(', ', $aOptionCaptions),
                         'subject_title' => $sTitle,
                     ];
@@ -367,6 +396,7 @@ class Callback extends Phpfox_Service
                     }
             }
 
+            Phpfox::log('email data: ' . var_export($aEmail, true));
 
             Phpfox::getLib('mail')->to($aEmail['user_id'])
                 ->subject(['digitaldownload_item_sold_title', ['title' => Phpfox::getLib('parse.input')->clean($aEmail['subject_title'], 255)]])
@@ -375,7 +405,7 @@ class Callback extends Phpfox_Service
                         'full_name' => $aInvoice['full_name'],
                         'site_name' => Phpfox::getParam('core.site_title'),
                         'title' => $aEmail['title'],
-                        'link' => Phpfox_Url::instance()->makeUrl('digitaldownload.view', $aDD['id']),
+                        'link' => $oDD['url'],
                         'user_link' => Phpfox_Url::instance()->makeUrl($aInvoice['user_name']),
                         'price' => Phpfox::getService('core.currency')->getCurrency($aInvoice['price'], $aInvoice['currency_id'])
                     ]
@@ -387,7 +417,7 @@ class Callback extends Phpfox_Service
             $this->database()->commit();
         } catch (\Exception $e) {
             $this->database()->rollback();
-            Phpfox::log("Error: " . $e->getMessage() . "; File: " . $e->getFile() . "; Line" . $e->getFile());
+            Phpfox::log("Error: " . $e->getMessage() . "; File: " . $e->getFile() . "; Line: " . $e->getLine());
         }
     }
 

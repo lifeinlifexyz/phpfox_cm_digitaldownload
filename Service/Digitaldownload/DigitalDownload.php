@@ -1,10 +1,14 @@
 <?php
-namespace Apps\CM_DigitalDownload\Service;
+namespace Apps\CM_DigitalDownload\Service\Digitaldownload;
 
+use Apps\CM_DigitalDownload\Lib\Exception\ServiceException;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
+use Apps\CM_DigitalDownload\Lib\Form\Exception\RequiredArgumentException;
 use Apps\CM_DigitalDownload\Lib\Tree\Tree;
+use Apps\CM_DigitalDownload\Lib\CustomFieldType\DigitalDownload as DDField;
+use Apps\CM_DigitalDownload\Service\Plan;
 use Core\Event;
 use Phpfox;
 use Phpfox_Plugin;
@@ -173,38 +177,44 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         return $this;
     }
 
-    public function &getDisplayer($iId)
+    public function getDisplayer($iId)
     {
         $iId = (int) $iId;
         if (!isset($this->_aDisplayer[$iId])) {
             $oDisplay = new Display($this);
 
             if (is_null($this->aRow)) {
-
                 (($sPlugin = Phpfox_Plugin::get('digitaldownload.service_digitaldownload_getdisplayer')) ? eval($sPlugin) : false);
+                $this->aRow =  $this->getForFeed($iId);
+            }
 
-                if (Phpfox::isModule('like')) {
-                    $this->database()->select('lik.like_id AS is_liked, ')
-                        ->leftJoin(Phpfox::getT('like'), 'lik', 'lik.type_id = \'digitaldownload\' AND lik.item_id = d.id AND lik.user_id = ' . Phpfox::getUserId());
-                }
-
-                $this->database()->select('f.friend_id AS is_friend, ')->leftJoin(Phpfox::getT('friend'), 'f', "f.user_id = d.user_id AND f.friend_user_id = " . Phpfox::getUserId());
-
-                $this->aRow =  $this->database()
-                    ->select(Phpfox::getUserField() . ', d.*, u.*, uf.total_score, uf.total_rating, ua.activity_points')
-                    ->from(Phpfox::getT($this->_sTable), 'd')
-                    ->join(Phpfox::getT('user'), 'u', 'u.user_id = d.user_id')
-                    ->join(Phpfox::getT('user_field'), 'uf', 'uf.user_id = d.user_id')
-                    ->join(Phpfox::getT('user_activity'), 'ua', 'ua.user_id = d.user_id')
-                    ->where('id = ' . $iId)
-                    ->get();
+            if (empty($this->aRow)) {
+                throw new ServiceException('Row data not set');
             }
 
             $oDisplay->setRow($this->aRow);
             $this->_aDisplayer[$iId] = $oDisplay;
         }
-
         return $this->_aDisplayer[$iId];
+    }
+
+    public function getForFeed($iId)
+    {
+        if (Phpfox::isModule('like')) {
+            $this->database()->select('lik.like_id AS is_liked, ')
+                ->leftJoin(Phpfox::getT('like'), 'lik', 'lik.type_id = \'digitaldownload\' AND lik.item_id = d.id AND lik.user_id = ' . Phpfox::getUserId());
+        }
+
+        $this->database()->select('f.friend_id AS is_friend, ')->leftJoin(Phpfox::getT('friend'), 'f', "f.user_id = d.user_id AND f.friend_user_id = " . Phpfox::getUserId());
+
+       return $this->database()
+            ->select(Phpfox::getUserField() . ', d.*, u.*, uf.total_score, uf.total_rating, ua.activity_points')
+            ->from(Phpfox::getT($this->_sTable), 'd')
+            ->join(Phpfox::getT('user'), 'u', 'u.user_id = d.user_id')
+            ->join(Phpfox::getT('user_field'), 'uf', 'uf.user_id = d.user_id')
+            ->join(Phpfox::getT('user_activity'), 'ua', 'ua.user_id = d.user_id')
+            ->where('id = ' . (int)$iId)
+            ->get();
     }
 
     public function updateById($iID, $aVal)
@@ -227,22 +237,24 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     public function activate($iId, array $aPlan = [])
     {
         $iId = (int) $iId;
-        if (!(count($aPlan) > 0)) {
-            $aPlan = json_decode($this->database()
-                ->select('`info`')
-                ->from(\Phpfox::getT(Plan::DD_PLAN_TABLE))
-                ->where('`dd_id` = ' . $iId)
-                ->get(), true);
-        }
 
         $oDD = $this->getDisplayer($iId);
 
         $aVal = [
-            'is_active' => true,
-            'is_expired' => false,
+            'is_active' => '1',
+            'is_expired' => '0',
         ];
 
         if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
+
+            if (!(count($aPlan) > 0)) {
+                $aPlan = json_decode($this->database()
+                    ->select('`info`')
+                    ->from(\Phpfox::getT(Plan::DD_PLAN_TABLE))
+                    ->where('`dd_id` = ' . $iId)
+                    ->get(), true);
+            }
+
             $iLifeDays = (!isset($aPlan['life_time']) || $aPlan['life_time'] == 0)
                 ? 365 * 10
                 : $aPlan['life_time'];
@@ -250,15 +262,98 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         }
 
         $this->updateById($iId, $aVal);
-        // insert new feed
+
+        //insert new feed
         \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
+
         $oDD['is_active'] = true;
+        return  $this;
+    }
+
+    public function activateByModerator($iId) {
+        $iId = (int) $iId;
+
+        $oDD = $this->getDisplayer($iId);
+
+        $aVal = [
+            'is_active' => '1',
+            'is_expired' => '0',
+        ];
+
+        if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
+            $iLifeDays = 365 * 10;
+            $aVal['expire_timestamp'] = PHPFOX_TIME + 60 * 60 * 24 * $iLifeDays;
+        }
+
+        $this->updateById($iId, $aVal);
+
+        //insert new feed
+        \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
+
+        $oDD['is_active'] = true;
+        return  $this;
+    }
+
+    public function deactivate($iId)
+    {
+        $this->updateById($iId, ['is_active' => 0]);
+        //delete feed
+        \Phpfox::getService('feed.process')->delete('digitaldownload', $iId);
+        return  $this;
     }
 
     public function delete($iId)
     {
-        //todo :: delete dd
-        return $this;
+        try {
+            $this->database()->beginTransaction();
+
+            $iId = (int)$iId;
+            $oDD = $this->getDisplayer($iId);
+            (($sPlugin = Phpfox_Plugin::get('digitaldownload.before_dd_delete')) ? eval($sPlugin) : false);
+
+            Phpfox::getService('digitaldownload.images')->deleteDDImages($iId);
+
+
+            $aDDFields = Phpfox::getService('digitaldownload.field')->getFieldsByType('dd');
+            try {
+                foreach($aDDFields as $sDDField) {
+                    $oField = $oDD->getField($sDDField);
+                    if ($oField instanceof  DDField) {
+                        $oField->delete();
+                    }
+                }
+            }catch(RequiredArgumentException $e) {
+                Phpfox::log('Not set dd type');
+            }
+            $this->database()->delete(Phpfox::getT($this->_sTable), '`id` = ' . $iId);
+            $this->database()->delete(Phpfox::getT(Plan::DD_PLAN_TABLE), '`dd_id` = ' . $iId);
+
+            (Phpfox::isModule('comment') ? Phpfox::getService('comment.process')->deleteForItem(null, $iId, 'digitaldownload') : null);
+            //delete feed
+            \Phpfox::getService('feed.process')->delete('digitaldownload', $iId);
+            \Phpfox::getService('feed.process')->delete('digitaldownload_comment', $iId);
+
+            //delete notify
+//            \Phpfox::getService('notification.process')->delete('digitaldownload', $iId);
+//            \Phpfox::getService('notification.process')->delete('digitaldownload_like', $iId);
+
+            Phpfox::massCallback('deleteItem', [
+                'sModule' => 'digitaldownload',
+                'sTable' => Phpfox::getT('digitaldownload'),
+                'iItemId' => $iId
+            ]);
+
+            (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_dd_delete')) ? eval($sPlugin) : false);
+            $this->database()->commit();
+
+            (($sPlugin = Phpfox_Plugin::get('digitaldownload.after_dd_delete')) ? eval($sPlugin) : false);
+
+            return $this;
+        } catch (\Exception $e) {
+            $this->database()->rollback();
+            throw  $e;
+        }
+
     }
 
     public function getPlan($iId) {

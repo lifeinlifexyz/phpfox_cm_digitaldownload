@@ -13,7 +13,7 @@ defined('PHPFOX') or exit('NO DICE!');
         <article class="cm-dd-search-item">
             <div class="cm-dd-search-item-img">
                 <a href="{$oDD.url}">
-                    {img path='core.url_pic' file='digitaldownload/'.$oDD.main_image.image_path server_id=$oDD.main_image.server_id suffix='_120_square' itemprop='image'}
+                    {img path='core.url_pic' file=$oDD.main_image.image_path server_id=$oDD.main_image.server_id suffix='_120_square' itemprop='image'}
                 </a>
             </div>
             <div class="cm-dd-search-item-content">

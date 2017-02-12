@@ -304,6 +304,10 @@ rules input
     height: 160px;
     float: left;
 }
+.cm-dd-view-block.list  .dd-box-product h6 {
+    margin-top: 0;
+}
+
 .dd-img-wrapper {
     min-width: 160px;
     min-height: 160px;
@@ -320,6 +324,7 @@ rules input
 .activity_feed_content_text .cm-dd-search-item-content
 {
     margin-left: 175px;
+    padding-top: 5px;
 }
 
 .dd-plan-item {
@@ -524,6 +529,11 @@ rules input
 
 .cd-dd-moderate {
     padding-bottom: 10px;
+    height: 30px;
+    line-height: 30px;
+}
+.cd-dd-moderate .list-inline {
+    font-size: 16px;
 }
 .cd-dd-moderate ._moderator{
     background: transparent;
@@ -539,4 +549,20 @@ rules input
         content: '';
         display: block;
     }
+}
+
+.color-primary {
+    color: #297fc7;
+}
+.color-success {
+    color: #5cb85c;
+}
+.color-warning {
+    color: #eea236;
+}
+.color-error {
+    color: #d9534f;
+}
+.color-default {
+    color: #d7d7d7;
 }

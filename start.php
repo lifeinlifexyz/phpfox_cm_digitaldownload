@@ -4,7 +4,6 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     . 'PF.Site/Apps/CM_DigitalDownload/assets/');
 
 //todo:: close the download dir for read
-//todo:: fix prase You can add up to {{ iMax }} to your digital download in edit page.
 
 \Phpfox_Module::instance()
     ->addServiceNames([
@@ -12,9 +11,9 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
         'digitaldownload.plan' => '\Apps\CM_DigitalDownload\Service\Plan',
         'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
-        'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\DigitalDownload',
+        'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\Digitaldownload\DigitalDownload',
         'digitaldownload.download' => '\Apps\CM_DigitalDownload\Service\Download',
-        'digitaldownload.browse' => '\Apps\CM_DigitalDownload\Service\Browse',
+        'digitaldownload.browse' => '\Apps\CM_DigitalDownload\Service\Digitaldownload\Browse',
         'digitaldownload.images' => '\Apps\CM_DigitalDownload\Service\Images',
         'digitaldownload.invoice' => '\Apps\CM_DigitalDownload\Service\Invoice',
         'digitaldownload.callback' => '\Apps\CM_DigitalDownload\Service\Callback',
@@ -59,6 +58,9 @@ if (setting('cm_dd_enabled')) {
         'digitaldownload.view'    => '\Apps\CM_DigitalDownload\Controller\ViewController',
         'digitaldownload.download'    => '\Apps\CM_DigitalDownload\Controller\DownloadController',
         'digitaldownload.invoice'    => '\Apps\CM_DigitalDownload\Controller\InvoiceController',
+        'digitaldownload.activate'    => '\Apps\CM_DigitalDownload\Controller\ActivateController',
+        'digitaldownload.deactivate'    => '\Apps\CM_DigitalDownload\Controller\DeactivateController',
+        'digitaldownload.delete'    => '\Apps\CM_DigitalDownload\Controller\DeleteController',
     ])->addComponentNames('block', [
         'digitaldownload.filter'    => '\Apps\CM_DigitalDownload\Block\Filter',
         'digitaldownload.entry'    => '\Apps\CM_DigitalDownload\Block\Entry',
@@ -147,11 +149,14 @@ group('/digitaldownload/', function (){
         route('friends', 'digitaldownload.index');
         route('user/:id', 'digitaldownload.index')->where([':id' => '([0-9]+)']);
         route('add', 'digitaldownload.add');
-        route('add/:id', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
-        route('add/:id/*', 'digitaldownload.add')->where([':id' => '([0-9]+)']);
+        route('activate/:id', 'digitaldownload.activate')->where([':id' => '([0-9]+)']);
+        route('deactivate/:id', 'digitaldownload.deactivate')->where([':id' => '([0-9]+)']);
+        route('delete/:id', 'digitaldownload.delete')->where([':id' => '([0-9]+)']);
+        route('add/*', 'digitaldownload.add');
         route(':id', 'digitaldownload.view')->where([':id' => '([0-9]+)']);
         route('purchase', 'digitaldownload.purchase');
         route('invoice', 'digitaldownload.invoice');
+        route('plan/choose', 'digitaldownload.plan');
         route('download/:id/:field', 'digitaldownload.download')->where([':id' => '([0-9]+)']);
     }
 });

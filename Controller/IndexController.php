@@ -104,10 +104,11 @@ class IndexController extends Phpfox_Component
 		$iCnt = $oSearch->getSearchTotal(Phpfox::getService('digitaldownload.browse')->count());
 		\Phpfox_Template::instance()->buildSectionMenu('digitaldownload', $aSectionMenu);
 
+		$aModerationMenu = $this->getModerationMenu();
 		$this->setParam('global_moderation', [
 			'name' => 'digitaldownload',
 			'ajax' => 'digitaldownload.moderation',
-			'menu' => $this->getModerationMenu()
+			'menu' => $aModerationMenu,
 		]);
 
 		$this->template()
@@ -117,23 +118,29 @@ class IndexController extends Phpfox_Component
 				'aDDs' => $aDD,
 				'iCount' => $iCnt,
 				'oFilterForm' => $oFormFilter,
+				'bShowModeration' => !empty($aModerationMenu),
 			]);
 	}
 
 	private function getModerationMenu()
 	{
 		$aModerationMenu = [];
-		$isOwner = Phpfox::isAdmin() || $this->request()->get('req2') == 'my';
 
-		if($isOwner) {
+		if (Phpfox::getUserParam('digitaldownload.can_delete_other')) {
 			$aModerationMenu[] = [
 				'phrase' => _p('core.delete'),
-				'action' => 'deleteDD'
+				'action' => 'delete'
 			];
+		}
 
+		if( Phpfox::getUserParam('digitaldownload.can_activate_deactivate_other')) {
 			$aModerationMenu[] = [
 				'phrase' => _p('Deactivate'),
-				'action' => 'deactivateDD'
+				'action' => 'deactivate'
+			];
+			$aModerationMenu[] = [
+				'phrase' => _p('Activate'),
+				'action' => 'Activate'
 			];
 		}
 

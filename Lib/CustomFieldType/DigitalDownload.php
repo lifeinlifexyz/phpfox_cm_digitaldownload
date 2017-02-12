@@ -94,15 +94,15 @@ class DigitalDownload extends AbstractType
                 ? $this->aInfo['value']['file']
                 : $this->aInfo['row_value'][$this->aInfo['name']],
 
-            $this->aInfo['name'] . '_price' => isset($this->aInfo['value']['price'])
+            $this->aInfo['name'] . '_price' => number_format((float)(isset($this->aInfo['value']['price'])
                 ? $this->aInfo['value']['price']
-                : $this->aInfo['row_value'][$this->aInfo['name'] . '_price'],
+                : $this->aInfo['row_value'][$this->aInfo['name'] . '_price']), 2),
             $this->aInfo['name'] . '_currency_id' => isset($this->aInfo['value']['currency_id'])
                 ? $this->aInfo['value']['currency_id']
                 : $this->aInfo['row_value'][$this->aInfo['name'] . '_currency_id'],
-            $this->aInfo['name'] . '_limit' => isset($this->aInfo['value']['limit'])
+            $this->aInfo['name'] . '_limit' => (int)(isset($this->aInfo['value']['limit'])
                 ? $this->aInfo['value']['limit']
-                : $this->aInfo['row_value'][$this->aInfo['name'] . '_limit'],
+                : $this->aInfo['row_value'][$this->aInfo['name'] . '_limit']),
         ];
     }
 
@@ -114,7 +114,7 @@ class DigitalDownload extends AbstractType
 
         $this->aInfo['value_price'] = isset($this->aInfo['value']['price'])
             ? $this->aInfo['value']['price']
-            : (isset($this->aInfo['row_value'][$this->aInfo['name'] . '_price']) ? $this->aInfo['row_value'][$this->aInfo['name'] . '_price']: null);
+            : (isset($this->aInfo['row_value'][$this->aInfo['name'] . '_price']) ? $this->aInfo['row_value'][$this->aInfo['name'] . '_price']: '0.00');
 
         $this->aInfo['value_limit'] = isset($this->aInfo['value']['limit'])
             ? $this->aInfo['value']['limit']
@@ -170,6 +170,12 @@ class DigitalDownload extends AbstractType
         $sFile = $this->sDir . $this->aInfo['value'];
         $sExt = pathinfo($sFile, PATHINFO_EXTENSION);
         \Phpfox_File::instance()->forceDownload($sFile, $sName . '.' . $sExt);
+    }
+
+    public function delete()
+    {
+        $sFile = $this->sDir . $this->aInfo['value'];
+        $this->oFile->unlink($sFile);
     }
 
     public function getPrice()

@@ -1,5 +1,5 @@
 <?php
-namespace Apps\CM_DigitalDownload\Service;
+namespace Apps\CM_DigitalDownload\Service\Digitaldownload;
 
 use Apps\CM_DigitalDownload\Lib\Collection\Collection;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
@@ -12,7 +12,7 @@ class Browse  extends \Phpfox_Service
 {
 
     private $_aConditions = array();
-    private $_sSort = 'c.time_stamp DESC';
+    private $_sSort = '`d`.`time_stamp` DESC';
     private $_iPage = 0;
     private $_iLimit = 9;
     private $_iCnt = 0;
