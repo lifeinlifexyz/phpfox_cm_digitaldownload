@@ -248,7 +248,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
 
             if (!(count($aPlan) > 0)) {
-                $aPlan = json_decode($this->database()
+                $aPlan = json_encode($this->database()
                     ->select('`info`')
                     ->from(\Phpfox::getT(Plan::DD_PLAN_TABLE))
                     ->where('`dd_id` = ' . $iId)

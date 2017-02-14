@@ -51,7 +51,7 @@ function installv1_0_0()
       `user_id` int( 11 ) NOT NULL DEFAULT  '0',
       `is_active` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `time_stamp` int( 10 ) NOT NULL,
-      `expire_timestamp` int( 10 ) NULL,
+      `expire_timestamp` int( 16 ) NULL,
       `featured` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `sponsored` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `highlighted` TINYINT( 1 ) NOT NULL DEFAULT  '0',
@@ -182,6 +182,210 @@ To view this listing follow the link below:
             'text' => $aText
         ];
         \Language_Service_Phrase_Process::instance()->add($aVal);
+    }
+
+
+    //sample data
+
+    \Phpfox_Module::instance()
+        ->addServiceNames([
+            'digitaldownload.category' => '\Apps\CM_DigitalDownload\Service\Category',
+            'digitaldownload.field' => '\Apps\CM_DigitalDownload\Service\Field',
+            'digitaldownload.plan' => '\Apps\CM_DigitalDownload\Service\Plan',
+            'digitaldownload.categoryField' => '\Apps\CM_DigitalDownload\Service\CategoryField',
+            'digitaldownload.dd' => '\Apps\CM_DigitalDownload\Service\Digitaldownload\DigitalDownload',
+        ]);
+
+    $aCategories = [
+        [
+            'parent_id' => 0,
+            'name' => 'Scripts',
+            'title' => '$title',
+            'keywords' => '$title, $description',
+            'description' => '$description',
+            'is_active' => '1',
+        ],
+        [
+            'parent_id' => 1,
+            'name' => 'Phpfox',
+            'title' => '$title',
+            'keywords' => '$title, $description',
+            'description' => '$description',
+            'is_active' => '1',
+        ],
+        [
+            'parent_id' => 1,
+            'name' => 'Oxwall',
+            'title' => '$title',
+            'keywords' => '$title, $description',
+            'description' => '$description',
+            'is_active' => '1',
+        ],
+        [
+            'parent_id' => 1,
+            'name' => 'Social engine',
+            'title' => '$title',
+            'keywords' => '$title, $description',
+            'description' => '$description',
+            'is_active' => '1',
+        ],
+        [
+            'parent_id' => 0,
+            'name' => '3d Model',
+            'title' => '$title',
+            'keywords' => '$title, $description',
+            'description' => '$description',
+            'is_active' => '1',
+        ],
+    ];
+    /**
+     * @var $oForm  \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form
+     */
+    $oForm = Phpfox::getService('digitaldownload.category')->getForm();
+    foreach($aCategories as $aCategory) {
+        foreach($aCategory as $sField => $sValue){
+            $oForm->setFieldValue($sField, $sValue);
+        }
+        $oForm->save();
+    }
+
+
+    foreach ($aLanguages as $aLanguage) {
+        Phpfox_Request::instance()->set('title_' . $aLanguage['language_id'], 'Title');
+        Phpfox_Request::instance()->set('description' . $aLanguage['language_id'], 'Description');
+    }
+    $aFields = [
+        [
+            'type' => 'string',
+            'name' => 'title',
+            'rules' => 'required|255:maxLength',
+            'is_filter' => '1',
+            'is_active' => '1'
+        ],
+        [
+            'type' => 'text',
+            'name' => 'description',
+            'rules' => '1000:maxLength',
+            'is_filter' => '1',
+            'is_active' => '1'
+        ],
+        [
+            'type' => 'dd',
+            'name' => 'file',
+            'rules' => 'required',
+            'is_filter' => '0',
+            'is_active' => '1'
+        ],
+    ];
+
+    $oForm = Phpfox::getService('digitaldownload.field')->getForm();
+    foreach($aFields as $aField) {
+        foreach($aField as $sField => $sValue){
+            $oForm->setFieldValue($sField, $sValue);
+        }
+        $oForm->save();
+    }
+
+    $aFields =  Phpfox::getService('digitaldownload.field')->all();
+    $aFieldIds = [];
+
+    foreach($aFields as  $aField) {
+        $aFieldIds[] = $aField['field_id'];
+    }
+
+    $aCategories  = Phpfox::getService('digitaldownload.category')->getList();
+    foreach($aCategories as $aCategory) {
+        Phpfox::getService('digitaldownload.categoryField')->sync($aFieldIds, $aCategory['category_id']);
+    }
+
+    $aPlans = [
+        [
+            'name' => 'Free plan',
+            'price_currency_id' => 'USD',
+            'price' => '0.00',
+            'allowed_count_pictures' => 3,
+            'life_time' => 30,
+            'featured' => [
+                'allowed' => 1,
+                'price' => '0.05',
+            ],
+            'sponsored' => [
+                'allowed' => 1,
+                'price' => '0.05',
+            ],
+            'highlighted' => [
+                'allowed' => 1,
+                'price' => '0.01',
+            ],
+            'user_groups' => [1, 2],
+        ],
+        [
+            'name' => 'Demo Plan',
+            'price_currency_id' => 'USD',
+            'price' => '1.00',
+            'allowed_count_pictures' => 5,
+            'life_time' => 60,
+            'featured' => [
+                'allowed' => 1,
+                'price' => '3.00',
+            ],
+            'sponsored' => [
+                'allowed' => 1,
+                'price' => '2.00',
+            ],
+            'highlighted' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
+            'user_groups' => [1, 2],
+        ],
+        [
+            'name' => 'Admin plan',
+            'price_currency_id' => 'USD',
+            'price' => '0.00',
+            'allowed_count_pictures' => 3,
+            'life_time' => 60,
+            'featured' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
+            'sponsored' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
+            'highlighted' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
+            'user_groups' => [1],
+        ],
+    ];
+
+    Phpfox::getLib('cache')->remove();
+    Phpfox::getLib('template.cache')->remove();
+    Phpfox::getLib('cache')->removeStatic();
+    if ($sPlugin = Phpfox_Plugin::get('admincp.component_controller_maintain_1')) {
+        eval($sPlugin);
+    }
+    Phpfox_Request::instance()->send(Phpfox_Url::instance()->makeUrl('admincp.maintain.cache'));
+    Phpfox_Plugin::set();
+
+    $oForm = Phpfox::getService('digitaldownload.plan')->getForm(['form_id' => 'dd-plan']);
+    foreach($aPlans as $aPlan) {
+        foreach($aPlan as $sField => $mValue) {
+            if ($sField == 'name') {
+                foreach ($aLanguages as $aLanguage) {
+                    Phpfox_Request::instance()->set($sField . '_' . $aLanguage['language_id'], $mValue);
+                }
+            }elseif($sField == 'price_currency_id'){
+                Phpfox_Request::instance()->set($sField, $mValue);
+            } elseif(is_array($mValue) && $sField != 'user_groups') { //plan option
+                $oForm->getField($sField)->setMValue($aPlan);
+            } else  {
+                $oForm->setFieldValue($sField, $mValue);
+            }
+        }
+        $oForm->save();
     }
 }
 
