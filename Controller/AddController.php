@@ -118,11 +118,17 @@ class AddController extends Phpfox_Component
             }
 
             db()->beginTransaction();
-
             $iId = $oForm->save();
 
             if (!$bEdit && isset($iPlan)) { //if add, assign plan to dd
                 Phpfox::getService('digitaldownload.plan')->assign($iId, $iPlan);
+            }
+
+            if ($bEdit && $this->request()->get('do_invite')) {
+                $aInvite = $this->request()->getArray('friend');
+                if ($aInvite > 0) {
+                    Phpfox::getService('digitaldownload.invite')->send($iId, $aInvite, $oDD);
+                }
             }
 
             $sPlugin = $bEdit
@@ -165,6 +171,7 @@ class AddController extends Phpfox_Component
             ->assign([
                     'sFieldsHtml' => $oForm->render('@CM_DigitalDownload/form/only_fields.html'),
                     'bEdit' => $bEdit,
+                    'sMyEmail' => Phpfox::getUserBy('email'),
                 ]
             );
     }

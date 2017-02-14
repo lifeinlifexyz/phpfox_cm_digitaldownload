@@ -120,6 +120,24 @@ function installv1_0_0()
         PRIMARY KEY (`download_id`),
         KEY `dd_id` (`dd_id`,`user_id`)
     );');
+    
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_invite') . '` (
+        `invite_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+        `dd_id` int(10) unsigned NOT NULL,
+        `type_id` tinyint(1) NOT NULL DEFAULT \'0\',
+        `visited_id` tinyint(1) NOT NULL DEFAULT \'0\',
+        `user_id` int(10) unsigned NOT NULL DEFAULT \'0\',
+        `invited_user_id` int(10) unsigned NOT NULL DEFAULT \'0\',
+        `invited_email` varchar(100) DEFAULT NULL,
+        `time_stamp` int(10) unsigned NOT NULL,
+        PRIMARY KEY (`invite_id`),
+        KEY `dd_id` (`dd_id`),
+        KEY `dd_id_2` (`dd_id`,`invited_user_id`),
+        KEY `invited_user_id` (`invited_user_id`),
+        KEY `dd_id_3` (`dd_id`,`visited_id`),
+        KEY `dd_id_4` (`dd_id`,`visited_id`,`invited_user_id`),
+        KEY `visited_id` (`visited_id`,`invited_user_id`)
+        ); ');
 
     $aCrons = [
         [
@@ -151,18 +169,18 @@ Users Name: {full_name}
 Users Profile: <a href="{user_link}">{user_link}</a>
 Price: {price}',
         'digitaldownload_item_sold_title' => 'Item Sold: {title}',
-        'digitaldownload_full_name_liked_your_listing_title' => '{full_name} liked your item "{title}"',
-        'digitaldownload_full_name_liked_your_listing_message' => '{full_name} liked item "<a href="{link}">{title}</a>"
-To view this listing follow the link below:
+        'digitaldownload_full_name_liked_your_dd_title' => '{full_name} liked your item "{title}"',
+        'digitaldownload_full_name_liked_your_dd_message' => '{full_name} liked item "<a href="{link}">{title}</a>"
+To view this dd follow the link below:
 <a href="{link}">{link}</a>',
 
-        'digitaldownload_user_name_liked_gender_own_listing_title' => '{user_name} liked {gender} own item "{title}"',
-        'digitaldownload_user_names_liked_your_listing_title' => '{user_names} liked your item "{title}"',
-        'digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_listing_title' => '{user_names} liked <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
+        'digitaldownload_user_name_liked_gender_own_dd_title' => '{user_name} liked {gender} own item "{title}"',
+        'digitaldownload_user_names_liked_your_dd_title' => '{user_names} liked your item "{title}"',
+        'digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_dd_title' => '{user_names} liked <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
 
-        'digitaldownload_user_names_commented_on_gender_listing_title' => '{user_names} commented on {gender} item "{title}"',
-        'digitaldownload_user_names_commented_on_your_listing_title' => '{user_names} commented on your item "{title}"',
-        'digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_listing_title' => '{user_names} commented on <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
+        'digitaldownload_user_names_commented_on_gender_dd_title' => '{user_names} commented on {gender} item "{title}"',
+        'digitaldownload_user_names_commented_on_your_dd_title' => '{user_names} commented on your item "{title}"',
+        'digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_dd_title' => '{user_names} commented on <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
 
         'digitaldownload_item_expired_subject' => 'Items expiration report from {web_site}',
         'digitaldownload_item_expired_message' => 'This email contains information regarding your items expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
@@ -278,12 +296,22 @@ To view this listing follow the link below:
         ],
     ];
 
+    Phpfox::getLib('cache')->remove();
+    Phpfox::getLib('template.cache')->remove();
+    Phpfox::getLib('cache')->removeStatic();
+    if ($sPlugin = Phpfox_Plugin::get('admincp.component_controller_maintain_1')) {
+        eval($sPlugin);
+    }
+    Phpfox_Request::instance()->send(Phpfox_Url::instance()->makeUrl('admincp.maintain.cache'));
+    Phpfox_Plugin::set();
+
     $oForm = Phpfox::getService('digitaldownload.field')->getForm();
     foreach($aFields as $aField) {
         foreach($aField as $sField => $sValue){
             $oForm->setFieldValue($sField, $sValue);
         }
         $oForm->save();
+        Phpfox::getService('digitaldownload.field')->addField($oForm);
     }
 
     $aFields =  Phpfox::getService('digitaldownload.field')->all();
@@ -360,15 +388,6 @@ To view this listing follow the link below:
             'user_groups' => [1],
         ],
     ];
-
-    Phpfox::getLib('cache')->remove();
-    Phpfox::getLib('template.cache')->remove();
-    Phpfox::getLib('cache')->removeStatic();
-    if ($sPlugin = Phpfox_Plugin::get('admincp.component_controller_maintain_1')) {
-        eval($sPlugin);
-    }
-    Phpfox_Request::instance()->send(Phpfox_Url::instance()->makeUrl('admincp.maintain.cache'));
-    Phpfox_Plugin::set();
 
     $oForm = Phpfox::getService('digitaldownload.plan')->getForm(['form_id' => 'dd-plan']);
     foreach($aPlans as $aPlan) {

@@ -18,6 +18,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload.invoice' => '\Apps\CM_DigitalDownload\Service\Invoice',
         'digitaldownload.callback' => '\Apps\CM_DigitalDownload\Service\Callback',
         'digitaldownload.cron' => '\Apps\CM_DigitalDownload\Service\Cron',
+        'digitaldownload.invite' => '\Apps\CM_DigitalDownload\Service\Invite',
     ])
     ->addComponentNames('controller', [
         'digitaldownload.admincp.add-category' => '\Apps\CM_DigitalDownload\Controller\Admin\AddCategoryController',
