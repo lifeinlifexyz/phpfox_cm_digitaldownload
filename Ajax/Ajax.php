@@ -19,7 +19,7 @@ class Ajax extends Phpfox_Ajax
         $iId = $this->get('id');
         $oDD = \Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDid);
 
-        if (Phpfox::getUserId() == $oDD['user_id']) {
+        if ((Phpfox::getUserId() == $oDD['user_id']) || Phpfox::getUserParam('digitaldownload.can_edit_other')) {
             $aImages = $oDD['images'];
             if (isset($aImages[$iId])) {
                 $aImage = $aImages[$iId];
@@ -27,7 +27,7 @@ class Ajax extends Phpfox_Ajax
                 \Phpfox_File::instance()->unlink($sFilePath);
                 unset($aImages[$iId]);
             }
-            $aVal = $oDD->getRow();
+            $aVal = [];
             $aVal['images'] = json_encode($aImages);
             \Phpfox::getService('digitaldownload.dd')->updateById($iDDid, $aVal);
         } else {
