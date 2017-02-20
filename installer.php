@@ -184,6 +184,13 @@ To view this dd follow the link below:
 
         'digitaldownload_item_expired_subject' => 'Items expiration report from {web_site}',
         'digitaldownload_item_expired_message' => 'This email contains information regarding your items expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
+
+        'digitaldownload_full_name_invited_you_to_view_the_digitaldownload_item_title' => '{full_name} invited you to view the digital download item "{title}".
+
+To check out this item, follow the link below:
+<a href="{link}">{link}</a>"',
+        'digitaldownload_full_name_added_the_following_personal_message' => '{full_name} added the following personal message',
+        'digitaldownload_full_name_invited_you_to_view_the_item_title' => '{full_name} invited you to view the item "{title}".',
     ];
 
     $aLanguages = \Language_Service_Language::instance()->getAll();

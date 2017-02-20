@@ -125,8 +125,16 @@ class AddController extends Phpfox_Component
             }
 
             if ($bEdit && $this->request()->get('do_invite')) {
-                $aInvite = $this->request()->getArray('friend');
-                if ($aInvite > 0) {
+                $aFriends = $this->request()->getArray('friend');
+                $aInvite = [
+                    'emails' => $this->request()->get('invite_emails'),
+                    'invite_from' => $this->request()->get('invite_invite_from'),
+                    'personal_message' => $this->request()->get('invite_personal_message'),
+                ];
+
+                $aInvite['invite'] = !empty($aFriends) ? $aFriends : null;
+
+                if (!empty($aInvite)) {
                     Phpfox::getService('digitaldownload.invite')->send($iId, $aInvite, $oDD);
                 }
             }

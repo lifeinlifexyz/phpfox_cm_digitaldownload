@@ -26,5 +26,5 @@ defined('PHPFOX') or exit('NO DICE!');
 		{/if}
 	{/if}
 	{if $oDD.user_id == Phpfox::getUserId() || Phpfox::getUserParam('digitaldownload.can_delete_other')}
-		<li class="item_delete"><a href="{url link='digitaldownload.delete'}{$aEntry.id}" class="sJsConfirm">{_p('Delete')}</a></li>
+		<li class="item_delete"><a href="{url link='digitaldownload.delete'}{$oDD.id}" class="sJsConfirm">{_p('Delete')}</a></li>
 	{/if}	

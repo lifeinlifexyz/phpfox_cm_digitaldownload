@@ -102,6 +102,11 @@ class Callback extends Phpfox_Service
         $this->database()->updateCount('like', 'type_id = \'digitaldownload\' AND item_id = ' . (int)$iItemId . '', 'total_like', 'digital_download', 'id = ' . (int)$iItemId);
     }
 
+    public function getUserCountFieldInvite()
+    {
+        return 'digitaldownload_invite';
+    }
+
     public function getNotificationLike($aNotification)
     {
         try {

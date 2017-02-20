@@ -34,12 +34,12 @@ defined('PHPFOX') or exit('NO DICE!');
 
             <div class="title">{_p('Invite People via Email')}</div>
             <div class="content">
-                <textarea cols="40" rows="8" name="friend[emails]" class="form-control"></textarea>
+                <textarea cols="40" rows="8" name="invite_emails" class="form-control"></textarea>
                 <div class="extra_info">
                     {_p('Separate multiple emails with a comma.')}
                     <div class="checkbox">
                         <label>
-                            <input type="checkbox" name="friend[invite_from]" value="1"> {phrase var='mail.send_from_my_own_address_semail' sEmail=$sMyEmail}
+                            <input type="checkbox" name="invite_invite_from" value="1"> {phrase var='mail.send_from_my_own_address_semail' sEmail=$sMyEmail}
                         </label>
                     </div>
                 </div>
@@ -47,9 +47,9 @@ defined('PHPFOX') or exit('NO DICE!');
 
             <div class="title">{_p('Add a Personal Message')}</div>
             <div class="content">
-                <textarea cols="40" rows="8" name="friend[personal_message]" class="form-control"></textarea>
+                <textarea cols="40" rows="8" name="invite_personal_message" class="form-control"></textarea>
                 <div class="p_top_8">
-                    <input type="submit" name="do_invite" value="{phrase var='marketplace.send_invitations'}" class="button btn btn-danger" />
+                    <input type="submit" name="do_invite" value="{_p('Send Invitations')}" class="button btn btn-danger" />
                 </div>
             </div>
         </div>

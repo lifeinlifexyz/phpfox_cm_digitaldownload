@@ -47,6 +47,10 @@ class ViewController extends Phpfox_Component
 		}
 		
 		$this->setParam('oDD', $oDD);
+//		d($oDD); die;
+		if (Phpfox::isUser() && $oDD['invite_id'] && !$oDD['visited_id'] && $oDD['user_id'] != Phpfox::getUserId()) {
+			Phpfox::getService('digitaldownload.invite')->setVisit($oDD['id'], Phpfox::getUserId());
+		}
 		
 		if (Phpfox::isUser() && $oDD['user_id'] != Phpfox::getUserId())
 		{

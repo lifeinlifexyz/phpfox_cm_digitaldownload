@@ -8,8 +8,14 @@ use Phpfox_Url;
 
 class Invite  extends \Phpfox_Service
 {
-    protected $_sTable = 'digital_invite';
+    protected $_sTable = 'digital_download_invite';
 
+    public function setVisit($iId, $iUserId)
+    {
+        $this->database()->update(Phpfox::getT($this->_sTable), ['visited_id' => 1], 'dd_id = ' . (int) $iId . ' AND invited_user_id = ' . (int) $iUserId);
+
+        (Phpfox::isModule('request') ? Phpfox::getService('request.process')->delete('digitaldownload_invite', $iId, $iUserId) : null);
+    }
     /**
      * @param $iId
      * @param $aVals
@@ -18,11 +24,11 @@ class Invite  extends \Phpfox_Service
     public function send($iId, $aVals, $oDD)
     {
         $oParseInput = Phpfox::getLib('parse.input');
-        
+
         if (isset($aVals['emails']) || isset($aVals['invite']))
         {
             $aInvites = $this->database()->select('invited_user_id, invited_email')
-                ->from(Phpfox::getT('digitaldownload_invite'))
+                ->from(Phpfox::getT($this->_sTable))
                 ->where('dd_id = ' . (int) $iId)
                 ->execute('getRows');
             $aInvited = [];
@@ -51,7 +57,7 @@ class Invite  extends \Phpfox_Service
                 }
 
                 $sLink = $oDD['url'];
-                $sMessage = Phpfox::getPhrase('digitaldownload.full_name_invited_you_to_view_the_digitaldownload_item_title', [
+                $sMessage = Phpfox::getPhrase('digitaldownload_full_name_invited_you_to_view_the_digitaldownload_item_title', [
                         'full_name' => Phpfox::getUserBy('full_name'),
                         'title' => $oParseInput->clean(((string)$oDD), 255),
                         'link' => $sLink
@@ -59,7 +65,7 @@ class Invite  extends \Phpfox_Service
                 );
                 if (!empty($aVals['personal_message']))
                 {
-                    $sMessage .= "\n\n" . Phpfox::getPhrase('digitaldownload.full_name_added_the_following_personal_message', ['full_name' => Phpfox::getUserBy('full_name')]) . ":\n";
+                    $sMessage .= "\n\n" . Phpfox::getPhrase('digitaldownload_full_name_added_the_following_personal_message', ['full_name' => Phpfox::getUserBy('full_name')]) . ":\n";
                     $sMessage .= $aVals['personal_message'];
                 }
 
@@ -70,7 +76,7 @@ class Invite  extends \Phpfox_Service
                         ->fromName(Phpfox::getUserBy('full_name'));
                 }
                 $bSent = $oMail->to($sEmail)
-                    ->subject(array('digitaldownload.full_name_invited_you_to_view_the_listing_title', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => $oParseInput->clean(((string)$oDD), 255)]))
+                    ->subject(array('digitaldownload_full_name_invited_you_to_view_the_item_title', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => $oParseInput->clean(((string)$oDD), 255)]))
                     ->message($sMessage)
                     ->send();
 
@@ -81,7 +87,7 @@ class Invite  extends \Phpfox_Service
                     $aCachedEmails[$sEmail] = true;
 
                     $this->database()->insert(Phpfox::getT($this->_sTable), [
-                            'listing_id' => $iId,
+                            'dd_id' => $iId,
                             'type_id' => 1,
                             'user_id' => Phpfox::getUserId(),
                             'invited_email' => $sEmail,
@@ -123,7 +129,7 @@ class Invite  extends \Phpfox_Service
                 }
 
                 $sLink = $oDD['url'];
-                $sMessage = Phpfox::getPhrase('digitaldownload.full_name_invited_you_to_view_the_digitaldownload_listing_title', [
+                $sMessage = Phpfox::getPhrase('digitaldownload_full_name_invited_you_to_view_the_digitaldownload_item_title', [
                     'full_name' => Phpfox::getUserBy('full_name'),
                     'title' => $oParseInput->clean(((string)$oDD), 255),
                     'link' => $sLink
@@ -131,12 +137,12 @@ class Invite  extends \Phpfox_Service
                 );
                 if (!empty($aVals['personal_message']))
                 {
-                    $sMessage .= "\n\n" . Phpfox::getPhrase('digitaldownload.full_name_added_the_following_personal_message', ['full_name' => Phpfox::getUserBy('full_name')], false, null, $aUser['language_id']);
+                    $sMessage .= "\n\n" . Phpfox::getPhrase('digitaldownload_full_name_added_the_following_personal_message', ['full_name' => Phpfox::getUserBy('full_name')], false, null, $aUser['language_id']);
                     $sMessage .= $aVals['personal_message'];
                 }
 
                 $bSent = Phpfox::getLib('mail')->to($aUser['user_id'])
-                    ->subject(['digitaldownload.full_name_invited_you_to_view_the_listing_title', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => $oParseInput->clean(((string)$oDD), 255)]])
+                    ->subject(['digitaldownload_full_name_invited_you_to_view_the_item_title', ['full_name' => Phpfox::getUserBy('full_name'), 'title' => $oParseInput->clean(((string)$oDD), 255)]])
                     ->message($sMessage)
                     ->notification('digitaldownload.new_invite')
                     ->send();
@@ -146,7 +152,7 @@ class Invite  extends \Phpfox_Service
                     $this->_aInvited[] = ['user' => $aUser['full_name']];
 
                     $this->database()->insert(Phpfox::getT($this->_sTable), [
-                            'listing_id' => $iId,
+                            'dd_id' => $iId,
                             'user_id' => Phpfox::getUserId(),
                             'invited_user_id' => $aUser['user_id'],
                             'time_stamp' => PHPFOX_TIME
