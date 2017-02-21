@@ -1,0 +1,19 @@
+{% spaceless %}
+<div class='cm-dd-rating cm-dd-rating-{{ dd_id }}'>
+    {% for i in 1..5 %}
+    <a title='{{ i }}' href='#?call=digitaldownload.rate&amp;id={{ dd_id }}&amp;rate={{ i }}' data-toggle='tooltip' class='js_ajax_link'>
+        {% if i <= rating %}
+        <i class='fa fa-star'></i>
+        {% elseif ((rating - (rating|round)) > 0) and ((rating - i) > 0) %}
+        <i class='fa fa-star-half-o'></i>
+        {% else %}
+        <i class='fa fa-star-o'></i>
+        {% endif %}
+    </a>
+    {% endfor %}
+    &nbsp;
+    <span class="color-primary">
+        {{rating}}/{{count}}
+    </span>
+</div>
+{% endspaceless %}

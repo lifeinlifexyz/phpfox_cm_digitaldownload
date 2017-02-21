@@ -159,7 +159,7 @@ class ViewController extends Phpfox_Component
 			);
 		}
 
-		$aFilterMenu = [];
+		$aSectionMenu = [];
 		if (!defined('PHPFOX_IS_USER_PROFILE'))
 		{
 //			$sInviteTotal = '';
@@ -168,9 +168,10 @@ class ViewController extends Phpfox_Component
 //				$sInviteTotal = '<span class="invited">' . $iTotalInvites . '</span>';
 //			}
 //
-			$aFilterMenu = [
-				_p('All') => '',
-				_p('My') => 'digitaldownload.my',
+			$aSectionMenu = [
+				_p('All Files') => '',
+				_p('My Files') => 'digitaldownload.my',
+				_p('Friends` Files') => 'digitaldownload.friends',
 				_p('Invoices') => 'digitaldownload.invoice',
 			];
 //
@@ -194,7 +195,7 @@ class ViewController extends Phpfox_Component
 //			}
 		}
 
-		$this->template()->buildSectionMenu('digitaldownload', $aFilterMenu);
+		$this->template()->buildSectionMenu('digitaldownload', $aSectionMenu);
 		
 		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_view_process_end')) ? eval($sPlugin) : false);
         return null;

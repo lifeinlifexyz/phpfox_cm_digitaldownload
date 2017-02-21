@@ -22,6 +22,9 @@ defined('PHPFOX') or exit('NO DICE!');
 			{phrase var='event.time_separator'}
 		</span>
 		<span>({$oDD.category})</span>
+		<span class="pull-right">
+			{$oDD.full_rating}
+		</span>
 	</div>
 
 	<div class="item_info_more clearfix">

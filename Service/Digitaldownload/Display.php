@@ -21,6 +21,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
         'aDDPrice',
         'short_description',
         'rating',
+        'full_rating',
     ];
 
     public function __construct(DigitalDownload $oDD)
@@ -110,6 +111,11 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 $aRating =  Phpfox::getService('digitaldownload.rating')->getRating($this->aRow['id'], $this->aRow['rating']);
                 $aRating['dd_id'] = $this->aRow['id'];
                 return view('@CM_DigitalDownload/rating/rating.html', $aRating);
+                break;
+            case 'full_rating':
+                $aRating =  Phpfox::getService('digitaldownload.rating')->getRating($this->aRow['id'], $this->aRow['rating']);
+                $aRating['dd_id'] = $this->aRow['id'];
+                return view('@CM_DigitalDownload/rating/full.html', $aRating);
                 break;
             default:
                 return parent::offsetGet($offset);
