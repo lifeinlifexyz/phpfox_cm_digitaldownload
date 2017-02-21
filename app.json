@@ -176,6 +176,8 @@
     "controller" : {
       "index" : "digitaldownload.index",
       "add" : "digitaldownload.add",
+      "category" : "digitaldownload.category",
+      "plan" : "digitaldownload.plan",
       "view" : "digitaldownload.view"
     }
   },
@@ -235,6 +237,30 @@
       "location" : "3",
       "is_active" : "1",
       "ordering" : "5"
+    },
+    "Featured in choose category" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.category",
+      "component" : "featured",
+      "location" : "3",
+      "is_active" : "1",
+      "ordering" : "1"
+    },
+    "Featured in choose plan" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.plan",
+      "component" : "featured",
+      "location" : "3",
+      "is_active" : "1",
+      "ordering" : "1"
+    },
+    "Featured on add" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.add",
+      "component" : "featured",
+      "location" : "3",
+      "is_active" : "1",
+      "ordering" : "1"
     },
     "Most liked" : {
       "type_id" : "0",

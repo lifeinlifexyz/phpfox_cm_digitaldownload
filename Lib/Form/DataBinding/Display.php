@@ -1,7 +1,6 @@
 <?php
 namespace Apps\CM_DigitalDownload\Lib\Form\DataBinding;
 
-use Apps\CM_DigitalDownload\Lib\Form\Form;
 
 class Display implements \ArrayAccess
 {

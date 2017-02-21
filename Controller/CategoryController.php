@@ -24,6 +24,7 @@ class CategoryController extends Phpfox_Component
         $this->template()->setTitle(_p('Select Category'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
             ->setBreadCrumb(_p('Add digital download'), $this->url()->makeUrl('digitaldownload.add'))
+            ->setBreadCrumb(_p('Choose category'))
             ->assign([
                     'aCategory' => Phpfox::getService('digitaldownload.category')->getActive(),
                     'sUrl' => $this->getParam('url'),

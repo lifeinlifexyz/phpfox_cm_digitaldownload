@@ -82,8 +82,14 @@ rules input
     margin-left: 6px;
 }
 
-.dd-list .dd-list {
+.dd-list .dd-list li {
     padding-left: 30px;
+}
+
+.dd-list li .dd-angle {
+    font-size: 18px;
+    color: #dadada;
+    font-weight: bold;
 }
 
 .dd-collapsed .dd-list {
@@ -359,6 +365,39 @@ rules input
     margin-left: 20px;
 }
 
+.dd-select-category {
+    border-left: 5px solid #dadada;
+    padding-left: 20px;
+    font-size: 16px;
+}
+.dd-select-category  .dd-list .dd-list li {
+    padding-left: 15px;
+}
+.dd-select-category > ul {
+    padding: 10px 0;
+}
+
+.dd-select-category li {
+    position: relative;
+}
+.dd-select-category li  a:hover {
+    color: #76AFC3;
+}
+.dd-select-category li > a:before {
+    content: '';
+    display: none;
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    width: 12px;
+    top: 5px;
+    left: -29px;
+    box-shadow: 1px 1px 4px #999;
+    height: 12px;
+}
+.dd-select-category li:hover > a:before {
+    display: block;
+}
 /***/
 
 .dd-view-mode-buttons {
