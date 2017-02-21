@@ -335,18 +335,74 @@ rules input
 }
 .dd-plan-item .title {
     font-size: 18px;
+    text-align: center;
+    display: inline-block;
+    position: relative;
     font-weight: bold;
+    line-height: 20px;
 }
 .dd-plan-header {
     border-bottom: 1px solid #ddd;
     margin: 0 -20px 10px -20px;
-    padding: 10px 20px;
+    padding: 10px 8px 3px;
+    background: #297fc7;
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+}
+
+.dd-plan-header .title:after {
+    content: '';
+    width: 25px;
+    background: #fff;
+    left: 0;
+    display: block;
+    bottom: 3px;
+    height: 1.4px;
+}
+
+.dd-plan-th {
+    font-size: 11px;
+    font-weight: bold;
+    margin-top: 7px;
+}
+.dd-plan-option {
+    border-bottom: 1px solid #dadada;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-bottom: 7px;
+    margin-bottom: 7px;
+}
+.dd-plan-option.last {
+    border-bottom: none;
+}
+.dd-plan-option-value {
+    float: right;
+    color: #297fc7;
+}
+.dd-plan-option-value:after {
+    display: block;
+    clear: both;
 }
 .dd-plan-footer {
     border-top: 1px solid #ddd;
     padding: 10px 20px 0;
-    text-align: right;
+    text-align: center;
+    text-transform: uppercase;
     margin: 0 -20px -10px;
+}
+.dd-btn-buy-plan {
+    margin-bottom: 20px;
+    border: 1px solid #dadada;
+    font-weight: bold;
+}
+.dd-btn-buy-plan:hover,
+.dd-btn-buy-plan:focus,
+.dd-btn-buy-plan:active {
+    color: #4e95c7;
+    box-shadow: 1px 1px 5px #dadada;
 }
 
 .dd-plan-item .btn {

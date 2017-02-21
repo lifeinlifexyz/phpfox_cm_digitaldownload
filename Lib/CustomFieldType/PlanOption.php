@@ -47,12 +47,16 @@ class PlanOption extends PriceType
 
     public function getDisplay()
     {
-        return '<p>'.
-                    $this->aInfo['title'] . ': <strong>' .
+        return '<div class="dd-plan-option">'.
+                    '<span class="dd-plan-option-caption">' . $this->aInfo['title'] . '</span>' .
+                    '<span class="dd-plan-option-value">
+                        <strong>' .
                     (($this->aInfo['value'] != '0.00')
                     ? \Phpfox::getService('core.currency')->getSymbol($this->sCurrency)
                         . ' ' . number_format($this->aInfo['value'], 2)
                     : _p('Free')).
-                '</strong></p>';
+                        '</strong>
+                    </span>
+                </div>';
     }
 }

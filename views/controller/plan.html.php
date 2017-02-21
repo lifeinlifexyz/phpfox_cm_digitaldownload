@@ -1,7 +1,7 @@
 <?php
 defined('PHPFOX') or exit('NO DICE!');
 ?>
-<div class="dd-select-plan">
+<div class="dd-select-plan cd-dd">
     <div class="row">
         <?php
             $index = 0;
@@ -12,16 +12,34 @@ defined('PHPFOX') or exit('NO DICE!');
                 <div class="item dd-plan-item">
                     <div class="dd-plan-header">
                         <div class="title">{$aItem.name}</div>
+                        <div class="row dd-plan-th">
+                            <div class="col-xs-6 text-left">
+                                {_p('Option')}
+                            </div>
+                            <div class="col-xs-6 text-right">
+                                {_p('Value')}
+                            </div>
+                        </div>
                     </div>
-
-                    <p>{_p('Digital Download Activation')}: <strong>{$aItem.price}</strong></p>
-                    <p>{_p('Life time(in day)')}: <strong>{$aItem.life_time}</strong></p>
+                    <div class="dd-plan-option row">
+                        <span class="dd-plan-option-caption">{_p('Digital Download Activation')}</span>
+                        <span class="dd-plan-option-value"><strong>{$aItem.price}</strong></span>
+                    </div>
+                    <div class="dd-plan-option">
+                        <span class="dd-plan-option-caption">
+                            {_p('Life time(in day)')}
+                        </span>
+                        <span class="dd-plan-option-value"><strong>{$aItem.life_time}</strong></span>
+                    </div>
                     <div class="dd-extra-options">
                         {$aItem}
                     </div>
-                    <p>{_p('Allowed pictures count')}: <strong>{$aItem.allowed_count_pictures}</strong></p>
+                    <div class="dd-plan-option last">
+                        <span class="dd-plan-option-caption">{_p('Allowed pictures count')}</span>
+                        <span class="dd-plan-option-value"><strong>{$aItem.allowed_count_pictures}</strong></span>
+                    </div>
                     <div class="dd-plan-footer">
-                        <a class="btn btn-default" href="{$sUrl}&plan_id={$aItem.plan_id}">{_p('Select')} >></a>
+                        <a class="btn dd-btn-buy-plan" href="{$sUrl}&plan_id={$aItem.plan_id}">{_p('Buy plan now')}</a>
                     </div>
                 </div>
             </div>
