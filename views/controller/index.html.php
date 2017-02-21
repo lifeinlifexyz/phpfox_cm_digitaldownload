@@ -3,15 +3,18 @@ defined('PHPFOX') or exit('NO DICE!');
 ?>
 {if  isset($aDDs) && count($aDDs)}
     {if !PHPFOX_IS_AJAX}
-        <div class="cm-dd-viewmode-control text-right">
-            <button type="button" class="btn btn-default list" data-mode="list">
-                <i class="fa fa-list"></i>
-                {_p('List')}
-            </button>
-            <button type="button" class="btn btn-default grid" data-mode="grid">
-                <i class="fa fa-th"></i>
-                {_p('Grid')}
-            </button>
+        <div class="bordered-title cm-dd-viewmode-control">
+            <span class="dd-view-mode-caption">{_p('digitaldownload_view_mode_list')}</span>
+            <div class="dd-view-mode-buttons">
+                <button type="button" class="btn cm-dd-btn-mode list" data-mode="list"
+                        title="{_p('digitaldownload_view_mode_list')}">
+                    <i class="fa fa-list"></i>
+                </button>
+                <button type="button" class="btn cm-dd-btn-mode grid" data-mode="grid"
+                        title="{_p('digitaldownload_view_mode_grid')}">
+                    <i class="fa fa-th"></i>
+                </button>
+            </div>
         </div>
     {/if}
     <div class="cm-dd-view-block">

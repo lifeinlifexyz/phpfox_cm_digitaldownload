@@ -71,22 +71,26 @@ var init_view_mode = function(id) {
 
     var viewmode = getCookie(id + 'view_mode');
 
-    //default mode is grid
+    //default mode is list
     if (!viewmode) {
-        viewmode = 'grid';
+        viewmode = 'list';
     }
+    var modePhraseText = viewmode_control.find('button.' + viewmode).attr('title');
 
     viewmode_control.find('button').removeClass('active');
     viewmode_control.find('button.' + viewmode).addClass('active');
+    viewmode_control.find('.dd-view-mode-caption').text(modePhraseText);
 
     $('.cm-dd-view-block').attr('class', 'cm-dd-view-block ' + viewmode);
 
     viewmode_control.find('button').click(function () {
         //Get data-mode
         var mode = $(this).data('mode');
+        var modePhraseText = viewmode_control.find('button.' + mode).attr('title');
 
         viewmode_control.find('button').removeClass('active');
         viewmode_control.find('button.' + mode).addClass('active');
+        viewmode_control.find('.dd-view-mode-caption').text(modePhraseText);
 
         $('.cm-dd-view-block').attr('class', 'cm-dd-view-block ' + mode);
 
@@ -96,6 +100,9 @@ var init_view_mode = function(id) {
 
 var isImagesLoaded = function(target) {
     var images = $(target).find('img');
+    if (!(images.length > 0)) {
+        return true;
+    }
     var loaded = false;
     images.each(function(){
        if ($(this).hasClass('built')) {

@@ -4,12 +4,16 @@ namespace Apps\CM_DigitalDownload\Service\Digitaldownload;
 
 
 use Apps\CM_DigitalDownload\Lib\Form\Exception\RequiredArgumentException;
+use Phpfox;
 
 class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 {
     private $oDD;
     protected $sTitleSettings = '$title';
     protected $aDDFieldNames = [];
+    protected $aExtraFields = [
+      'images', 'main_image', 'url', 'seo_keyword', 'seo_description',  'category', 'aDDPrice', 'short_description'
+    ];
 
     public function __construct(DigitalDownload $oDD)
     {
@@ -56,7 +60,7 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 $aImgs = $this->offsetGet('images');
                 $aImg =  array_shift($aImgs);
                 $aImg['server_id'] = isset($aImg['server_id']) ? $aImg['server_id'] : null;
-                $aImg['image_path'] = isset($aImg['image_path']) ? 'digitaldownload/' . $aImg['image_path'] : null;
+                $aImg['image_path'] = isset($aImg['image_path']) ? 'digitaldownload/' . $aImg['image_path'] : 'digitaldownload/dd_no_image.jpg';
                 return $aImg;
                 break;
             case 'url':
@@ -91,9 +95,17 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
 
                 return $aDDPrice;
                 break;
+            case 'short_description':
+                return Phpfox::getLib('parse.input')->clean($this->aRow['description'], 100);
+                break;
             default:
                 return parent::offsetGet($offset);
         }
+    }
+
+    public function offsetExists($offset)
+    {
+        return in_array($offset, $this->aExtraFields) || parent::offsetExists($offset);
     }
 
     public function getField($sField)

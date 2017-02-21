@@ -48,7 +48,7 @@ class Display implements \ArrayAccess
      */
     public function offsetExists($offset)
     {
-        return $this->aRow[$offset];
+        return isset($this->aRow[$offset]);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 defined('PHPFOX') or exit('NO DICE!');
 ?>
-<div id="js_dd_item_holder_{$aEntry.id}" class="dd-box-product-outer" {if $aEntry.highlighted}
+<div id="js_dd_item_holder_{$aEntry.id}" class="cd-dd dd-box-product-outer" {if $aEntry.highlighted}
      style="background-color: <?=Phpfox::getParam('cm_dd_highlighted_color', '#FFF0D1');?>"
      {/if}>
     <article itemscope itemtype="http://schema.org/Product" class="cm-dd-search-item dd-box-product">
@@ -64,9 +64,28 @@ defined('PHPFOX') or exit('NO DICE!');
                 <div class="clearfix"></div>
             </div>
         {/if}
+        <div class="dd-product-header">
+            <div class="visible-list dd-product-owner-list text-right">
+                <span class="dd-product-date" itemprop="releaseDate">{$aEntry.time_stamp|convert_time}</span>
+                {if !isset($bIsInFeed) && isset($aEntry.user_name)}
+                    <span class="cd-dd-upper">
+                        {$aEntry|user:'':'':30}
+                    </span>
+                {/if}
+            </div>
+
+            <p itemprop="name" class="dd-product-title cd-dd-upper">
+                <a itemprop="url" href="{$aEntry.url}" title="{$aEntry|clean}">{$aEntry|clean}</a>
+            </p>
+            {if isset($aEntry.short_description) && !empty($aEntry.short_description)}
+                <div class="dd-product-description">{$aEntry.short_description}</div>
+            {/if}
+        </div>
         <div class="cm-dd-search-item-img dd-img-wrapper">
             <a href="{$aEntry.url}">
-                {img path='core.url_pic' file=$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_120_square' itemprop='image'}
+                <span class="dd-product-img"
+                style="background-image: url({img path='core.url_pic' file=$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_200_square' return_url=true});"
+                      itemprop='image'></span>
             </a>
             <div class="dd-tags">
                 {if $aEntry.featured}
@@ -86,42 +105,55 @@ defined('PHPFOX') or exit('NO DICE!');
             </div>
         </div>
         <div class="cm-dd-search-item-content">
-           <h6 itemprop="name" class="dd-title">
-                <a itemprop="url" href="{$aEntry.url}" title="{$aEntry|clean}">{$aEntry|clean}</a>
-            </h6>
 
-            <div class="price" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
-                <ul>
+            <div class="row hidden-list">
+                <div class="col-xs-6">
+                    <div class="dd-product-category">
+                        {$aEntry.category}
+                    </div>
+                </div>
+                <div class="col-xs-6 text-right cd-dd-upper hidden-list">
+                    {if !isset($bIsInFeed) && isset($aEntry.user_name)}
+                    {$aEntry|user:'':'':30}
+                    {/if}
+                </div>
+            </div>
+
+            <div class="dd-product-price-wrap" itemprop="offers" itemscope="" itemtype="http://schema.org/Offer">
                     {assign var='aDDPrice' value=$aEntry.aDDPrice}
                     {if empty($aDDPrice)}
-                    <li>{_p('Free')}</li>
+                        {_p('Free')}
                     {else}
-                    {foreach from=$aDDPrice item=aPrice}
-                    <li>
-                        <span itemprop="price" title="{$aPrice.caption}" data-toggle="tooltip" data-placement="right">
-                            <strong>
-                                {if $aPrice.price == '0.00'}
-                                {_p('Free')}
-                                {else}
-                                {$aPrice.currency_id|currency_symbol}{$aPrice.price|number_format:2}
-                                {/if}
-                            </strong>
-                        </span>
-                    </li>
-                    {/foreach}
+                        <div class="row">
+                            {foreach from=$aDDPrice item=aPrice}
+                                <div class="col-sm-6" itemprop="price">
+                                    <span class="dd-product-price-caption">
+                                        {$aPrice.caption}:&nbsp;
+                                    </span>
+                                    <span class="dd-product-price">
+                                        {if $aPrice.price == '0.00'}
+                                            {_p('Free')}
+                                        {else}
+                                            {$aPrice.currency_id|currency_symbol}{$aPrice.price|number_format:2}
+                                        {/if}
+                                    </span>
+                                </div>
+                            {/foreach}
+                        </div>
                     {/if}
-                </ul>
             </div>
-            {if !isset($bIsInFeed)}
-                <ul class="listing_info">
-                    <li itemprop="releaseDate">{$aEntry.time_stamp|convert_time}</li>
-                    {if isset($aEntry.user_name)}
-                    <li>{$aEntry|user:'':'':30}</li>
-                    {/if}
-                </ul>
-            {/if}
-            <div class="category">
+
+            <div class="dd-product-category visible-list">
                 {$aEntry.category}
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6">
+
+                </div>
+                <div class="col-xs-6 text-right dd-product-order cd-dd-upper">
+                    {$aEntry.total_download | int} - {_p('Orders')}
+                </div>
             </div>
         </div>
     </article>

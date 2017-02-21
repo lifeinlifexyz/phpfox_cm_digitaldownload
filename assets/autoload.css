@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
 /**
  * Owl Carousel v2.2.0
  * Copyright 2013-2016 David Deutsch
@@ -300,31 +302,24 @@ rules input
 .cm-dd-view-block.list .cm-dd-search-item-img,
 .activity_feed_content_text .cm-dd-search-item-img
 {
-    width: 160px;
-    height: 160px;
+    width: 35%;
     float: left;
 }
-.cm-dd-view-block.list  .dd-box-product h6 {
-    margin-top: 0;
-}
 
-.dd-img-wrapper {
-    min-width: 160px;
-    min-height: 160px;
-    text-align: center;
-    border: 1px solid #dadada;
-}
-.dd-img-wrapper .no_image_item {
-    width: 160px;
-    height: 160px;
-    background: url("../../../../PF.Base/theme/frontend/default/style/default/image//misc/marketplace_no_image.jpg") no-repeat center;
-}
-
+.cm-dd-view-block.list .dd-product-header,
+.activity_feed_content_text .dd-product-header,
 .cm-dd-view-block.list .cm-dd-search-item-content,
-.activity_feed_content_text .cm-dd-search-item-content
-{
-    margin-left: 175px;
-    padding-top: 5px;
+.activity_feed_content_text .cm-dd-search-item-content{
+    width: 63%;
+    float: right;
+}
+.cm-dd-view-block.list .cm-dd-search-item-content,
+.activity_feed_content_text .cm-dd-search-item-content {
+    padding-left: 10px;
+}
+.cm-dd-view-block.list .dd-product-header,
+.activity_feed_content_text .dd-product-header {
+    padding-bottom: 0;
 }
 
 .dd-plan-item {
@@ -365,11 +360,30 @@ rules input
 }
 
 /***/
+
+.dd-view-mode-buttons {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.cm-dd-btn-mode.active,
+.cm-dd-btn-mode:hover,
+.cm-dd-btn-mode:focus,
+.cm-dd-btn-mode:active
+{
+    color: #297fc7;
+    background: none;
+    border-color: transparent;
+    box-shadow: none;
+    outline: none !important;
+}
+
 .dd-box-product-outer {
     margin-bottom: 5px;
-    padding: 15px;
-    border: 1px solid transparent;
-    border-radius: 0;
+    padding: 4px;
+    border: 1px solid #f1f1f1;
 }
 .dd-box-product-outer:after {
     clear: both;
@@ -377,9 +391,57 @@ rules input
     display: block;
 }
 
+.dd-product-category,
+.dd-product-price {
+    color: #297fc7;
+}
+.dd-product-price {
+    font-weight: 700;
+}
+.dd-product-price-wrap {
+    margin: 5px 0;
+}
+
+.dd-product-order,
+.dd-box-product .user_profile_link_span a,
+.dd-product-date {
+    color: #cbcbcb !important;
+}
+.dd-product-date:after {
+    content: "\00b7";
+    padding-left: 5px;
+    padding-right: 5px;
+    font-weight: bold;
+}
+.dd-product-order {
+    font-size: 11px;
+}
+
+.dd-box-product .user_profile_link_span,
+.dd-product-date{
+    font-size: 12px;
+}
+
+.dd-product-owner-list {
+    margin-top: -10px;
+    margin-right: -10px;
+}
+.visible-list {
+    display: none;
+}
+.activity_feed_content_text .visible-list,
+.cm-dd-view-block.list .visible-list {
+    display: block;
+}
+.cm-dd-view-block.list .hidden-list,
+.activity_feed_content_text .hidden-list
+{
+    display: none;
+}
 .dd-box-product .dd-img-wrapper {
     position: relative;
     overflow: hidden;
+    margin-bottom: 10px;
 }
 
 .dd-box-product .dd-img-wrapper > a > img {
@@ -468,17 +530,26 @@ rules input
     line-height: 1.4;
     display: block;
 }
-
-.dd-box-product-outer:hover {
-    border: 1px solid #009688;
+.dd-product-img {
+    display: block;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    height: 160px;
 }
+.dd-box-product-outer:hover {
+    box-shadow: 0 0 15px #dadada;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .dd-filter-sidebar {
     margin-bottom: 25px;
 }
 
 .filter-title,
 .bordered-title {
-    border-bottom: 3px solid #80cbc4;
+    border-bottom: 3px solid #9BBCD8;
     font-size: 18px;
     line-height: 1;
     margin: 0 0 10px;
@@ -487,7 +558,7 @@ rules input
 
 .filter-title span,
 .bordered-title span {
-    border-bottom: 3px solid #00897b;
+    border-bottom: 3px solid #297fc7;
     display: inline-block;
     margin-bottom: -3px;
     padding-bottom: 10px;
@@ -525,6 +596,7 @@ rules input
 
 .cm-dd-viewmode-control {
     margin-bottom: 15px;
+    position: relative;
 }
 
 .cd-dd-moderate {
@@ -539,16 +611,65 @@ rules input
     background: transparent;
 }
 
+.cd-dd {
+    font-family: 'Lato', sans-serif;;
+}
+
+.cd-dd-upper {
+    text-transform: uppercase;
+}
+.dd-product-header {
+    padding: 10px;
+    overflow: hidden;
+}
+.dd-product-title {
+    white-space: nowrap;
+    font-size: 16px;
+    position: relative;
+}
+.dd-product-title:after {
+    position: absolute;
+    right: -10px;
+    top: 0;
+    bottom: 0;
+    width: 70px;
+    content: '';
+    display: block;
+
+    background: -moz-linear-gradient(left, rgba(246, 247, 248, 0) 0%, rgba(246, 247, 248, 1) 98%, rgba(246, 247, 248, 1) 100%);
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(246, 247, 248, 0)), color-stop(98%, rgba(246, 247, 248, 1)), color-stop(100%, rgba(246, 247, 248, 1)));
+    background: -webkit-linear-gradient(left, rgba(246, 247, 248, 0) 0%, rgba(246, 247, 248, 1) 98%, rgba(246, 247, 248, 1) 100%);
+    background: -o-linear-gradient(left, rgba(246, 247, 248, 0) 0%, rgba(246, 247, 248, 1) 98%, rgba(246, 247, 248, 1) 100%);
+    background: -ms-linear-gradient(left, rgba(246, 247, 248, 0) 0%, rgba(246, 247, 248, 1) 98%, rgba(246, 247, 248, 1) 100%);
+    background: linear-gradient(to right, rgba(246, 247, 248, 0) 0%, rgba(246, 247, 248, 1) 98%, rgba(246, 247, 248, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=1);
+}
+.dd-product-title a{
+    color: #6f6f6f;
+}
+.dd-product-description {
+    color: #cbcbcb;
+    line-height: 15px;
+    margin-bottom: 5px;
+}
+
 @media (min-width: 992px) {
     .cm-dd-view-block.grid .dd-box-product-outer {
-        width: 50%;
+        width: 47%;
         float: left;
+        margin: 15px;
     }
     .cm-dd-view-block.grid .dd-box-product-outer:nth-child(2n + 1) {
         clear: both;
         content: '';
         display: block;
+        margin-left: 0;
     }
+
+    .cm-dd-view-block.grid .dd-box-product-outer:nth-child(2n) {
+            margin-right: 0;
+    }
+
 }
 
 .color-primary {

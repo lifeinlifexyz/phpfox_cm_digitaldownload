@@ -17,7 +17,7 @@ class Category extends TreeType
 
         $aBranches = $this->oTree->parents($this->aInfo['items'], $iValue);
         $sTitleField = $this->aInfo['title_field'];
-        $sSeperator = '&#10137;';
+        $sSeperator = '/';
 
         $sRes = '';
         $sName = $this->aInfo['name'];

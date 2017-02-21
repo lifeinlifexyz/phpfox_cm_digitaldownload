@@ -57,8 +57,8 @@ function installv1_0_0()
       `highlighted` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `total_comment` int(10) NOT NULL DEFAULT  '0',
       `total_like` int( 10 ) NOT NULL DEFAULT  '0',
-      `total_view` INT( 11 ) NULL,
-      `total_download` INT NULL,
+      `total_view` INT( 11 )  NOT NULL DEFAULT  '0',
+      `total_download` INT  NOT NULL DEFAULT  '0',
       `is_expired` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
@@ -160,6 +160,9 @@ function installv1_0_0()
         mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
     }
 
+    @rename(PHPFOX_DIR_APP . 'CM_DigitalDownload' . PHPFOX_DS . 'stubs' . PHPFOX_DS . 'dd_no_image.jpg',
+        Phpfox::getParam('core.dir_pic') . 'digitaldownload' . PHPFOX_DS . 'dd_no_image.jpg');
+
     $aPhrase  = [
         'digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name' => '{full_name} has purchased one of your items on {site_name}.
 
@@ -191,6 +194,10 @@ To check out this item, follow the link below:
 <a href="{link}">{link}</a>"',
         'digitaldownload_full_name_added_the_following_personal_message' => '{full_name} added the following personal message',
         'digitaldownload_full_name_invited_you_to_view_the_item_title' => '{full_name} invited you to view the item "{title}".',
+
+
+        'digitaldownload_view_mode_list' => 'List',
+        'digitaldownload_view_mode_grid' => 'Grid',
     ];
 
     $aLanguages = \Language_Service_Language::instance()->getAll();
