@@ -114,11 +114,29 @@ var isImagesLoaded = function(target) {
     return loaded;
 };
 
+var initCMAjaxLink = function() {
+    $('.js_ajax_link').off('click').on('click', function()
+    {
+        aParams = $.getParams(this.href);
+        var sParams = '';
+        for (sVar in aParams)
+        {
+            sParams += '&' + sVar + '=' + aParams[sVar] + '';
+        }
+        sParams = sParams.substr(1, sParams.length);
+
+        $Core.ajaxMessage();
+        $.ajaxCall(aParams['call'], sParams + '&global_ajax_message=true');
+
+        return false;
+    });
+}
+
 
 $Ready(function () {
 
     cm_loadAssets();
-
+    initCMAjaxLink();
     $('[data-toggle="tooltip"]').addClass('dont-unbind').tooltip();
 
     $('.owl-carousel').each(function(){

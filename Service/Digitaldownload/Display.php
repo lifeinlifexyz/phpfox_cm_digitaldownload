@@ -12,7 +12,15 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
     protected $sTitleSettings = '$title';
     protected $aDDFieldNames = [];
     protected $aExtraFields = [
-      'images', 'main_image', 'url', 'seo_keyword', 'seo_description',  'category', 'aDDPrice', 'short_description'
+        'images',
+        'main_image',
+        'url',
+        'seo_keyword',
+        'seo_description',
+        'category',
+        'aDDPrice',
+        'short_description',
+        'rating',
     ];
 
     public function __construct(DigitalDownload $oDD)
@@ -97,6 +105,11 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 break;
             case 'short_description':
                 return Phpfox::getLib('parse.input')->clean($this->aRow['description'], 100);
+                break;
+            case 'rating':
+                $aRating =  Phpfox::getService('digitaldownload.rating')->getRating($this->aRow['id'], $this->aRow['rating']);
+                $aRating['dd_id'] = $this->aRow['id'];
+                return view('@CM_DigitalDownload/rating/rating.html', $aRating);
                 break;
             default:
                 return parent::offsetGet($offset);

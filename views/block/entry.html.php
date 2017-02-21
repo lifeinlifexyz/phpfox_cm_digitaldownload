@@ -149,7 +149,7 @@ defined('PHPFOX') or exit('NO DICE!');
 
             <div class="row">
                 <div class="col-xs-6">
-
+                    {$aEntry.rating}
                 </div>
                 <div class="col-xs-6 text-right dd-product-order cd-dd-upper">
                     {$aEntry.total_download | int} - {_p('Orders')}

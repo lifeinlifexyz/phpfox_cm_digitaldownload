@@ -517,6 +517,12 @@ rules input
     font-size: 12px;
 }
 
+.cm-dd-rating,
+.cm-dd-rating a{
+    color: #DAAB0F;
+    font-size: 14px;
+}
+
 .dd-product-owner-list {
     margin-top: -10px;
     margin-right: -10px;

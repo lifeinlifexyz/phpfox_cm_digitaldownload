@@ -35,6 +35,28 @@ class Ajax extends Phpfox_Ajax
         }
     }
 
+    public function rate()
+    {
+        Phpfox::getUserParam('digitaldownload.can_rate', true);
+        $iId = (int)$this->get('id');
+        $aRow = \Phpfox::getService('digitaldownload.dd')->getForEdit($iId);
+
+        if ($aRow['user_id'] == Phpfox::getUserId()) {
+            $this->alert('You can not set rating for own item');
+            return false;
+        }
+
+        $iRate = (int) $this->get('rate');
+        Phpfox::getService('digitaldownload.rating')->setRating($iId, $iRate, Phpfox::getUserId());
+        $aRow = \Phpfox::getService('digitaldownload.dd')->getForEdit($iId);
+        $oDD = \Phpfox::getService('digitaldownload.dd')->setRow($aRow)->getDisplayer($iId);
+        $sRating = $oDD['rating'];
+        $this->replaceWith('.cm-dd-rating-' . $iId, $sRating);
+        $this->call('initCMAjaxLink();');
+        $this->alert(_p('Successfully rated'));
+        return $this->bIsModeration;
+    }
+
 
     public function moderation()
     {

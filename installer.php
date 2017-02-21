@@ -60,6 +60,7 @@ function installv1_0_0()
       `total_view` INT( 11 )  NOT NULL DEFAULT  '0',
       `total_download` INT  NOT NULL DEFAULT  '0',
       `is_expired` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `rating` VARCHAR( 25 ) NOT NULL DEFAULT  '',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
@@ -138,6 +139,15 @@ function installv1_0_0()
         KEY `dd_id_4` (`dd_id`,`visited_id`,`invited_user_id`),
         KEY `visited_id` (`visited_id`,`invited_user_id`)
         ); ');
+
+    db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_rating') . '` (
+      `dd_id` int(10) unsigned NOT NULL,
+      `user_id` int(10) unsigned NOT NULL,
+      `rating` varchar(2) DEFAULT NULL,
+      `time_stamp` int(10) unsigned NOT NULL,
+      `ip_address` varchar(15) DEFAULT NULL,
+      KEY `dd_id` (`dd_id`,`user_id`)
+    )');
 
     $aCrons = [
         [

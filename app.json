@@ -147,6 +147,21 @@
         "no": "No"
       }
     },
+    "digitaldownload.can_rate": {
+      "info": "Can set rate?",
+      "type": "input:radio",
+      "value": {
+        "1" : "1",
+        "2" : "1",
+        "3" : "0",
+        "4" : "1",
+        "5" : "0"
+      },
+      "options": {
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
     "digitaldownload.can_delete_other": {
       "info": "Can delete other?",
       "type": "input:radio",
