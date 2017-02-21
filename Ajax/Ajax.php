@@ -61,7 +61,6 @@ class Ajax extends Phpfox_Ajax
     public function moderation()
     {
         Phpfox::isUser(true);
-        $this->template()->getTemplate();
         switch($this->get('action')) {
 
             case 'deactivate':
