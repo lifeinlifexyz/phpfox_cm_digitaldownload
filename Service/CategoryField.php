@@ -2,9 +2,9 @@
 
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
-use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 
 class CategoryField extends \Phpfox_Service
 {
@@ -23,6 +23,9 @@ class CategoryField extends \Phpfox_Service
                 'field_id' => $iId,
             ]);
         }
+
+        CMCache::removeByGroup('cm_dd_category_fields');
+        CMCache::remove('cm_dd_field_types');
     }
 
     public function getByCategoryId($iId)
@@ -69,7 +72,8 @@ class CategoryField extends \Phpfox_Service
     public function delete($iId)
     {
         $this->database()->delete(\Phpfox::getT($this->_sTable),  '`category_id` = ' . $iId);
-        //todo:: trigger event after category deleted
+        CMCache::removeByGroup('cm_dd_category_fields');
+        CMCache::remove('cm_dd_field_types');
     }
 
 }

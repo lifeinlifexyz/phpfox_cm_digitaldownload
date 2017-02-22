@@ -16,8 +16,7 @@ abstract class AbstractModeration extends \Phpfox_Component
         }
 
         $this->aDD = \Phpfox::getService('digitaldownload.dd')->getForEdit($iId);
-
-        if ($this->aDD['user_id'] != \Phpfox::getUserId()/* || (!\Phpfox::getUserParam('digitaldownload.can_activate_deactivate_other'))*/) {
+        if ((isset($this->aDD['user_id']) && $this->aDD['user_id'] != \Phpfox::getUserId()) || (!\Phpfox::getUserParam('digitaldownload.can_activate_deactivate_other'))) {
             \Phpfox_Error::display(_p('You have not permission for activate this item'));
             return false;
         }

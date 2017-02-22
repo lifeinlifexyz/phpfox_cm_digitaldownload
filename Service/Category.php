@@ -2,9 +2,10 @@
 
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
-use Apps\CM_DigitalDownload\Lib\Tree\Tree;
+use Phpfox_Plugin;
 
 class Category extends \Phpfox_Service implements IFormly
 {
@@ -88,7 +89,6 @@ class Category extends \Phpfox_Service implements IFormly
 
     public function getActive($bRaw = false)
     {
-        //todo:: save to cache
         $aList = $this->database()
             ->select("*")
             ->from(\Phpfox::getT($this->_sTable))
@@ -115,6 +115,7 @@ class Category extends \Phpfox_Service implements IFormly
     public function setStatus($iStatus, $iIds)
     {
         $iIds = (array)$iIds;
+        CMCache::remove('cm_dd_category_data');
         return $this->database()->update(\Phpfox::getT($this->_sTable),
             ['`is_active`' => $iStatus], '`category_id` in (' . implode(',', $iIds) . ')');
     }
@@ -133,6 +134,7 @@ class Category extends \Phpfox_Service implements IFormly
             ];
             $this->database()->update(\Phpfox::getT($this->_sTable), $aData, '`category_id` = ' . $aOrder['id']);
         }
+        CMCache::remove('cm_dd_category_data');
         return $this;
     }
 
@@ -140,7 +142,8 @@ class Category extends \Phpfox_Service implements IFormly
     {
         $this->database()->delete(\Phpfox::getT($this->_sTable),  '`category_id` = ' . $iId);
         \Phpfox::getService('digitaldownload.categoryField')->delete($iId);
-        //todo:: trigger event after category deleted
+        CMCache::remove('cm_dd_category_data');
+        (($sPlugin = Phpfox_Plugin::get('digitaldownload.service_category_after_delete')) ? eval($sPlugin) : false);
     }
 
 }

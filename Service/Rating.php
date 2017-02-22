@@ -16,7 +16,7 @@ class Rating  extends \Phpfox_Service
 
             $aData = !is_null($aRawValue) ? explode('|', $aRawValue) : null;
             if (empty($aData)) {
-                $aRes = CMCache::remember('dd_rating_' . $iDDId, [$this, 'calculateRating']);
+                $aRes = CMCache::remember('cm_dd_rating_' . $iDDId, [$this, 'calculateRating']);
             } else {
                 $aRes = ['rating' => isset($aData[0]) ? $aData[0] : 0, 'count' => isset($aData[1]) ? $aData[1] : 0];
             }

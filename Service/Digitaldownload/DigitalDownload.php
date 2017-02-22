@@ -1,6 +1,7 @@
 <?php
 namespace Apps\CM_DigitalDownload\Service\Digitaldownload;
 
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
 use Apps\CM_DigitalDownload\Lib\Exception\ServiceException;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FilterTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
@@ -9,7 +10,6 @@ use Apps\CM_DigitalDownload\Lib\Form\Exception\RequiredArgumentException;
 use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 use Apps\CM_DigitalDownload\Lib\CustomFieldType\DigitalDownload as DDField;
 use Apps\CM_DigitalDownload\Service\Plan;
-use Core\Event;
 use Phpfox;
 use Phpfox_Plugin;
 
@@ -35,7 +35,6 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
     public function getFilterFields()
     {
-        //todo:: save to cache category fields
         $aSearch = request()->getArray('search');
 
         $iCategoryId = isset($aSearch['category_id']) ? $aSearch['category_id'] : 0;
@@ -94,16 +93,19 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
     public function getCategoryFieldData($aItems = null)
     {
-        return [
-            'type' => 'tree',
-            'name' => 'category_id',
-            'parent' => 'parent_id',
-            'key' => 'category_id',
-            'title' => _p('Category'),
-            'translate' => true,
-            'items' => is_null($aItems) ? \Phpfox::getService('digitaldownload.category')->getActive(true) : $aItems,
-            'table_alias' => 'd',
-        ];
+        return CMCache::remember('cm_dd_category_data', function() use ($aItems) {
+              return
+                  [
+                      'type' => 'tree',
+                      'name' => 'category_id',
+                      'parent' => 'parent_id',
+                      'key' => 'category_id',
+                      'title' => _p('Category'),
+                      'translate' => true,
+                      'items' => is_null($aItems) ? \Phpfox::getService('digitaldownload.category')->getActive(true) : $aItems,
+                      'table_alias' => 'd',
+                  ];
+        });
     }
 
     /**
@@ -113,40 +115,37 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
     public function getFieldsInfo()
     {
         if ($this->mKey) {
-            $this->aRow =  $this->database()
-                ->select('*')
-                ->from(\Phpfox::getT($this->_sTable))
-                ->where('`id` = ' . $this->mKey)
-                ->get();
+            $this->aRow =  $this->getForEdit($this->mKey);
             $this->iCategoryId = $this->aRow['category_id'];
         }
         if (!$this->iCategoryId) {
             throw new \InvalidArgumentException('Category id is null');
         }
-        //todo:: save to cache category fields
-        $aRawFields =\Phpfox::getService('digitaldownload.categoryField')->getInfoByCategoryId($this->iCategoryId);
-        $aFields = [];
+        $that = $this;
+        return CMCache::remember('cm_dd_category_fields_' . $this->iCategoryId, function() use ($that) {
+            $aRawFields =\Phpfox::getService('digitaldownload.categoryField')->getInfoByCategoryId($this->iCategoryId);
+            $aFields = [];
 
-        foreach($aRawFields as &$aRawField) {
-            $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField);
-        }
+            foreach($aRawFields as &$aRawField) {
+                $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField);
+            }
 
-        //add system fields
-        $aFields['category_id'] = [
-            'type' => 'hidden',
-            'name' => 'category_id',
-            'title' => '',
-            'value' => $this->iCategoryId,
-        ];
+            //add system fields
+            $aFields['category_id'] = [
+                'type' => 'hidden',
+                'name' => 'category_id',
+                'title' => '',
+                'value' => $this->iCategoryId,
+            ];
 
-        $aFields['privacy'] = [
-            'type' => 'privacy',
-            'name' => 'privacy',
-            'title' => _p('Digital download privacy'),
-            'value' => 0,
-        ];
-
-        return $aFields;
+            $aFields['privacy'] = [
+                'type' => 'privacy',
+                'name' => 'privacy',
+                'title' => _p('Digital download privacy'),
+                'value' => 0,
+            ];
+            return $aFields;
+        }, 0, 'cm_dd_category_fields');
     }
 
     protected function buildFieldInfo($aRawField, $bFilter = false)

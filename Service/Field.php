@@ -2,6 +2,7 @@
 
 namespace Apps\CM_DigitalDownload\Service;
 
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\Form;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
@@ -118,6 +119,8 @@ class Field extends \Phpfox_Service implements IFormly
                 $this->database()->addField($aColumnsDef);
             }
         }
+        CMCache::removeByGroup('cm_dd_category_fields');
+        CMCache::remove('cm_dd_field_types');
         return $this;
     }
 
@@ -133,6 +136,8 @@ class Field extends \Phpfox_Service implements IFormly
     public function setStatus($iId, $iStatus)
     {
         $iId = (int) $iId;
+        CMCache::removeByGroup('cm_dd_category_fields');
+        CMCache::remove('cm_dd_field_types');
         return $this->database()->update(\Phpfox::getT($this->_sTable),
             ['`is_active`' => $iStatus], '`field_id` = ' . $iId);
     }
@@ -152,6 +157,9 @@ class Field extends \Phpfox_Service implements IFormly
             $this->database()->delete(\Phpfox::getT($this->_sTable), '`field_id` = ' . $iId);
             $this->database()->dropField(\Phpfox::getT($this->sAttachTable), $sFieldName);
             $this->database()->commit();
+
+            CMCache::removeByGroup('cm_dd_category_fields');
+            CMCache::remove('cm_dd_field_types');
 
             return true;
         } catch (\Exception $e)
@@ -173,21 +181,22 @@ class Field extends \Phpfox_Service implements IFormly
         if (count($aCategoryIds) > 0) {
             $aCond[] = 'AND `c`.`category_id` in (' . implode(', ', $aCategoryIds) . ')';
         }
-
-        //todo::cache
-        return $this->database()
-            ->select('f.*')
-            ->from(\Phpfox::getT($this->_sTable), 'f')
-            ->leftJoin(\Phpfox::getT('digital_download_category_fields'), 'cf', 'f.field_id = cf.field_id')
-            ->leftJoin(\Phpfox::getT('digital_download_category'), 'c', 'c.category_id = cf.category_id')
-            ->where($aCond)
-            ->order('`f`.`ordering` ASC')
-            ->execute('getslaverows');
+        $sCacheKey = 'cm_dd_filterable_fields_' . implode('_', $aCategoryIds);
+        $that = $this;
+        return CMCache::remember($sCacheKey, function() use ($that, $aCond){
+            return $this->database()
+                ->select('f.*')
+                ->from(\Phpfox::getT($this->_sTable), 'f')
+                ->leftJoin(\Phpfox::getT('digital_download_category_fields'), 'cf', 'f.field_id = cf.field_id')
+                ->leftJoin(\Phpfox::getT('digital_download_category'), 'c', 'c.category_id = cf.category_id')
+                ->where($aCond)
+                ->order('`f`.`ordering` ASC')
+                ->execute('getslaverows');
+        }, 0, 'cm_dd_category_fields');
     }
 
     public function getFilterableFieldsName()
     {
-        //todo::cache
         $aFields = $this->getFilterable();
         $aList = [];
         foreach($aFields as $aField) {
@@ -198,17 +207,20 @@ class Field extends \Phpfox_Service implements IFormly
 
     public function getFieldsByType($sType)
     {
-        $aFields = $this->database()
-            ->select('`name`')
-            ->from(\Phpfox::getT($this->_sTable))
-            ->where('`type` = \'' . $sType . '\'')
-            ->all();
+        $that = $this;
+        return CMCache::remember('cm_dd_field_types_' . $sType, function() use ($that, $sType) {
+            $aFields = $this->database()
+                ->select('`name`')
+                ->from(\Phpfox::getT($this->_sTable))
+                ->where('`type` = \'' . $sType . '\'')
+                ->all();
 
-        $aRes =  [];
-        foreach($aFields as $aField) {
-            $aRes[] = $aField['name'];
-        }
-        return $aRes;
+            $aRes =  [];
+            foreach($aFields as $aField) {
+                $aRes[] = $aField['name'];
+            }
+            return $aRes;
+        });
     }
 
 }
