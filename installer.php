@@ -291,32 +291,30 @@ To check out this item, follow the link below:
         $oForm->save();
     }
 
-
-    foreach ($aLanguages as $aLanguage) {
-        Phpfox_Request::instance()->set('title_' . $aLanguage['language_id'], 'Title');
-        Phpfox_Request::instance()->set('description' . $aLanguage['language_id'], 'Description');
-    }
     $aFields = [
         [
             'type' => 'string',
             'name' => 'title',
             'rules' => 'required|255:maxLength',
             'is_filter' => '1',
-            'is_active' => '1'
+            'is_active' => '1',
+            'caption_phrase' => 'Title',
         ],
         [
             'type' => 'text',
             'name' => 'description',
             'rules' => '1000:maxLength',
             'is_filter' => '1',
-            'is_active' => '1'
+            'is_active' => '1',
+            'caption_phrase' => 'Description',
         ],
         [
             'type' => 'dd',
             'name' => 'file',
             'rules' => 'required',
             'is_filter' => '0',
-            'is_active' => '1'
+            'is_active' => '1',
+            'caption_phrase' => 'File',
         ],
     ];
 
@@ -332,7 +330,13 @@ To check out this item, follow the link below:
     $oForm = Phpfox::getService('digitaldownload.field')->getForm();
     foreach($aFields as $aField) {
         foreach($aField as $sField => $sValue){
-            $oForm->setFieldValue($sField, $sValue);
+            if ($sField == 'caption_phrase') {
+                foreach ($aLanguages as $aLanguage) {
+                    Phpfox_Request::instance()->set($sField . '_' . $aLanguage['language_id'], $sValue);
+                }
+            } else {
+                $oForm->setFieldValue($sField, $sValue);
+            }
         }
         $oForm->save();
         Phpfox::getService('digitaldownload.field')->addField($oForm);
