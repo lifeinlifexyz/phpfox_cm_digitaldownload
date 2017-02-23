@@ -4,35 +4,45 @@
         <label for="{{ name }}_field_price">{{ title }} {{ _p('price') }} : </label>
     </div>
     <div class="table_right">
-        <div class="">
-            <select class="form-control" name="{{ name }}[currency_id]">
-                {% for sCurrency, aCurrency in aCurrencies %}
-                <option value="{{ sCurrency }}"
-                        {% if value_currency_id ==  sCurrency or aCurrency.is_default %}
-                        selected="selected"
-                        {% endif %}
-                >
-                    {{ _p(aCurrency.name) }}
-                </option>
-                {% endfor %}
-            </select>
-            <input class="form-control" type="text" name="{{ name }}[price]" value="{{ value_price }}" id="{{ name }}_field_price" size="10" maxlength="100" onfocus="this.select();" />
+        <div class="row">
+            <div class="col-xs-6">
+                <select class="form-control" name="{{ name }}[currency_id]">
+                    {% for sCurrency, aCurrency in aCurrencies %}
+                    <option value="{{ sCurrency }}"
+                            {% if value_currency_id ==  sCurrency or aCurrency.is_default %}
+                            selected="selected"
+                            {% endif %}
+                    >
+                        {{ _p(aCurrency.name) }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-6">
+                <input class="form-control" type="text" name="{{ name }}[price]" value="{{ value_price }}" id="{{ name }}_field_price" size="10" maxlength="100" onfocus="this.select();" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-9">
+            <div class="table_left">
+                <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
+            </div>
+            <div class="table_right">
+                <input type="hidden" name="{{ name }}[file]" value="{{ value_file }}">
+                <input class="form-control" type="file" name="{{ name }}_file" id="{{ name }}_field" />
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="table_left">
+                <label for="{{ name }}_limit">{{ title }} {{ _p('limit') }}</label>
+            </div>
+            <div class="table_right">
+                <input class="form-control" min="0" type="number" id="{{ name }}_limit" name="{{ name }}[limit]" value="{{ value_limit }}">
+            </div>
         </div>
     </div>
 
-    <div class="table_left">
-        <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
-    </div>
-    <div class="table_right">
-        <input type="hidden" name="{{ name }}[file]" value="{{ value_file }}">
-        <input class="form-control" type="file" name="{{ name }}_file" id="{{ name }}_field" />
-    </div>
-    <div class="table_left">
-        <label for="{{ name }}_limit">{{ title }} {{ _p('limit') }}</label>
-    </div>
-    <div class="table_right">
-        <input class="form-control" min="0" type="number" id="{{ name }}_limit" name="{{ name }}[limit]" value="{{ value_limit }}">
-    </div>
 </fieldset>
 
 {% if hasError %}
