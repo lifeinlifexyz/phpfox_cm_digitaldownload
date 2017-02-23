@@ -36,6 +36,13 @@ class IndexController extends Phpfox_Component
 			_p('Invoices') => 'digitaldownload.invoice',
 		];
 
+		if (Phpfox::getUserParam('digitaldownload.can_moderate')) {
+			$aSectionMenu[_p('Moderation')] =  'digitaldownload.moderation';
+		}
+		if (Phpfox::getUserParam('digitaldownload.can_view_expired')) {
+			$aSectionMenu[_p('Expired')] = 'digitaldownload.expired';
+		}
+
 		$aSort = [
 			'latest' => ['d.id', _p('Latest added')],
 			'most-viewed' => ['d.total_view', _p('Most viewed')],
@@ -87,6 +94,14 @@ class IndexController extends Phpfox_Component
 					$oSearch->setCondition('AND `d`.`id` = 0'); //nothing dd. because his not friends
 				}
 				$oSearch->setCondition('AND `d`.`is_active` = 1');
+				break;
+			case 'moderation':
+				Phpfox::getUserParam('digitaldownload.can_moderate', true);
+				$oSearch->setCondition('AND 1 = 1');
+				break;
+			case 'expired':
+				Phpfox::getUserParam('digitaldownload.can_view_expired', true);
+				$oSearch->setCondition('AND `d`.`is_expired` = 1');
 				break;
 			default:
 				$oSearch->setCondition('AND `d`.`is_active` = 1');

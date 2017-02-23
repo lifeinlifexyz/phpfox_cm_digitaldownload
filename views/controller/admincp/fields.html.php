@@ -17,7 +17,7 @@ defined('PHPFOX') or exit('NO DICE!');
 			<th>{_p('Title')}</th>
 			<th>{_p('Type')}</th>
 			<th>{_p('Rules')}</th>
-			<th class="t_center" style="width:60px;">{_p var='Active'}</th>
+			<th class="t_center" style="width:60px;">{_p('Active')}</th>
 		</tr>
 		{foreach from=$aFields key=iKey item=aItem}
 		<tr class="checkRow{if is_int($iKey/2)} tr{else}{/if}" data-sort-id="{$aItem.field_id}">

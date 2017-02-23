@@ -48,6 +48,14 @@ class InvoiceController extends Phpfox_Component
 				_p('Friends` Files') => 'digitaldownload.friends',
 				_p('Invoices') => 'digitaldownload.invoice',
 			];
+
+			if (Phpfox::getUserParam('digitaldownload.can_moderate')) {
+				$aFilterMenu[_p('Moderation')] =  'digitaldownload.moderation';
+			}
+
+			if (Phpfox::getUserParam('digitaldownload.can_view_expired')) {
+				$aFilterMenu[_p('Expired')] = 'digitaldownload.expired';
+			}
 		}
 
 		$this->template()->setTitle(_p('Invoices'))

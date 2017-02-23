@@ -174,25 +174,15 @@ class ViewController extends Phpfox_Component
 				_p('Friends` Files') => 'digitaldownload.friends',
 				_p('Invoices') => 'digitaldownload.invoice',
 			];
-//
-//			if (Phpfox::getUserParam('marketplace.can_view_expired'))
-//			{
-//				$aFilterMenu[Phpfox::getPhrase('marketplace.expired')] = 'expired';
-//			}
-//			if (Phpfox::isModule('friend') && !Phpfox::getParam('core.friends_only_community'))
-//			{
-//				$aFilterMenu[Phpfox::getPhrase('marketplace.friends_listings')] = 'friend';
-//			}
-//
-//			if (Phpfox::isModule('event') && Phpfox::getUserParam('event.can_approve_events'))
-//			{
-//				$iPendingTotal = Phpfox::getService('marketplace')->getPendingTotal();
-//
-//				if ($iPendingTotal)
-//				{
-//					$aFilterMenu[Phpfox::getPhrase('marketplace.pending_listings') . '<span class="pending">' . $iPendingTotal . '</span>'] = 'pending';
-//				}
-//			}
+
+			if (Phpfox::getUserParam('digitaldownload.can_moderate')) {
+				$aSectionMenu[_p('Moderation')] =  'digitaldownload.moderation';
+			}
+
+			if (Phpfox::getUserParam('digitaldownload.can_view_expired')) {
+				$aSectionMenu[_p('Expired')] = 'digitaldownload.expired';
+			}
+
 		}
 
 		$this->template()->buildSectionMenu('digitaldownload', $aSectionMenu);
