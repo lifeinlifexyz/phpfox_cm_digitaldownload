@@ -64,6 +64,12 @@
       "value": 10,
       "js_variable": true
     },
+    "cm_dd_last_viewed_limit": {
+      "info": "User recently viewed in block",
+      "type": "input:text",
+      "value": 10,
+      "js_variable": true
+    },
     "cm_dd_highlighted_color": {
       "info": "Highlighted color",
       "type": "input:text",
@@ -216,6 +222,7 @@
       "most-liked" : "",
       "most-downloaded" : "",
       "similar" : "",
+      "user-recently-viewed" : "digitaldownload.user-recently-viewed",
       "featured" : ""
     },
     "controller" : {
@@ -271,9 +278,17 @@
       "type_id" : "0",
       "m_connection" : "digitaldownload.view",
       "component" : "similar",
-      "location" : "2",
+      "location" : "4",
       "is_active" : "1",
       "ordering" : "1"
+    },
+    "User recently viewed" : {
+      "type_id" : "0",
+      "m_connection" : "digitaldownload.view",
+      "component" : "user-recently-viewed",
+      "location" : "4",
+      "is_active" : "1",
+      "ordering" : "0"
     },
     "Most downloaded" : {
       "type_id" : "0",

@@ -75,6 +75,7 @@ if (setting('cm_dd_enabled')) {
         'digitaldownload.info'    => '\Apps\CM_DigitalDownload\Block\Info',
         'digitaldownload.manage-photos'    => '\Apps\CM_DigitalDownload\Block\ManagePhotos',
         'digitaldownload.manage-options'    => '\Apps\CM_DigitalDownload\Block\ManageOptions',
+        'digitaldownload.user-recently-viewed'    => '\Apps\CM_DigitalDownload\Block\LastUserViewed',
     ]);
 }
 

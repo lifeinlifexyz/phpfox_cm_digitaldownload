@@ -12,11 +12,6 @@ class Similar extends \Phpfox_Component
         if ($oDD) {
             $sTitle = (string) $oDD;
             $this->template()
-                ->setHeader('cache', [
-                        'masterslider.min.js' => 'module_core',
-                        'masterslider.css' => 'module_core',
-                    ]
-                )
                 ->assign([
                     'aDDs' =>  \Phpfox::getService('digitaldownload.browse')
                         ->conditions([

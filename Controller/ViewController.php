@@ -37,7 +37,6 @@ class ViewController extends Phpfox_Component
 			$this->url()->send('digitaldownload');
 		}
 
-		
 		if (!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDId))) {
 			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download which you are looking for not exist or has been removed')));
 		}
@@ -47,7 +46,7 @@ class ViewController extends Phpfox_Component
 		}
 		
 		$this->setParam('oDD', $oDD);
-//		d($oDD); die;
+
 		if (Phpfox::isUser() && $oDD['invite_id'] && !$oDD['visited_id'] && $oDD['user_id'] != Phpfox::getUserId()) {
 			Phpfox::getService('digitaldownload.invite')->setVisit($oDD['id'], Phpfox::getUserId());
 		}
@@ -62,11 +61,6 @@ class ViewController extends Phpfox_Component
 			Phpfox::getService('notification.process')->delete('digitaldownload', $iDDId, Phpfox::getUserId());
 			Phpfox::getService('notification.process')->delete('comment_digitaldownload', $iDDId, Phpfox::getUserId());
 		}
-		
-//		if (Phpfox::isModule('notification') && $oDD['user_id'] == Phpfox::getUserId())
-//		{
-//			Phpfox::getService('notification.process')->delete('marketplace_approved', $oDD['listing_id'], Phpfox::getUserId());
-//		}
 
 		if (!$oDD['is_active'] && !Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getUserId()) {
 			return Phpfox_Error::display(Phpfox::getPhrase(_p('The file which you are looking for not activated')));
@@ -162,12 +156,7 @@ class ViewController extends Phpfox_Component
 		$aSectionMenu = [];
 		if (!defined('PHPFOX_IS_USER_PROFILE'))
 		{
-//			$sInviteTotal = '';
-//			if (Phpfox::isUser() && ($iTotalInvites = Phpfox::getService('marketplace')->getTotalInvites()))
-//			{
-//				$sInviteTotal = '<span class="invited">' . $iTotalInvites . '</span>';
-//			}
-//
+
 			$aSectionMenu = [
 				_p('All Files') => '',
 				_p('My Files') => 'digitaldownload.my',

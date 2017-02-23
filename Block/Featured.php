@@ -17,8 +17,8 @@ class Featured extends \Phpfox_Component
             ->page(1)
             ->sort(' RAND()')
             ->getCollection(false);
-        if (!(count($aDDs) > 0)) {
-            return 'block';
+        if (\Phpfox::getService('digitaldownload.browse')->count() == 0) {
+            return false;
         }
 
         $this->template()
