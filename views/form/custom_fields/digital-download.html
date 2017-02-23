@@ -24,7 +24,7 @@
         <label for="{{ name }}_field">{% if required %}<span class="required">*</span>{% endif %} {{ title }}</label>
     </div>
     <div class="table_right">
-        <input type="hidden" name="{{ name }}[file]" value="{{ value }}">
+        <input type="hidden" name="{{ name }}[file]" value="{{ value_file }}">
         <input class="form-control" type="file" name="{{ name }}_file" id="{{ name }}_field" />
     </div>
     <div class="table_left">

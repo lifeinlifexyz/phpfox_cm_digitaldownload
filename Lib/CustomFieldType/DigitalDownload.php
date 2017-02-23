@@ -83,7 +83,7 @@ class DigitalDownload extends AbstractType
     public function setMValue($aRow)
     {
         $this->sCurrency = $aRow[$this->aInfo['name'] . '_currency_id'];
-        $this->aInfo['value'] = $aRow[$this->aInfo['name']];
+        $this->aInfo['value_file'] = $aRow[$this->aInfo['name']];
     }
 
     public function getValue()
@@ -120,7 +120,7 @@ class DigitalDownload extends AbstractType
             ? $this->aInfo['value']['limit']
             : (isset($this->aInfo['row_value'][$this->aInfo['name'] . '_limit']) ? $this->aInfo['row_value'][$this->aInfo['name'] . '_limit']: null);
 
-        $this->aInfo['value'] = isset($this->aInfo['value']) ? $this->aInfo['value'] : 0;
+        $this->aInfo['value_file'] = isset($this->aInfo['value_file']) ? $this->aInfo['value_file'] : (is_array($this->aInfo['value']) ? $this->aInfo['value']['file'] : 0);
 
         $this->aInfo['required'] = isset($this->aInfo['rules']) && (strpos($this->aInfo['rules'], 'required') !== false);
 
