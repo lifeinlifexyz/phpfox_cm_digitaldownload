@@ -170,9 +170,6 @@ function installv1_0_0()
         mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
     }
 
-    @rename(PHPFOX_DIR_APP . 'CM_DigitalDownload' . PHPFOX_DS . 'stubs' . PHPFOX_DS . 'dd_no_image.jpg',
-        Phpfox::getParam('core.dir_pic') . 'digitaldownload' . PHPFOX_DS . 'dd_no_image.jpg');
-
     $aPhrase  = [
         'digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name' => '{full_name} has purchased one of your items on {site_name}.
 
@@ -434,6 +431,9 @@ To check out this item, follow the link below:
         }
         $oForm->save();
     }
+
+    copy(PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'stubs' . PHPFOX_DS . 'dd_no_image.jpg',
+        Phpfox::getParam('core.dir_pic') . 'digitaldownload' . PHPFOX_DS . 'dd_no_image.jpg');
 }
 
 installv1_0_0();
