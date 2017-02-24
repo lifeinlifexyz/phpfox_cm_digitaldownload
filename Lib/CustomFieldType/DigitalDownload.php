@@ -82,7 +82,6 @@ class DigitalDownload extends AbstractType
 
     public function setMValue($aRow)
     {
-        d($aRow); die;
         $this->sCurrency = $aRow[$this->aInfo['name'] . '_currency_id'];
         $this->aInfo['value_file'] = $aRow[$this->aInfo['name']];
     }
