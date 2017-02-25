@@ -105,10 +105,12 @@ class AddController extends Phpfox_Component
 
             (($sPlugin = Phpfox_Plugin::get($sPlugin)) ? eval($sPlugin) : false);
 
-            $oForm->addField('hidden', [
-                'name' => 'user_id',
-                'value' => Phpfox::getUserId(),
-            ]);
+            if (!$bEdit) {
+                $oForm->addField('hidden', [
+                    'name' => 'user_id',
+                    'value' => Phpfox::getUserId(),
+                ]);
+            }
             
             if (!$bEdit) {
                 $oForm->addField('hidden', [
