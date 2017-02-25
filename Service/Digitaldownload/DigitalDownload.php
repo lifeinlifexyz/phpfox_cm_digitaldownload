@@ -207,7 +207,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $this->database()->select('f.friend_id AS is_friend, ')->leftJoin(Phpfox::getT('friend'), 'f', "f.user_id = d.user_id AND f.friend_user_id = " . Phpfox::getUserId());
 
        return $this->database()
-            ->select(Phpfox::getUserField() . ', d.*, u.*, uf.total_score, uf.total_rating, ua.activity_points, di.*,  `d`.`user_id` AS `user_id`')
+            ->select(Phpfox::getUserField() . ',u.*, uf.total_score, uf.total_rating, ua.activity_points, di.*,   d.*')
             ->from(Phpfox::getT($this->_sTable), 'd')
             ->join(Phpfox::getT('user'), 'u', 'u.user_id = d.user_id')
             ->join(Phpfox::getT('user_field'), 'uf', 'uf.user_id = d.user_id')

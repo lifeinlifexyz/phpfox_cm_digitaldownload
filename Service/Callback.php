@@ -120,7 +120,7 @@ class Callback extends Phpfox_Service
             } elseif ($oDD['user_id'] == Phpfox::getUserId()) {
                 $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_your_listing_title', ['user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')]);
             } else {
-                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_listing_title', array('user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'full_name' => $aRow['full_name'], 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')));
+                $sPhrase = Phpfox::getPhrase('digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_listing_title', array('user_names' => Phpfox::getService('notification')->getUsers($aNotification), 'full_name' => $oDD['full_name'], 'title' => Phpfox::getLib('parse.output')->shorten($sTitle, Phpfox::getParam('notification.total_notification_title_length'), '...')));
 
             }
 

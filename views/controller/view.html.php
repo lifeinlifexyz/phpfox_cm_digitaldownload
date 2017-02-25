@@ -14,7 +14,7 @@ defined('PHPFOX') or exit('NO DICE!');
 <div class="item_view">
 	<h1>{$oDD}</h1>
 	<div class="info">
-		<span>{$oDD.time_stamp|convert_time'} </span>
+		<span>{$oDD.time_stamp|convert_time} </span>
 		<span>&middot; </span>
 		<span>{phrase var='event.by'} {$oDD|user:'':'':50}</span>
 		<span>&middot;</span>
