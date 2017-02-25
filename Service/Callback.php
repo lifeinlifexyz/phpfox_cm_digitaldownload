@@ -175,12 +175,14 @@ class Callback extends Phpfox_Service
 
     public function getCommentItem($iId)
     {
-        $aDD = $this->database()->select('`id` AS comment_item_id, user_id AS comment_user_id')
-            ->from($this->_sTable)
-            ->where('`id` = ' . (int)$iId)
-            ->get();
+        $aDD = Phpfox::getService('digitaldownload.dd')->getForFeed((int)$iId);
+        if (empty($aDD)) {
+            return false;
+        }
 
         $aDD['comment_view_id'] = 1;
+        $aDD['comment_item_id'] = $iId;
+        $aDD['comment_user_id'] = Phpfox::getUserId();
 
         return $aDD;
     }
