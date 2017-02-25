@@ -43,11 +43,12 @@ class Field extends \Phpfox_Service implements IFormly
                 'type' => 'string',
                 'name' => 'name',
                 'title' => _p('Name'),
-                'rules' => 'required|alphabet|' . (!empty($aExitsFields)
+                'rules' => 'required|/^[A-Za-z][A-Za-z0-9_]{1,}$/:regex|' . (!empty($aExitsFields)
                         ? implode(':', $aExitsFields) . ':notin'
                         : 'notin'),
                 'errorMessages' => [
-                    'name.notin' =>_p('The value entered into \'NAME\' field is already used, please choose a different value.'),
+                    'name.notin' =>_p('The value entered into \'Name\' field is already used, please choose a different value.'),
+                    'name.regex' => _p('The value entered into \'Name\' must be any non-whitespace chars.'),
                 ]
             ],
             'caption_phrase' => [

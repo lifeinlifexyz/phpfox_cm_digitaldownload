@@ -24,6 +24,7 @@ class Validator implements IValidator
         'notin' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\NotIn@validate',
         'alphabet' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Alphabet@validate',
         'num' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Numeric@validate',
+        'regex' => 'Apps\CM_DigitalDownload\Lib\Form\Validator\Rule\Regex@validate',
     ];
 
     /**
