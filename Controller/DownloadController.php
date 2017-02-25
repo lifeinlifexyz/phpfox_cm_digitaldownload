@@ -36,7 +36,6 @@ class DownloadController extends Phpfox_Component
 		if (!($sField = $this->request()->get('req4'))) {
 			$this->url()->send('digitaldownload');
 		}
-
 		$aDDTypeFields = Phpfox::getService('digitaldownload.field')->getFieldsByType('dd');
 		if (
 		!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDId))
@@ -45,11 +44,11 @@ class DownloadController extends Phpfox_Component
 			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download you are looking for either does not exist or has been removed')));
 		}
 		if (!$oDD->getField($sField)->canDownload()) {
-			$this->url()->send('digitaldownload.' . $oDD['id'], [], _p('You must purchase this product to download'));
+			$this->url()->send('digitaldownload.' . $oDD['id'], [], _p('You must purchase this product to download'), 403);
 		}
 
 		//if is not free and not admin and not owner then decrement limit
-		if ($oDD[$sField . '_price'] != '0.00' && $oDD['user_id'] != Phpfox::getUserId()) {
+		if ($oDD[$sField . '_price'] != '0.00' && $oDD['user_id'] != Phpfox::getUserId() && !Phpfox::isAdmin()) {
 			Phpfox::getService('digitaldownload.download')->decrementLimit(Phpfox::getUserId(), $iDDId, $sField);
 		}
 
