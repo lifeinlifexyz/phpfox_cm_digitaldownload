@@ -13,7 +13,8 @@ class MostDownloaded extends \Phpfox_Component
             ->assign([
                 'aDDs' =>  \Phpfox::getService('digitaldownload.browse')
                     ->conditions([
-                        ' AND `d`.`is_active` = 1'
+                        ' AND `d`.`is_active` = 1',
+                        ' AND `d`.`total_download` > 0'
                     ])
                     ->limit(\Phpfox::getParam('cm_dd_most_downloaded_limit', 4))
                     ->page(1)
