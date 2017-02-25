@@ -25,7 +25,6 @@ class CategoryField extends \Phpfox_Service
         }
 
         CMCache::removeByGroup('cm_dd_category_fields');
-        CMCache::remove('cm_dd_field_types');
     }
 
     public function getByCategoryId($iId)
@@ -73,7 +72,6 @@ class CategoryField extends \Phpfox_Service
     {
         $this->database()->delete(\Phpfox::getT($this->_sTable),  '`category_id` = ' . $iId);
         CMCache::removeByGroup('cm_dd_category_fields');
-        CMCache::remove('cm_dd_field_types');
     }
 
 }

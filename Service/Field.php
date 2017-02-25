@@ -120,7 +120,6 @@ class Field extends \Phpfox_Service implements IFormly
             }
         }
         CMCache::removeByGroup('cm_dd_category_fields');
-        CMCache::remove('cm_dd_field_types');
         return $this;
     }
 
@@ -137,7 +136,6 @@ class Field extends \Phpfox_Service implements IFormly
     {
         $iId = (int) $iId;
         CMCache::removeByGroup('cm_dd_category_fields');
-        CMCache::remove('cm_dd_field_types');
         return $this->database()->update(\Phpfox::getT($this->_sTable),
             ['`is_active`' => $iStatus], '`field_id` = ' . $iId);
     }
@@ -159,7 +157,6 @@ class Field extends \Phpfox_Service implements IFormly
             $this->database()->commit();
 
             CMCache::removeByGroup('cm_dd_category_fields');
-            CMCache::remove('cm_dd_field_types');
 
             return true;
         } catch (\Exception $e)
@@ -175,7 +172,8 @@ class Field extends \Phpfox_Service implements IFormly
         $aCond  = [
             '`f`.`is_active` = 1',
             'AND `c`.`is_active` = 1',
-            'AND `f`.`is_filter` = 1'
+            'AND `f`.`is_filter` = 1',
+            'AND `f`.`type` <> \'dd\''
         ];
 
         if (count($aCategoryIds) > 0) {
@@ -220,7 +218,7 @@ class Field extends \Phpfox_Service implements IFormly
                 $aRes[] = $aField['name'];
             }
             return $aRes;
-        });
+        }, 0, 'cm_dd_category_fields');
     }
 
 }
