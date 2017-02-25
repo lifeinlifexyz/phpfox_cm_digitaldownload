@@ -59,7 +59,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $aMinMax = $this->database()
             ->select($sMinMaxSelect)
             ->from(Phpfox::getT($this->_sTable), 'd')
-            ->where('`category_id` in (' . implode(', ', $aCategoryIds) . ')')
+            ->where('`category_id` in (' . implode(', ', $aCategoryIds) . ') AND `is_active` = 1')
             ->get();
         $iMin = 0;
         $iMax = 0;
