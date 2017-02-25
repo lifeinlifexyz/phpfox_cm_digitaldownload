@@ -204,21 +204,30 @@ class Field extends \Phpfox_Service implements IFormly
         return $aList;
     }
 
-    public function getFieldsByType($sType)
+    public function getFieldsByType($sType, $bActive = true)
     {
         $that = $this;
-        return CMCache::remember('cm_dd_field_types_' . $sType, function() use ($that, $sType) {
-            $aFields = $this->database()
-                ->select('`name`')
-                ->from(\Phpfox::getT($this->_sTable))
-                ->where('`type` = \'' . $sType . '\'')
-                ->all();
+        return CMCache::remember('cm_dd_field_types_' . $sType . (string) $bActive,
+            function() use ($that, $sType, $bActive) {
+                $aCond = [
+                    ' AND `type` = \'' . $sType . '\'',
+                 ];
 
-            $aRes =  [];
-            foreach($aFields as $aField) {
-                $aRes[] = $aField['name'];
-            }
-            return $aRes;
+                if ($bActive) {
+                    $aCond[] = ' AND `is_active` = ' . (int) $bActive;
+                }
+
+                $aFields = $this->database()
+                    ->select('`name`')
+                    ->from(\Phpfox::getT($this->_sTable))
+                    ->where($aCond)
+                    ->all();
+
+                $aRes =  [];
+                foreach($aFields as $aField) {
+                    $aRes[] = $aField['name'];
+                }
+                return $aRes;
         }, 0, 'cm_dd_category_fields');
     }
 
