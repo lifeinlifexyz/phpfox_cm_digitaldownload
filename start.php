@@ -1,4 +1,6 @@
 <?php
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
+
 define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
     . str_replace('/index.php', '', \Phpfox::getParam('core.folder'))
     . 'PF.Site/Apps/CM_DigitalDownload/assets/');
@@ -140,9 +142,7 @@ group('/digitaldownload/', function (){
                 'values' => $values,
             ]
         );
-
-        //todo::remove fields cache
-
+        CMCache::removeByGroup('cm_dd_category_fields');
         return true;
     });
 
