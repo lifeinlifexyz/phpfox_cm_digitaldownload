@@ -26,14 +26,14 @@ defined('PHPFOX') or exit('NO DICE!');
                         {if  $bIsOwner || Phpfox::getUserParam('digitaldownload.can_activate_deactivate_other')}
                             {if !$aEntry.is_active}
                                 <li>
-                                    <a href="{url link='digitaldownload.activate'}{$aEntry.id}" class="js_dd_activate color-success" title="{_p('Activate')}" data-toggle="tooltip">
-                                        <i class="fa fa-eye"></i>
+                                    <a href="{url link='digitaldownload.activate'}{$aEntry.id}" class="js_dd_activate color-success">
+                                        <i class="fa fa-eye" title="{_p('Activate')}" data-toggle="tooltip"></i>
                                     </a>
                                 </li>
                             {else}
                                 <li>
-                                    <a href="{url link='digitaldownload.deactivate'}{$aEntry.id}" class="sJsConfirm js_dd_deactivate color-warning" title="{_p('Deactivate')}" data-toggle="tooltip">
-                                        <i class="fa fa-eye-slash"></i>
+                                    <a href="{url link='digitaldownload.deactivate'}{$aEntry.id}" class="sJsConfirm js_dd_deactivate color-warning">
+                                        <i class="fa fa-eye-slash" title="{_p('Deactivate')}" data-toggle="tooltip"></i>
                                     </a>
                                 </li>
                             {/if}
@@ -41,21 +41,21 @@ defined('PHPFOX') or exit('NO DICE!');
 
                         {if $bIsOwner || Phpfox::getUserParam('digitaldownload.can_delete_other')}
                             <li>
-                                <a href="{url link='digitaldownload.delete'}{$aEntry.id}" class="sJsConfirm color-error" title="{_p('Delete')}" data-toggle="tooltip">
-                                    <i class="fa fa-trash"></i>
+                                <a href="{url link='digitaldownload.delete'}{$aEntry.id}" class="sJsConfirm color-error">
+                                    <i class="fa fa-trash" title="{_p('Delete')}" data-toggle="tooltip"></i>
                                 </a>
                             </li>
                         {/if}
 
                         {if $bIsOwner ||  Phpfox::getUserParam('digitaldownload.can_edit_other')}
                             <li>
-                                <a href="{url link='digitaldownload.add' dd_id=$aEntry.id}" class="color-primary" title="{_p('Edit')}" data-toggle="tooltip">
-                                    <i class="fa fa-pencil"></i>
+                                <a href="{url link='digitaldownload.add' dd_id=$aEntry.id}" class="color-primary">
+                                    <i class="fa fa-pencil" title="{_p('Edit')}" data-toggle="tooltip"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="{url link='digitaldownload.add.options' dd_id=$aEntry.id}" class="color-default" title="{_p('Manage options')}" data-toggle="tooltip">
-                                    <i class="fa fa-cog"></i>
+                                <a href="{url link='digitaldownload.add.options' dd_id=$aEntry.id}" class="color-default">
+                                    <i class="fa fa-cog" title="{_p('Manage options')}" data-toggle="tooltip"></i>
                                 </a>
                             </li>
                         {/if}

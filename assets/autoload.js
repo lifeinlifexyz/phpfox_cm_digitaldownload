@@ -137,7 +137,7 @@ $Ready(function () {
 
     cm_loadAssets();
     initCMAjaxLink();
-    $('[data-toggle="tooltip"]').addClass('dont-unbind').tooltip();
+    $('.cd-dd [data-toggle="tooltip"]').addClass('dont-unbind').tooltip();
 
     $('.owl-carousel').each(function(){
        var that = this;
