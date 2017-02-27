@@ -7,11 +7,11 @@ defined('PHPFOX') or exit('NO DICE!');
             <span class="dd-view-mode-caption">{_p('digitaldownload_view_mode_list')}</span>
             <div class="dd-view-mode-buttons">
                 <button type="button" class="btn cm-dd-btn-mode list" data-mode="list"
-                        title="{_p('digitaldownload_view_mode_list')}">
+                        title="{_p('List')}">
                     <i class="fa fa-list"></i>
                 </button>
                 <button type="button" class="btn cm-dd-btn-mode grid" data-mode="grid"
-                        title="{_p('digitaldownload_view_mode_grid')}">
+                        title="{_p('Grid')}">
                     <i class="fa fa-th"></i>
                 </button>
             </div>
