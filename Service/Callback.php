@@ -457,6 +457,31 @@ class Callback extends Phpfox_Service
 
     }
 
+    public function globalUnionSearch($sSearch)
+    {
+        $this->database()->select('item.id AS item_id, item._title AS item_title, item.time_stamp AS item_time_stamp, item.user_id AS item_user_id, \'digitaldownload\' AS item_type_id, \'\' AS item_photo, \'\' AS item_photo_server')
+            ->from($this->_sTable, 'item')
+            ->where('item.is_active = 1 AND item.privacy = 0 AND ' . $this->database()->searchKeywords('item._title', $sSearch))
+            ->union();
+    }
+
+    public function getSearchInfo($aRow)
+    {
+        $aInfo = array();
+        $aInfo['item_link'] = Phpfox_Url::instance()->permalink('digitaldownload', $aRow['item_id']);
+        $aInfo['item_name'] = _p('Digital download');
+
+        $aInfo['item_display_photo'] = null;
+        return $aInfo;
+    }
+
+    public function getSearchTitleInfo()
+    {
+        return [
+            'name' => _p('Digital downloads')
+        ];
+    }
+
     /**
      * If a call is made to an unknown method attempt to connect
      * it to a specific plug-in with the same name thus allowing

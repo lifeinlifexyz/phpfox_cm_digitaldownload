@@ -234,6 +234,11 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         return $aRow;
     }
 
+    public function updateParsedTitle($oDD)
+    {
+        $this->updateById($oDD['id'], ['_title' => (string)$oDD]);
+    }
+
     public function activate($iId, array $aPlan = [])
     {
         $iId = (int) $iId;
@@ -265,6 +270,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
         //insert new feed
         \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
+        $this->updateParsedTitle($oDD);
 
         $oDD['is_active'] = true;
         return  $this;
@@ -289,6 +295,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
         //insert new feed
         \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
+        $this->updateParsedTitle($oDD);
 
         $oDD['is_active'] = true;
         return  $this;

@@ -1,4 +1,12 @@
 <?php
+function includeDDHooks()
+{
+    $oCache = Phpfox::getLib('cache');
+    $oCache->remove();
+    file_put_contents(PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'app.lock', '');
+    new \Core\App(true);
+    Phpfox_Plugin::set();
+}
 
 function installv1_0_0()
 {
@@ -61,6 +69,7 @@ function installv1_0_0()
       `total_download` INT  NOT NULL DEFAULT  '0',
       `is_expired` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `rating` VARCHAR( 25 ) NOT NULL DEFAULT  '',
+      `_title` VARCHAR(500) NOT NULL DEFAULT  '',
       PRIMARY KEY (`id`),
       KEY `category_id` (`category_id`),
       KEY `is_active` (`is_active`),
@@ -121,7 +130,7 @@ function installv1_0_0()
         PRIMARY KEY (`download_id`),
         KEY `dd_id` (`dd_id`,`user_id`)
     );');
-    
+
     db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_invite') . '` (
         `invite_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
         `dd_id` int(10) unsigned NOT NULL,
@@ -733,7 +742,13 @@ To check out this item, follow the link below:
     $oForm = Phpfox::getService('digitaldownload.category')->getForm();
     foreach($aCategories as $aCategory) {
         foreach($aCategory as $sField => $sValue){
-            $oForm->setFieldValue($sField, $sValue);
+            if ($sField == 'name') {
+                foreach ($aLanguages as $aLanguage) {
+                    Phpfox_Request::instance()->set($sField . '_' . $aLanguage['language_id'], $sValue);
+                }
+            } else {
+                $oForm->setFieldValue($sField, $sValue);
+            }
         }
         $oForm->save();
     }
@@ -765,14 +780,7 @@ To check out this item, follow the link below:
         ],
     ];
 
-    Phpfox::getLib('cache')->remove();
-    Phpfox::getLib('template.cache')->remove();
-    Phpfox::getLib('cache')->removeStatic();
-    if ($sPlugin = Phpfox_Plugin::get('admincp.component_controller_maintain_1')) {
-        eval($sPlugin);
-    }
-    Phpfox_Request::instance()->send(Phpfox_Url::instance()->makeUrl('admincp.maintain.cache'));
-    Phpfox_Plugin::set();
+    includeDDHooks();
 
     $oForm = Phpfox::getService('digitaldownload.field')->getForm();
     foreach($aFields as $aField) {
