@@ -222,7 +222,7 @@
       "most-liked" : "",
       "most-downloaded" : "",
       "similar" : "",
-      "user-recently-viewed" : "digitaldownload.user-recently-viewed",
+      "user-recently-viewed" : "",
       "featured" : ""
     },
     "controller" : {

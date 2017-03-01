@@ -26,12 +26,12 @@ abstract class MultiLangType extends AbstractType
         $sModule = isset($this->aInfo['module']) ? $this->aInfo['module'] : 'core';
         if (is_null($sPhrase)) {
             //insert phrase
-            $sDefText = $this->oRequest->get($sName . '_' . $this->sDefLangId) ?: $sModule . '.' . $sName;
+            $sDefText = $this->oRequest->get($sName . '_' . $this->sDefLangId, $sModule . '.' . $sName);
             $aText = [];
-            foreach ($aLanguages as &$aLanguage) {
-                $aText[$aLanguage['language_id']] = $this->oRequest->get($sName . '_' . $aLanguage['language_id']) ?: $sDefText;
+            foreach ($aLanguages as $aLanguage) {
+                $aText[$aLanguage['language_id']] = $this->oRequest->get($sName . '_' . $aLanguage['language_id'], $sDefText);
             }
-            $sPhrase = $sName . '_multi_lang_string_' . md5($sName . PHPFOX_TIME . rand(1, 100));
+            $sPhrase = $sName . '_multi_lang_string_' . md5($sName . PHPFOX_TIME . rand(1, 9000));
             $aPhrase = [
                 'product_id' => 'phpfox',
                 'module' => $sModule . '|' . $sModule,
@@ -42,7 +42,7 @@ abstract class MultiLangType extends AbstractType
 
         } elseif (!is_null($sPhrase) && \Phpfox::isPhrase($sPhrase)) {
             //update phrase
-            foreach ($aLanguages as &$aLanguage) {
+            foreach ($aLanguages as $aLanguage) {
                 if ($this->oRequest->get($sName . '_' . $aLanguage['language_id'])) {
                     $sText = $this->oRequest->get($sName . '_' . $aLanguage['language_id']);
                     \Language_Service_Phrase_Process::instance()->updateVarName($aLanguage['language_id'], $sPhrase, $sText);

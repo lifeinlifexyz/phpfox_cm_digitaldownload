@@ -741,13 +741,13 @@ To check out this item, follow the link below:
      */
     $oForm = Phpfox::getService('digitaldownload.category')->getForm();
     foreach($aCategories as $aCategory) {
-        foreach($aCategory as $sField => $sValue){
-            if ($sField == 'name') {
+        foreach($aCategory as $sCatField => $sCatValue){
+            if ($sCatField == 'name') {
                 foreach ($aLanguages as $aLanguage) {
-                    Phpfox_Request::instance()->set($sField . '_' . $aLanguage['language_id'], $sValue);
+                    Phpfox_Request::instance()->set('name_' . $aLanguage['language_id'], $sCatValue);
                 }
             } else {
-                $oForm->setFieldValue($sField, $sValue);
+                $oForm->setFieldValue($sCatField, $sCatValue);
             }
         }
         $oForm->save();
@@ -787,7 +787,7 @@ To check out this item, follow the link below:
         foreach($aField as $sField => $sValue){
             if ($sField == 'caption_phrase') {
                 foreach ($aLanguages as $aLanguage) {
-                    Phpfox_Request::instance()->set($sField . '_' . $aLanguage['language_id'], $sValue);
+                    Phpfox_Request::instance()->set('caption_phrase_' . $aLanguage['language_id'], $sValue);
                 }
             } else {
                 $oForm->setFieldValue($sField, $sValue);
@@ -877,7 +877,7 @@ To check out this item, follow the link below:
         foreach($aPlan as $sField => $mValue) {
             if ($sField == 'name') {
                 foreach ($aLanguages as $aLanguage) {
-                    Phpfox_Request::instance()->set($sField . '_' . $aLanguage['language_id'], $mValue);
+                    Phpfox_Request::instance()->set('name_' . $aLanguage['language_id'], $mValue);
                 }
             }elseif($sField == 'price_currency_id'){
                 Phpfox_Request::instance()->set($sField, $mValue);

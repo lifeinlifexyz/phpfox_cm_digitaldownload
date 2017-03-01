@@ -16,5 +16,7 @@ $aTables = [
     Phpfox::getT('digital_download_invoice'),
     Phpfox::getT('digital_download_dd_plan'),
     Phpfox::getT('digital_download_download'),
+    Phpfox::getT('digital_download_invite'),
+    Phpfox::getT('digital_download_rating'),
 ];
 db()->dropTables($aTables);

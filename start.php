@@ -42,7 +42,7 @@ define('DD_ASSET_PATH', '//' . \Phpfox::getParam('core.host')
         'digitaldownload' => PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'views',
         'cm_forms' => PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'views'. PHPFOX_DS . 'form',
         'cm_filter_form' => PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'views'. PHPFOX_DS . 'filter',
-    ]);
+    ])->addAliasNames('digitaldownload', 'CM_DigitalDownload');;
 
 event('app_settings', function ($settings){
     if (isset($settings['cm_dd_enabled'])) {
