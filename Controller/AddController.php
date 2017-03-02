@@ -97,6 +97,16 @@ class AddController extends Phpfox_Component
         if ($sAction == 'upload') {
             $this->upload($oDD);
         }
+        $aPlan = isset($aPlan) ? $aPlan : Phpfox::getService('digitaldownload.plan')->get($iPlan);
+
+        if (isset($aPlan['youtube_video_allowed']) && $aPlan['youtube_video_allowed']) {
+            $oForm->addField('url', [
+                'name' => 'youtube_video_url',
+                'type' => 'url',
+                'value' => $this->request()->get('youtube_video_url', (isset($aDD) ? $aDD['youtube_video_url']: null)),
+                'title' => _p('Youtube video'),
+            ]);
+        }
 
         if ($_POST && $oForm->isValid()) {
             $sPlugin = $bEdit

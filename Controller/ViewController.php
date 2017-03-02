@@ -98,7 +98,6 @@ class ViewController extends Phpfox_Component
 			]
 		);
 
-
 		$aMainImage = $oDD['main_image'];
 		$this->template()->setTitle((string)$oDD)
 			->setBreadCrumb(_p('Digitaldownload'), $this->url()->makeUrl('digitaldownload'))
@@ -135,23 +134,10 @@ class ViewController extends Phpfox_Component
 					'oDD' => $oDD,
 					'aFieldNames' => $oDD->getFields([
 						'description' => true,
-						'privacy'=> true
+						'privacy'=> true,
 					]),
 				]
 			);
-		if (Phpfox::isModule('rate'))
-		{
-			$this->template()
-				->setPhrase([
-					'rate.thanks_for_rating'
-					]
-				)
-				->setHeader([
-					'rate.js' => 'module_rate',
-					'<script type="text/javascript">$Behavior.rateDigitaldownloadUser = function() { $Core.rate.init({display: false}); }</script>',
-					]
-			);
-		}
 
 		$aSectionMenu = [];
 		if (!defined('PHPFOX_IS_USER_PROFILE'))
@@ -175,7 +161,7 @@ class ViewController extends Phpfox_Component
 		}
 
 		$this->template()->buildSectionMenu('digitaldownload', $aSectionMenu);
-		
+
 		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_view_process_end')) ? eval($sPlugin) : false);
         return null;
 	}

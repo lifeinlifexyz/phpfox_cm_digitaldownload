@@ -22,7 +22,6 @@ class Plan extends \Phpfox_Service implements IFormly
      */
     public function getFieldsInfo()
     {
-        //todo extend options
         $aFields = [
             'name' => [
                 'type' => 'mstring',

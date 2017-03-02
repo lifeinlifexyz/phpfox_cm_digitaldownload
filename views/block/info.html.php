@@ -26,3 +26,4 @@ defined('PHPFOX') or exit('NO DICE!');
 		</div>
 	{/foreach}
 </div>
+{$oDD.youtube}

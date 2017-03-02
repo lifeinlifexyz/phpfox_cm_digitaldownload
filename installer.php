@@ -63,6 +63,8 @@ function installv1_0_0()
       `featured` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `sponsored` TINYINT( 1 ) NOT NULL DEFAULT  '0',
       `highlighted` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `youtube_video` TINYINT( 1 ) NOT NULL DEFAULT  '0',
+      `youtube_video_url` VARCHAR( 255 ) NULL,
       `total_comment` int(10) NOT NULL DEFAULT  '0',
       `total_like` int( 10 ) NOT NULL DEFAULT  '0',
       `total_view` INT( 11 )  NOT NULL DEFAULT  '0',
@@ -90,6 +92,8 @@ function installv1_0_0()
       `sponsored_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
       `highlighted` DECIMAL( 14, 2 ) NOT NULL DEFAULT \'0.00\',
       `highlighted_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
+      `youtube_video` DECIMAL( 14, 2 ) NOT NULL DEFAULT \'0.00\',
+      `youtube_video_allowed` TINYINT( 1 ) NOT NULL DEFAULT  \'0\',
       `user_groups` VARCHAR( 255 ) NULL,
        PRIMARY KEY (`plan_id`)
     )');
@@ -828,6 +832,10 @@ To check out this item, follow the link below:
                 'allowed' => 1,
                 'price' => '0.01',
             ],
+            'youtube_video' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
             'user_groups' => [1, 2],
         ],
         [
@@ -848,6 +856,10 @@ To check out this item, follow the link below:
                 'allowed' => 1,
                 'price' => '0.00',
             ],
+            'youtube_video' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
             'user_groups' => [1, 2],
         ],
         [
@@ -865,6 +877,10 @@ To check out this item, follow the link below:
                 'price' => '0.00',
             ],
             'highlighted' => [
+                'allowed' => 1,
+                'price' => '0.00',
+            ],
+            'youtube_video' => [
                 'allowed' => 1,
                 'price' => '0.00',
             ],

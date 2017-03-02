@@ -81,9 +81,7 @@ class Builder
         foreach ($aFields as $aField) {
             $sType = $aField['type'];
             $oForm->addField($sType, $aField);
-            $mValue = (!is_null($this->oRequest->get($aField['name'], null)))
-                ? $this->oRequest->get($aField['name'])
-                : (isset($aField['value']) ? $aField['value'] : null);
+            $mValue = $this->oRequest->get($aField['name'], (isset($aField['value']) ? $aField['value'] : null));
 
             $oForm->setFieldValue($aField['name'], $mValue);
         }
