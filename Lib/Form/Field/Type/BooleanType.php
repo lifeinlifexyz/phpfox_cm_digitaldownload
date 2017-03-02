@@ -18,6 +18,6 @@ class BooleanType extends AbstractType
 
     public function getDisplay()
     {
-        return (isset($this['value']) && $this['value']) ? _p('Yes') : _p('No');
+        return (isset($this->aInfo['value']) && $this->aInfo['value']) ? _p('Yes') : _p('No');
     }
 }
