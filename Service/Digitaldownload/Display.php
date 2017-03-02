@@ -119,15 +119,17 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 return view('@CM_DigitalDownload/rating/full.html', $aRating);
                 break;
             case 'youtube':
+                $sVideo = '';
                 if (isset($this->aRow['youtube_video']) && $this->aRow['youtube_video']) {
                     preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",
                         $this->aRow['youtube_video_url'],
                         $matches);
                     $video_id  = empty($matches) ? $this->aRow['youtube_video_url'] : array_pop($matches);
-                    return view('@CM_DigitalDownload/form/custom_fields/display/youtube.html', ['video_id' => $video_id]);
-                } else {
-                    return false;
+                    if (!empty($video_id)) {
+                        $sVideo = view('@CM_DigitalDownload/form/custom_fields/display/youtube.html', ['video_id' => $video_id]);
+                    }
                 }
+                return $sVideo;
                 break;
             default:
                 return parent::offsetGet($offset);
