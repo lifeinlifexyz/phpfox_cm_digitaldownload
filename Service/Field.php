@@ -94,7 +94,6 @@ class Field extends \Phpfox_Service implements IFormly
             'boolean' => _p('Boolean'),
             'mstring' => _p('Multi language string'),
             'string' => _p('String'),
-            'select' => _p('Select'),
             'text' => _p('Text'),
             'dd' => _p('Digital Download'),
         ];
