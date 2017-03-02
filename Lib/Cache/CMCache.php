@@ -12,7 +12,7 @@ class CMCache
            cache()->set($sKey, $mData);
            if (!is_null($sGroup)) {
                $sGroup = str_replace(['/', '_'], '', $sGroup);
-               $aGroup =  cache()->get('cm_cache_tag_group_' . $sGroup);
+               $aGroup =  cache()->get('cm_dd_cache_tag_group_' . $sGroup);
                $aGroup = empty($aGroup) ? [] : $aGroup;
                $aGroup[] = $sKey;
                cache()->set('cm_dd_cache_tag_group_' . $sGroup, $aGroup);
