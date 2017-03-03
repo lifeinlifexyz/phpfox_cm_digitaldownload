@@ -74,6 +74,9 @@
     $Ready(function(){
         var rules = {};
         var rulesSelectorTarget = $(ruleSelector);
+        if (rulesSelectorTarget == undefined || !rulesSelectorTarget.length) {
+            return false;
+        }
         var editValue = rulesSelectorTarget.closest('.rules-input-box').find('input[type="hidden"]').val();
         if (editValue.length > 0) {
             restoreRules(editValue);
