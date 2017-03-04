@@ -9,7 +9,7 @@ class Ajax extends Phpfox_Ajax
     public function setFieldStatus()
     {
         \Phpfox::isAdmin(true);
-        \Phpfox::getService('digitaldownload.field')->setStatus($this->get('id'), $this->get('status'));
+        \Phpfox::getService('digitaldownload.field')->setStatus($this->get('id'), $this->get('active'));
     }
 
     public function deleteImage()

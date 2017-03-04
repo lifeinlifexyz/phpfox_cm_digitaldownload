@@ -42,10 +42,10 @@ defined('PHPFOX') or exit('NO DICE!');
 			<td>{$aItem.rules}</td>
 			<td class="t_center">
 				<div class="js_item_is_active"{if !$aItem.is_active} style="display:none;"{/if}>
-					<a href="#?call=digitaldownload.setFieldStatus&amp;id={$aItem.field_id}&amp;status=0" class="js_item_active_link" title="{_p var='Deactivate'}">{img theme='misc/bullet_green.png' alt=''}</a>
+					<a href="#?call=digitaldownload.setFieldStatus&amp;id={$aItem.field_id}&amp;active=0" class="js_item_active_link" title="{_p var='Deactivate'}">{img theme='misc/bullet_green.png' alt=''}</a>
 				</div>
 				<div class="js_item_is_not_active"{if $aItem.is_active} style="display:none;"{/if}>
-					<a href="#?call=digitaldownload.setFieldStatus&amp;id={$aItem.field_id}&amp;status=1" class="js_item_active_link" title="{_p var='Activate'}">{img theme='misc/bullet_red.png' alt=''}</a>
+					<a href="#?call=digitaldownload.setFieldStatus&amp;id={$aItem.field_id}&amp;active=1" class="js_item_active_link" title="{_p var='Activate'}">{img theme='misc/bullet_red.png' alt=''}</a>
 				</div>
 			</td>
 		</tr>
