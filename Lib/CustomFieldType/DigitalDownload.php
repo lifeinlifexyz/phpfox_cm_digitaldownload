@@ -96,7 +96,7 @@ class DigitalDownload extends AbstractType
 
             $this->aInfo['name'] . '_price' => number_format((float)(isset($this->aInfo['value']['price'])
                 ? $this->aInfo['value']['price']
-                : $this->aInfo['row_value'][$this->aInfo['name'] . '_price']), 2),
+                : $this->aInfo['row_value'][$this->aInfo['name'] . '_price']), 2, '.', ''),
             $this->aInfo['name'] . '_currency_id' => isset($this->aInfo['value']['currency_id'])
                 ? $this->aInfo['value']['currency_id']
                 : $this->aInfo['row_value'][$this->aInfo['name'] . '_currency_id'],
@@ -182,7 +182,7 @@ class DigitalDownload extends AbstractType
     {
         $sPrice = $this->aInfo['row_value'][$this->aInfo['name'] . '_price'];
 
-        return Phpfox::getService('core.currency')->getCurrency(number_format($sPrice, 2),
+        return Phpfox::getService('core.currency')->getCurrency($sPrice,
             $this->aInfo['row_value'][$this->aInfo['name'] . '_currency_id']);
     }
 

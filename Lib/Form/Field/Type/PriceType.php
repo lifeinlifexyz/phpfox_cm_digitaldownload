@@ -63,7 +63,7 @@ class PriceType extends IntegerType
     {
         return ($this->aInfo['value'] != '0.00')
             ? Phpfox::getService('core.currency')->getSymbol($this->sCurrency)
-                . ' ' . number_format($this->aInfo['value'], 2)
+                . ' ' . number_format($this->aInfo['value'], 2, '.', '')
             : _p('Free');
     }
 }
