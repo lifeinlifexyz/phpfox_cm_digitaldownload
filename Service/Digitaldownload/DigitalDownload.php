@@ -192,6 +192,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             }
 
             $oDisplay->setRow($this->aRow);
+            $oDisplay->setDDFieldNames(\Phpfox::getService('digitaldownload.field')->getFieldsByType('dd'));
             $this->_aDisplayer[$iId] = $oDisplay;
         }
         return $this->_aDisplayer[$iId];

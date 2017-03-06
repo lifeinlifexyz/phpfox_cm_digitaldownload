@@ -4,7 +4,6 @@ namespace Apps\CM_DigitalDownload\Service\Digitaldownload;
 use Apps\CM_DigitalDownload\Lib\Collection\Collection;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\FormlyTrait;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
-use Core\Event;
 use Phpfox;
 use Phpfox_Plugin;
 
