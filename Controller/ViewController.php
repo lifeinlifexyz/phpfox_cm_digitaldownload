@@ -38,7 +38,7 @@ class ViewController extends Phpfox_Component
 		}
 
 		if (!($oDD = Phpfox::getService('digitaldownload.dd')->getDisplayer($iDDId))) {
-			return Phpfox_Error::display(Phpfox::getPhrase(_p('The Digital Download which you are looking for not exist or has been removed')));
+			return Phpfox_Error::display(_p('The Digital Download which you are looking for not exist or has been removed'));
 		}
 
 		if (\Phpfox::isModule('privacy')) {
