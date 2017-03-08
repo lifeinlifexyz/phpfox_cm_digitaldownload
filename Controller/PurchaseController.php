@@ -40,7 +40,7 @@ class PurchaseController extends Phpfox_Component
 
                 $aUserGateways =  [];
                 if ($aInvoice['type'] == 'options') { //if buy options, then pay for admin, else for owner
-                    $aAdminGateways = Phpfox::getService('api.gateway')->getForAdmin();
+                    $aAdminGateways = Phpfox::getService('api.gateway')->getActive();
 
                     foreach ($aAdminGateways as &$aAdminGateway) {
                         $aUserGateways[$aAdminGateway['gateway_id']]['gateway'] = unserialize($aAdminGateway['setting']);
