@@ -173,7 +173,6 @@ class Field extends \Phpfox_Service implements IFormly
             '`f`.`is_active` = 1',
             'AND `c`.`is_active` = 1',
             'AND `f`.`is_filter` = 1',
-            'AND `f`.`type` <> \'dd\''
         ];
 
         if (count($aCategoryIds) > 0) {
@@ -187,6 +186,7 @@ class Field extends \Phpfox_Service implements IFormly
                 ->from(\Phpfox::getT($this->_sTable), 'f')
                 ->leftJoin(\Phpfox::getT('digital_download_category_fields'), 'cf', 'f.field_id = cf.field_id')
                 ->leftJoin(\Phpfox::getT('digital_download_category'), 'c', 'c.category_id = cf.category_id')
+                ->group('`name`')
                 ->where($aCond)
                 ->order('`f`.`ordering` ASC')
                 ->execute('getslaverows');

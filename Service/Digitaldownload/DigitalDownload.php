@@ -44,49 +44,62 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $aFields['category_id']['tree_option_tmp'] = '@CM_DigitalDownload/filter/fields/tree-option.html';
 
         $aCategoryIds = $this->oTreeManager->getAllChildValues($aFields['category_id']['items'], $iCategoryId, [$iCategoryId]);
-
         $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable($aCategoryIds);
         foreach($aRawFields as &$aRawField) {
+            if ($aRawField['type'] == 'dd') {
+                continue;
+            }
             $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
         }
 
-        $aDDFields = \Phpfox::getService('digitaldownload.field')->getFieldsByType('dd');
-        $sMinMaxSelect  = '';
-        foreach($aDDFields as &$sDDField) {
-            $sMinMaxSelect .= 'MIN(`d`.`' . $sDDField . '_price`) as `' . $sDDField .'_min`, MAX(`d`.`' . $sDDField . '_price`) as `' . $sDDField .'_max`,';
-        }
-        $sMinMaxSelect  = rtrim($sMinMaxSelect, ',');
-        $aMinMax = $this->database()
-            ->select($sMinMaxSelect)
-            ->from(Phpfox::getT($this->_sTable), 'd')
-            ->where('`category_id` in (' . implode(', ', $aCategoryIds) . ') AND `is_active` = 1')
-            ->get();
-        $iMin = 0;
-        $iMax = 0;
-        foreach($aMinMax as $sKey => $fValue) {
-            if (strpos($sKey, '_min') && $fValue < $iMin) {
-                $iMin = $fValue;
-            } elseif (strpos($sKey, '_max') && $fValue > $iMax) {
-                $iMax = $fValue;
+        $aDDFields = [];
+        foreach($aRawFields as &$aRawField) {
+            if ($aRawField['type'] == 'dd') {
+                $aDDFields[] = $aRawField['name'];
             }
         }
-        $iMin = round($iMin);
-        $iMax = round($iMax);
-        if ($iMax > 0 && $iMin != $iMax) {
-            $aFields['price'] = [
-                'type' => 'dd_price',
-                'is_search' => true,
-                'name' => 'price',
-                'title' => _p('Price'),
-                'table_alias' => 'd',
-                'template' => '@CM_DigitalDownload/filter/fields/slider.html',
-                'table' => \Phpfox::getT($this->_sTable),
-                'min' => $iMin,
-                'max' => $iMax,
-                'columns' => $aDDFields,
-                'column' => 'price',
-            ];
+
+        if (!empty($aDDFields)) {
+
+            $sMinMaxSelect  = '';
+            foreach($aDDFields as &$sDDField) {
+                $sMinMaxSelect .= 'MIN(`d`.`' . $sDDField . '_price`) as `' . $sDDField .'_min`, MAX(`d`.`' . $sDDField . '_price`) as `' . $sDDField .'_max`,';
+            }
+            $sMinMaxSelect  = rtrim($sMinMaxSelect, ',');
+            $aMinMax = $this->database()
+                ->select($sMinMaxSelect)
+                ->from(Phpfox::getT($this->_sTable), 'd')
+                ->where('`category_id` in (' . implode(', ', $aCategoryIds) . ') AND `is_active` = 1')
+                ->get();
+            $iMin = 0;
+            $iMax = 0;
+            foreach($aMinMax as $sKey => $fValue) {
+                if (strpos($sKey, '_min') && $fValue < $iMin) {
+                    $iMin = $fValue;
+                } elseif (strpos($sKey, '_max') && $fValue > $iMax) {
+                    $iMax = $fValue;
+                }
+            }
+            $iMin = round($iMin);
+            $iMax = round($iMax);
+            if ($iMax > 0 && $iMin != $iMax) {
+                $aFields['price'] = [
+                    'type' => 'dd_price',
+                    'is_search' => true,
+                    'name' => 'price',
+                    'title' => _p('Price'),
+                    'table_alias' => 'd',
+                    'template' => '@CM_DigitalDownload/filter/fields/slider.html',
+                    'table' => \Phpfox::getT($this->_sTable),
+                    'min' => $iMin,
+                    'max' => $iMax,
+                    'columns' => $aDDFields,
+                    'column' => 'price',
+                ];
+            }
+
         }
+
 
         return $aFields;
     }
@@ -245,6 +258,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $iId = (int) $iId;
 
         $oDD = $this->getDisplayer($iId);
+        $oDD['is_active'] = true;
 
         $aVal = [
             'is_active' => '1',
@@ -272,8 +286,6 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         //insert new feed
         \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
         $this->updateParsedTitle($oDD);
-
-        $oDD['is_active'] = true;
         return  $this;
     }
 
