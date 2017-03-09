@@ -42,6 +42,7 @@ class Builder
             ]);
             \Phpfox::getBlock('privacy.form', [
                 'privacy_name' => $sName,
+                'privacy_no_custom' => true,
                 'privacy_info' => $sInfo,
             ]);
             return '';
