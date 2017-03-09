@@ -81,6 +81,7 @@ class IndexController extends Phpfox_Component
 			case 'user':
 				$oSearch->setCondition('AND `d`.`user_id` = ' . $this->request()->getInt('req3'));
 				$oSearch->setCondition('AND `d`.`is_active` = 1');
+				$oSearch->setCondition(' AND `d`.`privacy` = \'0,1\'');
 				break;
 			case 'friends':
 				$aFriends = Phpfox::getService('friend')->getFromCache();
@@ -94,6 +95,8 @@ class IndexController extends Phpfox_Component
 					$oSearch->setCondition('AND `d`.`id` = 0'); //nothing dd. because his not friends
 				}
 				$oSearch->setCondition('AND `d`.`is_active` = 1');
+				$oSearch->setCondition(' AND `d`.`privacy` = \'0,1,2\'');
+
 				break;
 			case 'moderation':
 				Phpfox::getUserParam('digitaldownload.can_moderate', true);
@@ -105,6 +108,7 @@ class IndexController extends Phpfox_Component
 				break;
 			default:
 				$oSearch->setCondition('AND `d`.`is_active` = 1');
+				$oSearch->setCondition(' AND `d`.`privacy` = \'0\'');
 
 		}
 		$oSearch->set($aSearchParams);
