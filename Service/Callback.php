@@ -345,13 +345,22 @@ class Callback extends Phpfox_Service
                     $bActivate = isset($aVal['activate']);
 
                     if ($bActivate) { //activate and set expire time
-                        Phpfox::getService('digitaldownload.dd')->activate($aInvoice['dd_id']);
+                        $aPlan = json_decode($aDD['plan_info'], true);
+                        Phpfox::log('Plan: ' . var_export($aPlan, true));
+                        Phpfox::getService('feed.process')->allowGuest();
+                        Phpfox::getService('digitaldownload.dd')->activate($aInvoice['dd_id'], $aPlan);
+                        Phpfox::log('Activate dd');
+                        unset($aVal['activate']);
                     }
 
                     ($bActivate && ($sPlugin = Phpfox_Plugin::get('digitaldownload.before_activate_digitaldownload')) ? eval($sPlugin) : false);
-                    Phpfox::log('Update with data:' . var_export($aVal, true));
-                    Phpfox::getService('digitaldownload.dd')->updateById($aInvoice['dd_id'], $aVal);
-                    Phpfox::log('Updated DD');
+
+                    if (!empty($aVal)) {
+                        Phpfox::log('Update with data:' . var_export($aVal, true));
+                        Phpfox::getService('digitaldownload.dd')->updateById($aInvoice['dd_id'], $aVal);
+                        Phpfox::log('Updated DD');
+                    }
+
 
 
                     //send email to admins
@@ -425,6 +434,7 @@ class Callback extends Phpfox_Service
         } catch (\Exception $e) {
             $this->database()->rollback();
             Phpfox::log("Error: " . $e->getMessage() . "; File: " . $e->getFile() . "; Line: " . $e->getLine());
+            Phpfox::log("Stack trace: " . $e->getTraceAsString());
         }
     }
 

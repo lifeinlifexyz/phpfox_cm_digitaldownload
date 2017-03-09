@@ -267,12 +267,15 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
         if ($oDD['expire_timestamp'] <= PHPFOX_TIME) {
 
-            if (!(count($aPlan) > 0)) {
-                $aPlan = json_encode($this->database()
+            if (empty($aPlan)) {
+
+                $aPlan = $this->database()
                     ->select('`info`')
                     ->from(\Phpfox::getT(Plan::DD_PLAN_TABLE))
                     ->where('`dd_id` = ' . $iId)
-                    ->get(), true);
+                    ->get();
+
+                $aPlan = json_encode($aPlan['info'], true);
             }
 
             $iLifeDays = (!isset($aPlan['life_time']) || $aPlan['life_time'] == 0)
@@ -284,7 +287,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $this->updateById($iId, $aVal);
 
         //insert new feed
-        \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
+        \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0, 0, $oDD['user_id']);
         $this->updateParsedTitle($oDD);
         return  $this;
     }
@@ -307,7 +310,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $this->updateById($iId, $aVal);
 
         //insert new feed
-        \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0);
+        \Phpfox::getService('feed.process')->add('digitaldownload', $iId, $oDD['privacy'], 0, 0, $oDD['user_id']);
         $this->updateParsedTitle($oDD);
 
         $oDD['is_active'] = true;
