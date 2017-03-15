@@ -2,6 +2,7 @@
 
 namespace Apps\CM_DigitalDownload\Controller\Admin;
 
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 use Phpfox;
 use Phpfox_Component;
@@ -34,6 +35,7 @@ class AddCategoryController extends Phpfox_Component
 
         if ($_POST && $oForm->isValid()) {
             $oForm->save();
+            CMCache::remove('cm_dd_category_data');
             $this->url()->send('admincp.app',
                 [
                     'id' => 'CM_DigitalDownload',

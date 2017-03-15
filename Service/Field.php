@@ -197,8 +197,10 @@ class Field extends \Phpfox_Service implements IFormly
     {
         $aFields = $this->getFilterable();
         $aList = [];
-        foreach($aFields as $aField) {
-            $aList[$aField['name']] = $aField['name'];
+        if (is_array($aFields)) {
+            foreach($aFields as $aField) {
+                $aList[$aField['name']] = $aField['name'];
+            }
         }
         return $aList;
     }

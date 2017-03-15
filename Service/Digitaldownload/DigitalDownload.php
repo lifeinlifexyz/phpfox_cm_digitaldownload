@@ -106,7 +106,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
     public function getCategoryFieldData($aItems = null)
     {
-        $aItems = is_null($aItems) ? CMCache::remember('cm_dd_category_data', function() use ($aItems) {
+        $aItems = is_null($aItems) ? CMCache::remember('cm_dd_category_data', function() {
             return  \Phpfox::getService('digitaldownload.category')->getActive(true);
         }) : $aItems;
 
@@ -205,6 +205,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
                 throw new ServiceException('Row data not set');
             }
 
+            $this->iCategoryId = $this->aRow['category_id'];
             $oDisplay->setRow($this->aRow);
             $oDisplay->setDDFieldNames(\Phpfox::getService('digitaldownload.field')->getFieldsByType('dd'));
             $this->_aDisplayer[$iId] = $oDisplay;
