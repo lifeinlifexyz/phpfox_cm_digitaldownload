@@ -106,19 +106,20 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
 
     public function getCategoryFieldData($aItems = null)
     {
-        return CMCache::remember('cm_dd_category_data', function() use ($aItems) {
-              return
-                  [
-                      'type' => 'tree',
-                      'name' => 'category_id',
-                      'parent' => 'parent_id',
-                      'key' => 'category_id',
-                      'title' => _p('Category'),
-                      'translate' => true,
-                      'items' => is_null($aItems) ? \Phpfox::getService('digitaldownload.category')->getActive(true) : $aItems,
-                      'table_alias' => 'd',
-                  ];
-        });
+        $aItems = is_null($aItems) ? CMCache::remember('cm_dd_category_data', function() use ($aItems) {
+            return  \Phpfox::getService('digitaldownload.category')->getActive(true);
+        }) : $aItems;
+
+        return  [
+            'type' => 'tree',
+            'name' => 'category_id',
+            'parent' => 'parent_id',
+            'key' => 'category_id',
+            'title' => _p('Category'),
+            'translate' => true,
+            'items' => $aItems,
+            'table_alias' => 'd',
+        ];
     }
 
     /**
@@ -323,6 +324,21 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         //delete feed
         \Phpfox::getService('feed.process')->delete('digitaldownload', $iId);
         return  $this;
+    }
+
+    public function deleteByCatId($iCatId)
+    {
+        $aDD  = $this->database()
+            ->select('`id`')
+            ->from(Phpfox::getT($this->_sTable))
+            ->where('category_id=' . $iCatId)
+            ->all();
+
+        foreach($aDD as $aItem) {
+            $this->delete($aItem['id']);
+        }
+
+        return $this;
     }
 
     public function delete($iId)

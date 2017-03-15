@@ -9,7 +9,7 @@ defined('PHPFOX') or exit('NO DICE!');
         {for $i = 0; $i < count($aPlans); $i++}
             {assign var="aItem" value=$aPlans[$i]}
             <div class="col-sm-2 col-md-4">
-                <div class="item dd-plan-item">
+                <div class="item dd-plan-item" data-plan-name="{$aItem.name}">
                     <div class="dd-plan-header">
                         <div class="title">{$aItem.name}</div>
                         <div class="row dd-plan-th">

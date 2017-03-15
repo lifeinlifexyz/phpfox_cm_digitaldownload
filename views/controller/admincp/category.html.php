@@ -4,7 +4,7 @@ defined('PHPFOX') or exit('NO DICE!');
 {if isset($categories[$iPid])}
     <ol class="dd-list">
         {foreach from=$categories[$iPid] item=category}
-            <li class="dd-item {if !$category.is_active}cat-not-active{/if}" data-id="{$category.category_id}">
+            <li class="dd-item {phrase var=$category.name} {if !$category.is_active}cat-not-active{/if}" data-id="{$category.category_id}">
                 <div class="dd-content">
                     <div class="dd-handle">
                         {phrase var=$category.name}
@@ -33,7 +33,7 @@ defined('PHPFOX') or exit('NO DICE!');
                             <i class="fa fa-circle-o"></i>
                         </a>
 
-                        <a href="{url link='admincp.digitaldownload.category.fields' id=$category.category_id}" title="{_p('Fields')}" class="green popup"><i class="fa fa-list"></i></a>
+                        <a href="{url link='admincp.digitaldownload.category.fields' id=$category.category_id}" title="{_p('Fields')}" class="green popup attache-field"><i class="fa fa-list"></i></a>
                 </div>
                 </div>
 

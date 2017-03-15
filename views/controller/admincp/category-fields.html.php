@@ -12,7 +12,7 @@ defined('PHPFOX') or exit('NO DICE!');
             <th>{_p('Title')}</th>
         </tr>
         {foreach from=$aFields key=iKey item=aItem}
-        <tr class="checkRow{if is_int($iKey/2)} tr{else}{/if}">
+        <tr class="checkRow{if is_int($iKey/2)} tr{else}{/if} {$aItem.name}">
             <td><input type="checkbox" name="catFields[]" class="checkbox"
                        value="{$aItem.field_id}" id="js_id_row{$aItem.field_id}"
                        {if in_array($aItem.field_id,$aAttachedFields) == true} checked {/if} /></td>

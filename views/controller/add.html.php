@@ -3,7 +3,7 @@
 defined('PHPFOX') or exit('NO DICE!'); 
 
 ?>
-<form method="post" action="{url link='current'}" enctype="multipart/form-data" id="js_marketplace_form">
+<form method="post" action="{url link='current'}" enctype="multipart/form-data" id="js_digitaldownload_form">
     <div><input type="hidden" name="page_section_menu" value="" id="page_section_menu_form" /></div>
 
     <div id="js_mp_block_detail" class="js_mp_block page_section_menu_holder">
