@@ -90,19 +90,19 @@ class Display extends \Apps\CM_DigitalDownload\Lib\Form\DataBinding\Display
                 break;
             case 'aDDPrice':
                 $aDDPrice = [];
-
-                foreach($this->aDDFieldNames  as $aDDFieldName) {
-                    if (!isset($this->oForm[$aDDFieldName])) {
-                        continue;
+                if (is_array($this->aDDFieldNames)) {
+                    foreach($this->aDDFieldNames  as $aDDFieldName) {
+                        if (!isset($this->oForm[$aDDFieldName])) {
+                            continue;
+                        }
+                        $aDDPrice[] = [
+                            'caption' => $this->oForm[$aDDFieldName]['caption'],
+                            'price' => $this->aRow[$aDDFieldName . '_price'],
+                            'currency_id' => $this->aRow[$aDDFieldName . '_currency_id'],
+                            'limit' => $this->aRow[$aDDFieldName . '_limit'],
+                        ];
                     }
-                    $aDDPrice[] = [
-                          'caption' => $this->oForm[$aDDFieldName]['caption'],
-                          'price' => $this->aRow[$aDDFieldName . '_price'],
-                          'currency_id' => $this->aRow[$aDDFieldName . '_currency_id'],
-                          'limit' => $this->aRow[$aDDFieldName . '_limit'],
-                    ];
                 }
-
                 return $aDDPrice;
                 break;
             case 'short_description':

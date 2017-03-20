@@ -42,7 +42,9 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
         $aFields['category_id'] = $this->getCategoryFieldData();
         $aFields['category_id']['template'] = '@CM_DigitalDownload/filter/fields/category.html';
         $aFields['category_id']['tree_option_tmp'] = '@CM_DigitalDownload/filter/fields/tree-option.html';
-
+        if (!is_array($aFields['category_id']['items'])) {
+            return [];
+        }
         $aCategoryIds = $this->oTreeManager->getAllChildValues($aFields['category_id']['items'], $iCategoryId, [$iCategoryId]);
         $aRawFields =\Phpfox::getService('digitaldownload.field')->getFilterable($aCategoryIds);
 
