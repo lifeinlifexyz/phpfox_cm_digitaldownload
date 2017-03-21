@@ -44,18 +44,18 @@ class ViewController extends Phpfox_Component
 		if (\Phpfox::isModule('privacy')) {
 			\Privacy_Service_Privacy::instance()->check('digitaldownload', $oDD['id'], $oDD['user_id'], $oDD['privacy']);
 		}
-		
+
 		$this->setParam('oDD', $oDD);
 
 		if (Phpfox::isUser() && $oDD['invite_id'] && !$oDD['visited_id'] && $oDD['user_id'] != Phpfox::getUserId()) {
 			Phpfox::getService('digitaldownload.invite')->setVisit($oDD['id'], Phpfox::getUserId());
 		}
-		
-		if (Phpfox::isUser() && $oDD['user_id'] != Phpfox::getUserId())
-		{
+
+
+		if (Phpfox::isUser() && $oDD['user_id'] != Phpfox::getUserId()) {
 			db()->updateCounter('digital_download', 'total_view', 'id', $iDDId);
 		}
-		
+
 		if (Phpfox::isUser() && Phpfox::isModule('notification'))
 		{
 			Phpfox::getService('notification.process')->delete('digitaldownload', $iDDId, Phpfox::getUserId());
@@ -65,7 +65,7 @@ class ViewController extends Phpfox_Component
 		if (!$oDD['is_active'] && !Phpfox::isAdmin() && $oDD['user_id'] != Phpfox::getUserId()) {
 			return Phpfox_Error::display(Phpfox::getPhrase(_p('The file which you are looking for not activated')));
 		}
-		
+
 		if (Phpfox::isModule('privacy')) {
 			Privacy_Service_Privacy::instance()->check('digitaldownload', $oDD['id'], $oDD['user_id'], $oDD['privacy']);
 		}
@@ -76,8 +76,8 @@ class ViewController extends Phpfox_Component
 				'item_id' => $oDD['user_id'],
 				'stars' => range(1, 10)
 			)
-		);			
-		
+		);
+
 		$this->setParam('aFeed', [
 				'comment_type_id' => 'digitaldownload',
 				'privacy' => $oDD['privacy'],
@@ -163,7 +163,7 @@ class ViewController extends Phpfox_Component
 		$this->template()->buildSectionMenu('digitaldownload', $aSectionMenu);
 
 		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_view_process_end')) ? eval($sPlugin) : false);
-        return null;
+		return 'controller';
 	}
 	
 	/**
