@@ -113,13 +113,12 @@ class Field extends \Phpfox_Service implements IFormly
         foreach($aColumnsDefs as &$aColumnsDef) {
             $aColumnsDef['table'] = $sTable;
             $aColumnsDef['field'] = isset($aColumnsDef['field'])
-                ? $sName . '_' .$aColumnsDef['field']
-                : $sName;
+                ? '`' . $sName . '_' .$aColumnsDef['field'] . '`'
+                : '`' . $sName . '`';
             if (!$this->database()->isField($sTable, $aColumnsDef['field'])) {
                 $this->database()->addField($aColumnsDef);
             }
         }
-        CMCache::removeByGroup('cm_dd_category_fields');
         return $this;
     }
 

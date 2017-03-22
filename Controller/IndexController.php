@@ -50,6 +50,12 @@ class IndexController extends Phpfox_Component
 			'most-liked' => ['d.total_like',  _p('Most liked')],
 			'most-downloaded' => ['d.total_download',  _p('Most downloaded')],
 		];
+
+		$aRawFilterableFields = Phpfox::getService('digitaldownload.field')->getFilterableFieldsName();
+		$aFilterableFields = [];
+		foreach($aRawFilterableFields as  &$sField) {
+			$aFilterableFields['`' . $sField . '`'] = '`' . $sField . '`';
+		}
 		/**
 		 * @var $oFormFilter FilterForm
 		 */
@@ -62,7 +68,7 @@ class IndexController extends Phpfox_Component
 				'show' => $aPages,
 				'search' => [
 					'name' => 'keywords',
-					'field' => Phpfox::getService('digitaldownload.field')->getFilterableFieldsName(),
+					'field' => $aFilterableFields,
 					'default_value' => _p('Keywords') . '...',
 					'action' => '',
 				]

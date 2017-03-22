@@ -2,6 +2,7 @@
 
 namespace Apps\CM_DigitalDownload\Controller\Admin;
 
+use Apps\CM_DigitalDownload\Lib\Cache\CMCache;
 use Apps\CM_DigitalDownload\Lib\Form\DataBinding\IFormly;
 use Phpfox;
 use Phpfox_Component;
@@ -40,6 +41,7 @@ class SaveFieldController extends Phpfox_Component
                 if (!$iId) {
                     $oFieldService->addField($oForm);
                 }
+                CMCache::removeByGroup('cm_dd_category_fields');
                 db()->commit();
             } catch (\Exception $e) {
                 db()->rollback();

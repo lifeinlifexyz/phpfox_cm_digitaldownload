@@ -56,6 +56,7 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             if ($aRawField['type'] == 'dd') {
                 continue;
             }
+            $aFields[$aRawField['name']] = $this->buildFieldInfo($aRawField, true);
         }
 
 
@@ -106,8 +107,6 @@ class DigitalDownload  extends \Phpfox_Service implements IFormly
             }
 
         }
-
-
         return $aFields;
     }
 
