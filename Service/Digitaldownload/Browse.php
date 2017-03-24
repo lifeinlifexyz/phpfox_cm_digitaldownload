@@ -43,11 +43,18 @@ class Browse  extends \Phpfox_Service
 
     public function similar($sTitle)
     {
-        $aFilterable = Phpfox::getService('digitaldownload.field')->getFilterableFieldsName();
+        $aRawFilterable = Phpfox::getService('digitaldownload.field')->getFilterableFieldsName();
 
-        if (!empty($aFilterable)) {
+        if (!empty($aRawFilterable)) {
+
+            $aFilterable = [];
+            foreach($aRawFilterable as $item) {
+                $aFilterable['`' . $item . '`'] = '`' . $item . '`';
+            }
+
             $sQuery = $this->database()->searchKeywords($aFilterable, $sTitle);
             $this->_aConditions[] = ' AND (' . $sQuery . ')';
+
         }
 
         return $this;

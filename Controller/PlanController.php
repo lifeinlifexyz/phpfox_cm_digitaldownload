@@ -27,11 +27,14 @@ class PlanController extends Phpfox_Component
             ]);
         }
 
+        $aPlans = $this->getParam('aPlans') ? $this->getParam('aPlans')
+            : Phpfox::getService('digitaldownload.plan')->collection();
+
         $this->template()->setTitle(_p('Select Plan'))
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
             ->setBreadCrumb(_p('Choose plan'))
             ->assign([
-                    'aPlans' => Phpfox::getService('digitaldownload.plan')->collection(),
+                    'aPlans' => $aPlans,
                     'sUrl' => $sUrl,
                 ]
             );

@@ -115,7 +115,7 @@ class Field extends \Phpfox_Service implements IFormly
             $aColumnsDef['field'] = isset($aColumnsDef['field'])
                 ? '`' . $sName . '_' .$aColumnsDef['field'] . '`'
                 : '`' . $sName . '`';
-            if (!$this->database()->isField($sTable, $aColumnsDef['field'])) {
+            if (!$this->database()->isField($sTable, str_replace('`', '', $aColumnsDef['field']))) {
                 $this->database()->addField($aColumnsDef);
             }
         }

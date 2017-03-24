@@ -75,15 +75,15 @@ class Form extends \Apps\CM_DigitalDownload\Lib\Form\Form implements IForm
                 $aValues = $oField->getValue();
                 foreach($aValues as $sName => $mValue) {
                     if (isset($aFieldsInfo['filter'][$sName])) {
-                        $aResult[$sName] = call_user_func($aFieldsInfo['filter'][$sName], $mValue);
+                        $aResult['`' . $sName . '`'] = call_user_func($aFieldsInfo['filter'][$sName], $mValue);
                     } else {
-                        $aResult[$sName] = $mValue;
+                        $aResult['`' . $sName . '`'] = $mValue;
                     }
                 }
             } elseif (isset($aFieldsInfo['filter'])) {
-                $aResult[$sField] = call_user_func($aFieldsInfo['filter'], $oField->getValue());
+                $aResult['`' . $sField . '`'] = call_user_func($aFieldsInfo['filter'], $oField->getValue());
             } else {
-                $aResult[$sField] = $oField->getValue();
+                $aResult['`' . $sField . '`'] = $oField->getValue();
             }
         }
         return $aResult;

@@ -84,8 +84,14 @@ class AddController extends Phpfox_Component
             $iPlan = $this->request()->getInt('plan_id');
 
             if (!$iPlan) {
-                $this->setParam('url', $this->url()->makeUrl('current', ['category_id' => $iCategory]));
-                return Phpfox::getLib('module')->setController('digitaldownload.plan');
+                $aPlans = Phpfox::getService('digitaldownload.plan')->collection();
+                if (count($aPlans) == 1) {
+                    $iPlan = $aPlans[0]['plan_id'];
+                } else {
+                    $this->setParam('aPlans', $aPlans);
+                    $this->setParam('url', $this->url()->makeUrl('current', ['category_id' => $iCategory]));
+                    return Phpfox::getLib('module')->setController('digitaldownload.plan');
+                }
             }
 
         }
