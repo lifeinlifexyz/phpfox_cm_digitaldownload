@@ -36,5 +36,5 @@ defined('PHPFOX') or exit('NO DICE!');
         {moderation}
     {/if}
 {elseif !PHPFOX_IS_AJAX}
-{_p('No digital download fond')}
+{_p('No digital download found')}
 {/if}

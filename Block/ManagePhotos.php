@@ -32,7 +32,7 @@ class ManagePhotos extends \Phpfox_Component
             '<script type="text/javascript">window.cm_dd_assets=' . json_encode($aAssets) . '</script>',
             '<script type="text/javascript">window.cm_dd_photo_data=' . json_encode($aPhotoData) . '</script>',
         ])->assign([
-            'sMaxPhotosPhrase' => _p('You can add up to {{ iMax }} to your digital download.', ['iMax' => $iAllowedPhotos]),
+            'sMaxPhotosPhrase' => _p('dd_allowed_max_photo_count', ['iMax' => $iAllowedPhotos]),
             'aPhotos' => $aImages,
         ]);
 

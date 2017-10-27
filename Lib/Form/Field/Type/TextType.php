@@ -7,8 +7,7 @@ class TextType extends StringType
     protected $aColumnDefinitions = [
         [
             'type' => 'TEXT (5000)',
-            'null' => false,
-            'default' => 'DEFAULT \'\'',
+            'null' => 'NULL',
         ]
     ];
 

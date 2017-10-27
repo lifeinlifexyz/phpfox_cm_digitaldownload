@@ -3,6 +3,8 @@
 namespace Apps\CM_DigitalDownload\Lib\Form\Field;
 
 
+use Language_Service_Phrase_Phrase;
+
 abstract class MultiLangType extends AbstractType
 {
     protected $oLang;
@@ -31,19 +33,19 @@ abstract class MultiLangType extends AbstractType
             foreach ($aLanguages as $aLanguage) {
                 $aText[$aLanguage['language_id']] = $this->oRequest->get($sName . '_' . $aLanguage['language_id'], $sDefText);
             }
-            $sPhrase = $sName . '_multi_lang_string_' . md5($sName . PHPFOX_TIME . rand(1, 9000));
-            $aPhrase = [
-                'product_id' => 'phpfox',
-                'module' => $sModule . '|' . $sModule,
-                'var_name' => $sPhrase,
-                'text' => $aText
-            ];
-            $sPhrase = \Language_Service_Phrase_Process::instance()->add($aPhrase);
+            $sPhrase = $sModule . '_' . $sName . '_multi_lang_string_' . md5(implode(',',$aText));
+            if(!Language_Service_Phrase_Phrase::instance()->isValid($sPhrase)) {
+                $aPhrase = [
+                    'var_name' => $sPhrase,
+                    'text' => $aText
+                ];
+                $sPhrase = \Language_Service_Phrase_Process::instance()->add($aPhrase);
+            }
 
         } elseif (!is_null($sPhrase) && \Phpfox::isPhrase($sPhrase)) {
             //update phrase
             foreach ($aLanguages as $aLanguage) {
-                if ($this->oRequest->get($sName . '_' . $aLanguage['language_id'])) {
+                if ($this->oRequest->get($sName . '_' . $aLanguage['language_id'], false)) {
                     $sText = $this->oRequest->get($sName . '_' . $aLanguage['language_id']);
                     \Language_Service_Phrase_Process::instance()->updateVarName($aLanguage['language_id'], $sPhrase, $sText);
                 }

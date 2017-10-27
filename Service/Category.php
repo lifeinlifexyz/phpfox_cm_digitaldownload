@@ -140,7 +140,13 @@ class Category extends \Phpfox_Service implements IFormly
 
     public function delete($iId)
     {
+        $category = $this->database()->select('*')
+            ->from(\Phpfox::getT($this->_sTable))
+            ->where('category_id=' . $iId)
+            ->executeRow();
+        \Language_Service_Phrase_Process::instance()->delete($category['name'], true);
         $this->database()->delete(\Phpfox::getT($this->_sTable),  '`category_id` = ' . $iId);
+
         \Phpfox::getService('digitaldownload.categoryField')->delete($iId);
         \Phpfox::getService('digitaldownload.dd')->deleteByCatId($iId);
         CMCache::remove('cm_dd_category_data');
