@@ -20,7 +20,7 @@ var ddManagePhotos = function() {
         initialIframeSrc: 'upload-dd-Photo' //for fix on Firefox v49
     }).bind('fileuploadstart', function (e, data) {
         $Core.processing();
-        $(".add-photo-form .error").html("");
+        $(".add-photo-form .error").html("<i class=\"fa fa-spinner fa-spin fa-1x fa-fw\"></i>");
         uploadPhotoForm.addClass("uploading");
         uploadPhotoFormContainer.css('background-image', 'none');
     }).bind('fileuploaddone', function (e, data) {
@@ -47,6 +47,7 @@ var ddManagePhotos = function() {
         increaseNumberOfPhotos();
 
         uploadPhotoForm.removeClass("uploading");
+        $(".add-photo-form .error").html("");
         uploadPhotoFormContainer.css('background-image', uploadPhotoFormContainerBgImage);
     });
 

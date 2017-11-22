@@ -3,13 +3,14 @@
 defined('PHPFOX') or exit('NO DICE!'); 
 
 ?>
+<div class="dd-overlay-message" style="display: none;"><span><i class="fa fa-spinner fa-spin fa-1x fa-fw"></i> {_p('uploading_in_progress_please_wait')}</span></div>
 <form method="post" action="{url link='current'}" enctype="multipart/form-data" id="js_digitaldownload_form">
     <div><input type="hidden" name="page_section_menu" value="" id="page_section_menu_form" /></div>
 
     <div id="js_mp_block_detail" class="js_mp_block page_section_menu_holder">
         {$sFieldsHtml}
         <div class="form-group">
-            <input class="btn btn-primary" type="submit" value="{if $bEdit}{_p('Save')}{else}{_p('Add')}{/if}">
+            <input class="btn btn-primary" onclick="$('.dd-overlay-message').show();" type="submit" value="{if $bEdit}{_p('Save')}{else}{_p('Add')}{/if}">
         </div>
     </div>
 

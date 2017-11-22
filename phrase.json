@@ -125,5 +125,6 @@
   "Category":"Category",
   "Digital download privacy": "Digital download privacy",
   "No digital download found": "No digital download found",
-  "dd_allowed_max_photo_count": "You can add up to {{ iMax }} to your digital download."
+  "dd_allowed_max_photo_count": "You can add up to {{ iMax }} to your digital download.",
+  "uploading_in_progress_please_wait":"Uploading in progress .. please wait"
 }
