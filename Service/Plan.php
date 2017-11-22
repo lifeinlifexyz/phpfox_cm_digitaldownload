@@ -135,6 +135,14 @@ class Plan extends \Phpfox_Service implements IFormly
 
     public function delete($iId)
     {
+        $sPlanName = $this->database()
+            ->select('name')
+            ->from(\Phpfox::getT($this->_sTable))
+            ->where('`plan_id` = ' . $iId)
+            ->execute('getSlaveField');
+        if ($sPlanName) {
+            \Language_Service_Phrase_Process::instance()->delete($sPlanName, true);
+        }
         $this->database()->delete(\Phpfox::getT($this->_sTable), '`plan_id` = ' . $iId);
         return $this;
     }

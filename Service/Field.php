@@ -142,19 +142,19 @@ class Field extends \Phpfox_Service implements IFormly
     public function delete($iId)
     {
         try {
-            $sFieldName = $this->database()
-                ->select('name')
+            $aField = $this->database()
+                ->select('name, caption_phrase')
                 ->from(\Phpfox::getT($this->_sTable))
                 ->where('`field_id` = ' . $iId)
-                ->execute('getslavefield');
-            if (!$sFieldName) {
+                ->execute('getSlaveRow');
+            if (!isset($aField['name'])) {
                 return false;
             }
             $this->database()->beginTransaction();
             $this->database()->delete(\Phpfox::getT($this->_sTable), '`field_id` = ' . $iId);
             $this->database()->dropField(\Phpfox::getT($this->sAttachTable), $sFieldName);
             $this->database()->commit();
-
+            \Language_Service_Phrase_Process::instance()->delete($aField['caption_phrase'], true);
             CMCache::removeByGroup('cm_dd_category_fields');
 
             return true;
