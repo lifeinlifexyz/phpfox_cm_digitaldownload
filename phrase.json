@@ -126,5 +126,9 @@
   "Digital download privacy": "Digital download privacy",
   "No digital download found": "No digital download found",
   "dd_allowed_max_photo_count": "You can add up to {{ iMax }} to your digital download.",
-  "uploading_in_progress_please_wait":"Uploading in progress .. please wait"
+  "uploading_in_progress_please_wait":"Uploading in progress .. please wait",
+  "Your file cannot be uploaded, your file bigger than accepted, max file size you can upload": "Your file cannot be uploaded, your file bigger than accepted, max file size you can upload",
+  "Pay now":"Pay now",
+  "Cancel":"Cancel",
+  "Cannot find this invoice":"Cannot find this invoice"
 }

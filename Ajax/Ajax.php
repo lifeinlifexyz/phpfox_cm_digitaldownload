@@ -114,4 +114,16 @@ class Ajax extends Phpfox_Ajax
         $this->alert($sMessage, _p('Moderation'), 300, 150, true);
         $this->hide('.moderation_process');
     }
+
+    public function deleteInvoice(){
+        Phpfox::isUser(true);
+        $iInvoice = $this->get('invoice');
+        if (!empty($iInvoice)){
+            if (Phpfox::getService('digitaldownload.invoice')->delete($iInvoice)){
+                $this->hide('#data-invoice-id-'.$iInvoice);
+            }else{
+                $this->alert(_p('Cannot find this invoice'));
+            }
+        }
+    }
 }

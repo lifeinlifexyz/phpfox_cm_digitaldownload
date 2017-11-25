@@ -24,8 +24,12 @@ var ddManagePhotos = function() {
         uploadPhotoForm.addClass("uploading");
         uploadPhotoFormContainer.css('background-image', 'none');
     }).bind('fileuploaddone', function (e, data) {
+        try{
+            var response = JSON.parse($('pre', data.result).text());
+        }catch(error){
+            $(".add-photo-form .error").html("");
+        }
         //console.log(data.result.error); return;
-        var response = JSON.parse($('pre', data.result).text())
         if (response.error) {
             var messages = '';
             for(var i in response.messages) {
@@ -48,6 +52,7 @@ var ddManagePhotos = function() {
 
         uploadPhotoForm.removeClass("uploading");
         $(".add-photo-form .error").html("");
+        $Core.processingEnd();
         uploadPhotoFormContainer.css('background-image', uploadPhotoFormContainerBgImage);
     });
 

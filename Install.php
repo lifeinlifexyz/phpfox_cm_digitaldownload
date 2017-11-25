@@ -27,7 +27,7 @@
             {
                 $this->name = 'Digital Download';
             } protected function setVersion() {
-                $this->version = '1.0.1';
+                $this->version = '1.0.2';
             } protected function setSupportVersion() {
             $this->start_support_version = '4.4.0';
             $this->end_support_version = '4.4.0';

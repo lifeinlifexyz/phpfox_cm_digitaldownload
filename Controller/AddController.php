@@ -186,13 +186,13 @@ class AddController extends Phpfox_Component
                 ]
             );
         }
-
         $this->template()
             ->setTitle($sTitle)
             ->setBreadCrumb(_p('Digital Download'), $this->url()->makeUrl('digitaldownload'))
             ->setBreadCrumb($sTitle, $sUrl, true)
             ->setHeader([
                 'progress.js' => 'static_script',
+                '<script type="text/javascript">oTranslations["your_file_cannot_be_uploaded"] = "'. _p('Your file cannot be uploaded, your file bigger than accepted, max file size you can upload') .'";</script>',
             ])
             ->assign([
                     'sFieldsHtml' => $oForm->render('@CM_DigitalDownload/form/only_fields.html'),
@@ -200,6 +200,7 @@ class AddController extends Phpfox_Component
                     'sMyEmail' => Phpfox::getUserBy('email'),
                 ]
             );
+        echo('<script type="text/javascript">oParams["digitaldownload.max_uploaded_file_size"] = "'. Phpfox::getService('digitaldownload.dd')->getFileUploadMaxSize() .'";</script>');
     }
 
     private function upload($oDD)

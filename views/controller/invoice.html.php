@@ -24,9 +24,9 @@ defined('PHPFOX') or exit('NO DICE!');
 		<th>{_p('Date')}</th>
 	</tr>
 	{foreach from=$aInvoices item=aInvoice}
-	<tr>
+	<tr id="data-invoice-id-{$aInvoice.invoice_id}">
 		<td class="t_center">{$aInvoice.invoice_id}</td>
-		<td>{$aInvoice.status_phrase}{if $aInvoice.status === null || $aInvoice.status == 'pending'} (<a href="{url link='digitaldownload.purchase' invoice=$aInvoice.invoice_id}">{phrase var='marketplace.pay_now'}</a>){/if}</td>
+		<td>{$aInvoice.status_phrase}{if $aInvoice.status === null || $aInvoice.status == 'pending'} ( <a href="{url link='digitaldownload.purchase' invoice=$aInvoice.invoice_id}">{phrase var='Pay now'}</a> | <a href="#" onclick="{literal}$.ajaxCall('digitaldownload.deleteInvoice', 'invoice={/literal}{$aInvoice.invoice_id}{literal}');{/literal}">{phrase var='Cancel'}</a> ){/if}</td>
 		<td>{$aInvoice.price|currency:$aInvoice.currency_id}</td>
 		<td>{$aInvoice.time_stamp|date}</td>
 	</tr>

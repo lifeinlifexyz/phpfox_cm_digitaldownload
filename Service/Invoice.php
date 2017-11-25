@@ -82,4 +82,13 @@ class Invoice extends \Phpfox_Service
         return array($iCnt, $aRows);
     }
 
+    public function delete($iInvoice){
+        $aInvoice = $this->get($iInvoice);
+
+        if (isset($aInvoice['invoice_id'])){
+            return $this->database()->delete(Phpfox::getT($this->_sTable), '`invoice_id` = ' . $aInvoice['invoice_id']);
+        }
+        return false;
+    }
+
 }
