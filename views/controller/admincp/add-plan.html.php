@@ -1,4 +1,8 @@
 <?php 
 defined('PHPFOX') or exit('NO DICE!');
 ?>
-{$form}
+<div class="panel panel-default">
+    <div class="panel-body">
+        {$form}
+    </div>
+</div>

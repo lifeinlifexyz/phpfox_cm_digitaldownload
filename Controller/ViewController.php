@@ -27,7 +27,7 @@ class ViewController extends Phpfox_Component
 	 */
 	public function process()
 	{
-		Phpfox::getUserParam('digitaldownload.can_view_dd', true);
+		//Phpfox::getUserParam('digitaldownload.can_view_dd', true);
 		//add button to add new Digital Download
 		if (user('digitaldownload.cm_dd_add' , '0') == '1') {
 			sectionMenu(_p('Add'), url('/digitaldownload/add'));

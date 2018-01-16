@@ -2,7 +2,7 @@
   "id": "CM_DigitalDownload",
   "alias": "digitaldownload",
   "name": "Digital Download",
-  "version": "1.0.2",
+  "version": "1.0.6",
   "icon": "https://raw.githubusercontent.com/codemakeorg/logo/master/dd.png",
   "vendor": "<a href=\"//codemake.org\" target=\"_blank\">CodeMake.Org</a> - See all our products <a href=\"//store.phpfox.com/techie/u/ecodemaster\" target=_new>HERE</a> - contact us at: support@codemake.org",
   "store_id": 1773,

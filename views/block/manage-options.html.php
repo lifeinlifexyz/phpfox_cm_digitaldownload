@@ -32,7 +32,7 @@
         {/if}
         {if count($aPaidOptions)}
             <div class="dd-free-options">
-                <p><strong>{_p('Available Paid Options')}:</strong></p>
+                <p><strong>{_p('Available Free Options')}:</strong></p>
                 <ul>
                     {foreach from=$aPaidOptions  key=sOptionName item=aOption}
                         <li>

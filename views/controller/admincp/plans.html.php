@@ -7,8 +7,9 @@ defined('PHPFOX') or exit('NO DICE!');
 	{_p('Plans')}
 </div>
 {if count($aPlans)}
+<div class="panel panel-default">
 <form method="post" action="{url link='digitaldownload.admincp.delete-plan'}">
-	<table cellpadding="0" cellspacing="0">
+	<table cellpadding="0" cellspacing="0" class="table table-admin">
 		<tr>
 			<th style="width:10px;"><input type="checkbox" name="delete[]" value="" id="js_check_box_all" class="main_checkbox" /></th>
 			<th style="width:20px;"></th>
@@ -44,4 +45,5 @@ defined('PHPFOX') or exit('NO DICE!');
 		<input type="submit" value="{_p('Delete selected')}" class="sJsConfirm delete button sJsCheckBoxButton disabled" disabled="true" />
 	</div>
 </form>
+</div>
 {/if}

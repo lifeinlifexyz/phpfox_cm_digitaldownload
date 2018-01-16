@@ -13,7 +13,7 @@
         <div class="dd-img-wrapper">
             <a href="{$aEntry.url}">
                 <span class="dd-product-img"
-                      style="background-image: url({img path='core.url_pic' file=$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_200_square' return_url=true});"
+                      style="background-image: url({img path='core.url_pic' file=$aEntry.main_image.image_path server_id=$aEntry.main_image.server_id suffix='_400' return_url=true});"
                       itemprop='image'></span>
             </a>
             <div class="dd-tags">

@@ -27,6 +27,7 @@ class DownloadController extends Phpfox_Component
 	 */
 	public function process()
 	{
+        Phpfox::isUser(true);
 		(($sPlugin = Phpfox_Plugin::get('digitaldownload.component_controller_download_process_start')) ? eval($sPlugin) : false);
 
 		if (!($iDDId = $this->request()->getInt('req3'))) {

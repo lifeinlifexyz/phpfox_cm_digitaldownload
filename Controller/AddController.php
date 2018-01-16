@@ -127,7 +127,7 @@ class AddController extends Phpfox_Component
                     'value' => Phpfox::getUserId(),
                 ]);
             }
-            
+
             if (!$bEdit) {
                 $oForm->addField('hidden', [
                     'name' => 'time_stamp',
@@ -226,8 +226,8 @@ class AddController extends Phpfox_Component
                         'path' => 'core.url_pic',
                         'file' => 'digitaldownload/' . $sFile,
                         'server_id' => $this->request()->getServer('PHPFOX_SERVER_ID'),
-                        'suffix' => '_200',
-                        'max_width' => '200',
+                        'suffix' => '_150',
+                        'max_width' => '150',
                         'return_url' => true,
                     ]),
                     'id' => $iImageId,

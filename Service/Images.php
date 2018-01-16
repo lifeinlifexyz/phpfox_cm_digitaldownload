@@ -8,6 +8,7 @@ use Apps\CM_DigitalDownload\Lib\Tree\Tree;
 use Core\Event;
 use Phpfox;
 use Phpfox_File;
+use Phpfox_Image;
 use Phpfox_Plugin;
 use Phpfox_Request;
 
@@ -19,10 +20,20 @@ class Images extends \Phpfox_Service
     {
         $oFile = Phpfox_File::instance();
         $aImage = $oFile->load('image', ['jpg', 'gif', 'png']);
-
         if ($aImage !== false) {
             $sDirImage = Phpfox::getParam('core.dir_pic') . 'digitaldownload/';
             $sFileName = $oFile->upload('image', $sDirImage, $oDD['id'] . rand(1, 100));
+
+            $oImage = Phpfox_Image::instance();
+            $aSizes = [
+                150, 200, 400, 600
+            ];
+
+            foreach ($aSizes as $iSize) {
+                $oImage->createThumbnail($sDirImage . sprintf($sFileName, ''),
+                    $sDirImage . sprintf($sFileName, '_' . $iSize), $iSize, $iSize);
+            }
+
             $aVal = $oDD->getRow();
             $aImages = $oDD['images'];
             $aImages[] = [

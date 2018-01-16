@@ -1,9 +1,9 @@
 <?php
 function includeDDHooks()
 {
+    file_put_contents(PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'app.lock', '');
     $oCache = Phpfox::getLib('cache');
     $oCache->remove();
-    file_put_contents(PHPFOX_DIR_SITE_APPS . 'CM_DigitalDownload' . PHPFOX_DS . 'app.lock', '');
     new \Core\App(true);
     Phpfox_Plugin::set();
 }
@@ -53,7 +53,7 @@ function installv1_0_0()
           KEY `category_id` (`category_id`)
             );");
 
-            db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download') . "` (
+        db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download') . "` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `category_id` int(11) NOT NULL,
           `privacy` TINYINT( 1 ) NOT NULL DEFAULT  '0',
@@ -155,7 +155,7 @@ function installv1_0_0()
             KEY `visited_id` (`visited_id`,`invited_user_id`)
             ); ');
 
-            db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_rating') . '` (
+        db()->query('CREATE TABLE IF NOT EXISTS `' . Phpfox::getT('digital_download_rating') . '` (
           `dd_id` int(10) unsigned NOT NULL,
           `user_id` int(10) unsigned NOT NULL,
           `rating` varchar(2) DEFAULT NULL,
@@ -185,60 +185,7 @@ function installv1_0_0()
             mkdir(Phpfox::getParam('core.dir_pic') . 'digitaldownload/', 0777, true);
         }
 
-        $aPhrase = [
-            'digitaldownload_full_name_has_purchased_an_item_of_yours_on_site_name' => '{full_name} has purchased one of your items on {site_name}.
-    
-    Item Name: {title}
-    Item Link: <a href="{link}">{link}</a>
-    Users Name: {full_name}
-    Users Profile: <a href="{user_link}">{user_link}</a>
-    Price: {price}',
-            'digitaldownload_item_sold_title' => 'Item Sold: {title}',
-            'digitaldownload_full_name_liked_your_dd_title' => '{full_name} liked your item "{title}"',
-            'digitaldownload_full_name_liked_your_dd_message' => '{full_name} liked item "<a href="{link}">{title}</a>"
-    To view this dd follow the link below:
-    <a href="{link}">{link}</a>',
-
-            'digitaldownload_user_name_liked_gender_own_dd_title' => '{user_name} liked {gender} own item "{title}"',
-            'digitaldownload_user_names_liked_your_dd_title' => '{user_names} liked your item "{title}"',
-            'digitaldownload_user_names_liked_span_class_drop_data_user_full_name_s_span_dd_title' => '{user_names} liked <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
-
-            'digitaldownload_user_names_commented_on_gender_dd_title' => '{user_names} commented on {gender} item "{title}"',
-            'digitaldownload_user_names_commented_on_your_dd_title' => '{user_names} commented on your item "{title}"',
-            'digitaldownload_user_names_commented_on_span_class_drop_data_user_full_name_s_span_dd_title' => '{user_names} commented on <span class="drop_data_user">{full_name}\'s</span> item "{title}"',
-
-            'digitaldownload_item_expired_subject' => 'Items expiration report from {web_site}',
-            'digitaldownload_item_expired_message' => 'This email contains information regarding your items expiration on {web_site}.</br><p>The following items have expired:</p><ul>{item_list}</ul>',
-
-            'digitaldownload_full_name_invited_you_to_view_the_digitaldownload_item_title' => '{full_name} invited you to view the digital download item "{title}".
-    
-    To check out this item, follow the link below:
-    <a href="{link}">{link}</a>"',
-            'digitaldownload_full_name_added_the_following_personal_message' => '{full_name} added the following personal message',
-            'digitaldownload_full_name_invited_you_to_view_the_item_title' => '{full_name} invited you to view the item "{title}".',
-
-
-            'digitaldownload_view_mode_list' => 'List',
-            'digitaldownload_view_mode_grid' => 'Grid',
-        ];
-
         $aLanguages = \Language_Service_Language::instance()->getAll();
-
-        foreach ($aPhrase as $sVar => $sText) {
-            $aText = [];
-            foreach ($aLanguages as $aLanguage) {
-                $aText[$aLanguage['language_id']] = $sText;
-            }
-            $aVal = [
-                'product_id' => 'phpfox',
-                'module' => 'digitaldownload|digitaldownload',
-                'var_name' => $sVar,
-                'text' => $aText
-            ];
-            \Language_Service_Phrase_Process::instance()->add($aVal);
-        }
-
-
         //sample data
 
         \Phpfox_Module::instance()
@@ -332,6 +279,12 @@ function installv1_0_0()
         includeDDHooks();
 
         $oForm = Phpfox::getService('digitaldownload.field')->getForm();
+        
+        $oForm->getFactory()->registerType('dd', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\DigitalDownload');
+        $oForm->getFactory()->registerType('dd_price', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\DDPrice');
+        $oForm->getFactory()->registerType('category', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\Category');
+        $oForm->getFactory()->registerType('planOption', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\PlanOption');
+        
         foreach ($aFields as $aField) {
             foreach ($aField as $sField => $sValue) {
                 if ($sField == 'caption_phrase') {
@@ -434,6 +387,45 @@ function installv1_0_0()
         ];
 
         $oForm = Phpfox::getService('digitaldownload.plan')->getForm(['form_id' => 'dd-plan']);
+        
+        $oForm->getFactory()->registerType('dd', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\DigitalDownload');
+        $oForm->getFactory()->registerType('dd_price', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\DDPrice');
+        $oForm->getFactory()->registerType('category', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\Category');
+        $oForm->getFactory()->registerType('planOption', 'Apps\CM_DigitalDownload\Lib\CustomFieldType\PlanOption');
+        
+        $aFields = [];
+
+        $aFields['featured'] = [
+            'type' => 'planOption',
+            'name' => 'featured',
+            'title' => _p('Featured'),
+            'value' => '0.00',
+        ];
+        $aFields['sponsored'] = [
+            'type' => 'planOption',
+            'name' => 'sponsored',
+            'title' => _p('Sponsored'),
+            'value' => '0.00',
+        ];
+        $aFields['highlighted'] = [
+            'type' => 'planOption',
+            'name' => 'highlighted',
+            'title' => _p('Highlighted'),
+            'value' => '0.00'
+        ];
+        $aFields['youtube_video'] = [
+            'type' => 'planOption',
+            'name' => 'youtube_video',
+            'title' => _p('Youtube video'),
+            'value' => '0.00',
+        ];
+
+        foreach ($aFields as $aField) {
+            $sType = $aField['type'];
+            $oForm->addField($sType, $aField);
+            $oForm->setFieldValue($aField['name'], $aField['value']);
+        }
+        
         foreach ($aPlans as $aPlan) {
             foreach ($aPlan as $sField => $mValue) {
                 if ($sField == 'name') {

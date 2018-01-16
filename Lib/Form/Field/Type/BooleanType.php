@@ -12,7 +12,7 @@ class BooleanType extends AbstractType
     protected $aColumnDefinitions = [
         [
             'type' => 'tinyint(1)',
-            'default' => 'DEFAULT \'0\'',
+            'default' => '\'0\'',
         ]
     ];
 

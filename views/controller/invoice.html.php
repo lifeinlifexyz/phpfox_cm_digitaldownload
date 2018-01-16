@@ -1,14 +1,14 @@
-<?php 
+<?php
 /**
  * [PHPFOX_HEADER]
- * 
+ *
  * @copyright		[PHPFOX_COPYRIGHT]
  * @author  		Raymond_Benc
  * @package 		Phpfox
  * @version 		$Id: index.html.php 1594 2010-05-22 22:49:41Z Raymond_Benc $
  */
- 
-defined('PHPFOX') or exit('NO DICE!'); 
+
+defined('PHPFOX') or exit('NO DICE!');
 
 ?>
 {if !count($aInvoices)}

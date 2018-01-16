@@ -141,7 +141,7 @@ class PurchaseController extends Phpfox_Component
             'amount' => $aInvoice['price'],
             'return' => $this->url()->makeUrl('digitaldownload.invoice', ['payment' => 'done']),
             'item_name' => Phpfox::getBaseUrl() . ': '
-                . _p('For Digital Download {{ id }}', ['id' => $aInvoice['dd_id']]),
+                . _p('for_digital_download', ['id' => $aInvoice['dd_id']]),
             'recurring' => '',
             'recurring_cost' => '',
             'alternative_cost' => '',

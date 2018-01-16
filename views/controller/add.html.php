@@ -6,25 +6,24 @@ defined('PHPFOX') or exit('NO DICE!');
 <div class="dd-overlay-message" style="display: none;"><span><i class="fa fa-spinner fa-spin fa-1x fa-fw"></i> {_p('uploading_in_progress_please_wait')}</span></div>
 <form method="post" action="{url link='current'}" enctype="multipart/form-data" id="js_digitaldownload_form">
     <div><input type="hidden" name="page_section_menu" value="" id="page_section_menu_form" /></div>
-
-    <div id="js_mp_block_detail" class="js_mp_block page_section_menu_holder">
+    <div id="js_mp_block_detail" class="js_mp_block page_section_menu_holder"  {if !empty($sActiveTab) && $sActiveTab != 'detail'}style="display:none;"{/if}>
         {$sFieldsHtml}
         <div class="form-group">
             <input class="btn btn-primary" onclick="$('.dd-overlay-message').show();" type="submit" value="{if $bEdit}{_p('Save')}{else}{_p('Add')}{/if}">
         </div>
     </div>
 
-    <div id="js_mp_block_photo" class="js_mp_block page_section_menu_holder" style="display: none">
+    <div id="js_mp_block_photo" class="js_mp_block page_section_menu_holder" {if empty($sActiveTab) || $sActiveTab != 'photo'}style="display:none;"{/if}>
         {module name="digitaldownload.manage-photos" id=$bEdit}
     </div>
-    <div id="js_mp_block_options" class="js_mp_block page_section_menu_holder" style="display: none">
+    <div id="js_mp_block_options" class="js_mp_block page_section_menu_holder" {if empty($sActiveTab) || $sActiveTab != 'options'}style="display:none;"{/if}>
         {module name="digitaldownload.manage-options" id=$bEdit}
     </div>
 
-    <div id="js_mp_block_invite" class="js_mp_block page_section_menu_holder" style="display:none;">
+    <div id="js_mp_block_invite" class="js_mp_block page_section_menu_holder" {if empty($sActiveTab) || $sActiveTab != 'invite'}style="display:none;"{/if}>
         <div class="block">
             {if Phpfox::isModule('friend')}
-                <div class="title">{phrase var='marketplace.invite_friends'}</div>
+            <div class="title">{phrase var='marketplace.invite_friends'}</div>
                 <div class="content">
                     {if $bEdit}
                     <div id="js_selected_friends" class="hide_it"></div>

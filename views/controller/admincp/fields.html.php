@@ -7,8 +7,9 @@ defined('PHPFOX') or exit('NO DICE!');
 	{_p('Fields')}
 </div>
 {if count($aFields)}
+<div class="panel panel-default">
 <form method="post" action="{url link='digitaldownload.admincp.delete-field'}">
-	<table id="_sort" data-sort-url="{url link='digitaldownload.admincp.fields.order'}" cellpadding="0" cellspacing="0">
+	<table class="table table-admin" id="_sort" data-sort-url="{url link='digitaldownload.admincp.fields.order'}" cellpadding="0" cellspacing="0">
 		<tr>
 			<th></th>
 			<th style="width:10px;"><input type="checkbox" name="delete[]" value="" id="js_check_box_all" class="main_checkbox" /></th>
@@ -55,4 +56,5 @@ defined('PHPFOX') or exit('NO DICE!');
 		<input type="submit" value="{_p('Delete selected')}" class="sJsConfirm delete button sJsCheckBoxButton disabled" disabled="true" />
 	</div>
 </form>
+</div>
 {/if}
