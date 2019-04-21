@@ -8,9 +8,7 @@ However, we believe that your system should be tailored to your needs without th
 <h2>Product information:</h2>
 <ul>
 <li>Product version: 1.0.7</li>
-<li>User guide: <a href="https://codemake.org/knowledge-base/digital-download-app/">https://codemake.org/knowledge-base/digital-download-app/</a></li>
 <li>Compatible with phpFox: 4.2+(has been tested with latest version of phpFox!)</li>
-<li>Demo profile: (user: demo@codemake.org, pass: 123456)    </li>
 <li><a href="https://youtu.be/DuYyBc546pQ" target="_blank">Frontend video YouTube</a>     </li>
 <li><a href="https://youtu.be/4UpQjtbNgrc" target="_blank">Backend video YouTube</a>     </li>
 </ul>
