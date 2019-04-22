@@ -1,3 +1,7 @@
+<h2>Paid Support:</h2>       
+<p>The phpfox apps and themes by codemake are provided under the MIT license with no commercial support or liability. 
+<a href="mailto:phpfox@lifeinlife.xyz">phpfox@lifeinlife.xyz</a> also provides commercial support and professional customisation services.</p>
+
 <h2>PHPFox Digital Download:</h2>
 <p>Make it work for you.
 Without a doubt, Digital Download is a complete Digital eCommerce solution for PHPFox. Right out of the box, it is prepared to power your online business without the need of any other dependencies.
